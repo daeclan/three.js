@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+
+  <h1>GOLD MOUF DOG</h1>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
 
@@ -19,7 +22,7 @@
     camera.position.z = 2;
 
     var renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setClearColor("#e5e5e5");
+    renderer.setClearColor("#000000");
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     document.body.appendChild(renderer.domElement)
@@ -34,22 +37,28 @@
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
 
-    var geometry = new THREE.BoxGeometry(1, 1, 1)
+    var geometry = new THREE.CircleGeometry(1, 1, 1)
     var material = new THREE.MeshLambertMaterial({color: 0xFFCC00})
-    var mesh = new THREE.Mesh(geometry, material);
 
-    // mesh.position.x = -1;  
-    // mesh.position.y = -1;  
-    // mesh.position.z = -41;  
+    meshX = -10
+    for(var i = 0; i < 228; i++){
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = (Math.random() - 0.5 )* 10
+      mesh.position.y = (Math.random() - 0.5) * 10
+      mesh.position.z = (Math.random() - 0.5) * 10
+      scene.add(mesh);
+      meshX +=1
+    }
+    // 
 
-    mesh.position.set(-1,-1,-4)
-    mesh.rotation.set(1, 1, 56)
-    mesh.scale.set(1,1,3)
+    // 
 
-    scene.add(mesh);
+    var light = new THREE.PointLight(0xFFFFF, 1, 1000)
+    light.position.set(0,0,0);
+    scene.add(light);
 
-    var light = new THREE.PointLight(0xFFFFF, 1, 500)
-    light.position.set(10,0,25);
+    var light = new THREE.PointLight(0xFFFFF, 2 , 1000)
+    light.position.set(0,0,25);
     scene.add(light);
 
     var render = function() {
@@ -68,10 +77,12 @@
       var intersects = raycaster.intersectObjects(scene.children, true);
       for (var i = 0; i < intersects.length; i++) {
         this.tl = new TimelineMax();
-        this.tl.to(intersects[i].object.scale, 1, {x: 2, ease: Expo.ease})
-        this.tl.to(intersects[i].object.scale, .5, {x: .5, ease: Expo.ease})
-        this.tl.to(intersects[i].object.position, .5, {x: 2, ease: Expo.ease})
-        this.tl.to(intersects[i].object.rotation, 1, {y: Math.PI*.5, ease: Expo.ease}, "=-1.5")
+        this.tl.to(intersects[i].object.rotation, 1, {y: Math.PI*.227, ease: Expo.ease}, "=-1.5")
+        this.tl.to(intersects[i].object.scale, 3, {x: 0.5, ease: Expo.ease})
+        this.tl.to(intersects[i].object.scale, 1.5, {x: 9.5, ease: Expo.ease})
+        this.tl.to(intersects[i].object.position, 3.5, {x: 1, ease: Expo.ease})
+        // this.tl.to(intersects[i].object.rotation, 1, {y: Math.PI*7, ease: Expo.ease}, "=-1.5")
+        
       }
     }
 
