@@ -4,7 +4,7 @@
 		<title>three.js webgl - Depth Texture</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
+		<link type="text/css" rel="stylesheet" href="./css/main.css">
 		<style>
 			#error {
 				margin: auto;
@@ -68,7 +68,7 @@
 
 			import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.min.js';
 
-			import { GUI } from '/Users/yungdae/Documents/Actualize/three.js/node_modules/three/examples/jsm/libs/dat.gui.module.js';
+			import { GUI } from './node_modules/three/examples/jsm/libs/dat.gui.module.js';
 			import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
 
 			let camera, scene, renderer, controls, stats;
@@ -91,13 +91,13 @@
 
 				renderer = new THREE.WebGLRenderer();
 
-				if ( renderer.capabilities.isWebGL2 === false && renderer.extensions.has( 'WEBGL_depth_texture' ) === false ) {
+				// if ( renderer.capabilities.isWebGL2 === false && renderer.extensions.has( 'WEBGL_depth_texture' ) === false ) {
 
-					supportsExtension = false;
-					document.querySelector( '#error' ).style.display = 'block';
-					return;
+				// 	supportsExtension = false;
+				// 	document.querySelector( '#error' ).style.display = 'block';
+				// 	return;
 
-				}
+				// }
 
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
