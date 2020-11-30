@@ -47,16 +47,35 @@
       objLoader.setMaterials(materials);
       objLoader.load('2.obj', function (object) {
         scene.add(object);
+        ourObj = object;
         object.position.z -= 370;
         object.rotation.x = 250;
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('Slime.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('Slime.obj', function (object) {
+        scene.add(object);
+        ourObj2 = object;
+        object.position.z -= 370;
+        object.rotation.x = 250;
+
+        this.tl = new TimeLineMax();
+        this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
       });
     });
 
     var render = function() {
       requestAnimationFrame(render);
 
-      // ourObj.rotation.z -= .01
-      // ourObj2.rotation.z += .03
+      ourObj.rotation.x -= .01
+      ourObj2.rotation.z += .03
 
       renderer.render(scene, camera);
     }
