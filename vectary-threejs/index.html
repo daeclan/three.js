@@ -31,26 +31,37 @@
       camera.updateProjectionMatrix();
     })
 
-    var light = new THREE.PointLight(0xFFFFFF, 2.4, 1000)
+    var light = new THREE.PointLight(0xFFFDDD, 2.4, 1000)
     light.position.set(0,15,15);
     scene.add(light);
 
     var ourObj;
     var ourObj2;
 
-    var mtlLoader = new Three.mtlLoader(;
-    mtlLoader.load('house.mtl', function (materials) {
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('2.mtl', function (materials) {
 
       materials.preload();
 
       var objLoader = new THREE.OBJLoader();
       objLoader.setMaterials(materials);
-      objLoader.laod("house.obj", function (object) {
+      objLoader.load('2.obj', function (object) {
         scene.add(object);
-      })
+        object.position.z -= 370;
+        object.rotation.x = 250;
+      });
+    });
 
-    })
+    var render = function() {
+      requestAnimationFrame(render);
 
+      // ourObj.rotation.z -= .01
+      // ourObj2.rotation.z += .03
+
+      renderer.render(scene, camera);
+    }
+
+    render();
   </script>
 
 
