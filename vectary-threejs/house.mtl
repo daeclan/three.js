@@ -1,0 +1,10 @@
+newmtl 3D Text material_d639b5c2-ea7c-4df5-a56c-859c52a0092d
+Kd 0.467 1.000 0.000
+d 1.000
+newmtl 3D Text material 1_f1608727-5ccb-44e1-aef8-cfa58e6e4b7c
+Kd 0.467 1.000 0.000
+d 1.000
+newmtl Woven Fabric_c664318c-2cbc-4b57-829b-235e342b9a55
+Kd 1.000 1.000 1.000
+d 1.000
+map_Kd texture_1.jpg
