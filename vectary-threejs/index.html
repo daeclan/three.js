@@ -21,7 +21,7 @@
 
     var camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 )
     camera.position.x = 0
-    camera.position.z = 50
+    camera.position.z = 0.1
     camera.position.y = 0
     camera.rotation.z =  1200
 
@@ -45,6 +45,7 @@
 
     var ourObj;
     var ourObj2;
+    var ourObj3;
 
     var controls = new OrbitControls( camera, renderer.domElement );
     controls.enableDamping = true;
@@ -68,8 +69,10 @@
       objLoader.load('2.obj', function (object) {
         scene.add(object);
         ourObj = object;
-        object.position.z -= 370;
-        object.rotation.x = 80;
+        object.position.z = 0;
+        object.position.y = 0;
+        object.position.x = 0;
+        object.rotation.x = 0;
 
         // this.tl = new TimelineMax();
         // this.tl.from(ourObj.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
@@ -86,8 +89,28 @@
       objLoader.load('Slime.obj', function (object) {
         scene.add(object);
         ourObj2 = object;
-        object.position.z -= 370;
+        object.position.z = 0;
         object.rotation.x = 250;
+
+        // this.tl = new TimelineMax();
+        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+     
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('Slime.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('Slime.obj', function (object) {
+        scene.add(object);
+        ourObj3 = object;
+        object.position.z -= 370;
+        object.rotation.x = 0;
 
         // this.tl = new TimelineMax();
         // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
@@ -99,10 +122,10 @@
     var render = function() {
       requestAnimationFrame(render);
 
-      ourObj.rotation.x -= .01
-      ourObj2.rotation.z += .03
+      ourObj.rotation.x -= 0
+      ourObj2.rotation.z += 2
       camera.rotation.z += .001
-      camera.rotation.z += .001
+      camera.rotation.z += .02
 
 
       controls.update(); 
