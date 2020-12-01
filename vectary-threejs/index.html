@@ -12,11 +12,19 @@
   <script src="./js/mtl.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
 
-  <script>
+
+  <script type="module">
+    import { GUI } from './node_modules/three/examples/jsm/libs/dat.gui.module.js';
+    import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+
     var scene = new THREE.Scene();
 
-    var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
-    camera.position.z = 25
+    var camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 )
+    camera.position.x = 0
+    camera.position.z = 50
+    camera.position.y = 0
+    camera.rotation.z =  1200
+
 
     var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     renderer.setClearColor("#DDDDDD");
@@ -38,6 +46,18 @@
     var ourObj;
     var ourObj2;
 
+    var controls = new OrbitControls( camera, renderer.domElement );
+    controls.enableDamping = true;
+    controls.enableZoom = true;
+    controls.keys = {
+      LEFT: 37, //left arrow
+      UP: 38, // up arrow
+      RIGHT: 39, // right arrow
+      BOTTOM: 40 // down arrow
+    } 
+
+
+
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.load('2.mtl', function (materials) {
 
@@ -49,7 +69,10 @@
         scene.add(object);
         ourObj = object;
         object.position.z -= 370;
-        object.rotation.x = 250;
+        object.rotation.x = 80;
+
+        // this.tl = new TimelineMax();
+        // this.tl.from(ourObj.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
       });
     });
 
@@ -66,8 +89,10 @@
         object.position.z -= 370;
         object.rotation.x = 250;
 
-        this.tl = new TimeLineMax();
-        this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+        // this.tl = new TimelineMax();
+        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+     
       });
     });
 
@@ -76,6 +101,11 @@
 
       ourObj.rotation.x -= .01
       ourObj2.rotation.z += .03
+      camera.rotation.z += .001
+      camera.rotation.z += .001
+
+
+      controls.update(); 
 
       renderer.render(scene, camera);
     }
