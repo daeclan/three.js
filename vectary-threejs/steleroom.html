@@ -20,7 +20,7 @@
     var scene = new THREE.Scene();
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-		camera.position.set( 779, 389, 4 );
+		camera.position.set( 400, 200, 0 );
     camera.rotation.z =  1200
 
 
@@ -150,7 +150,6 @@
       controls.update(); 
 
       renderer.render(scene, camera);
-      // console.log(camera.position)
     }
 
     render();
