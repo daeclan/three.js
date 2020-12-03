@@ -45,6 +45,7 @@
     var ourObj2;
     var ourObj3;
     var ourObj4;
+    var ourObj5;
 
     var controls = new OrbitControls( camera, renderer.domElement );
     controls.enableDamping = true;
@@ -129,6 +130,26 @@
         scene.add(object);
         ourObj4 = object;
         object.position.z -= 370;
+        object.rotation.x = 0;
+
+        // this.tl = new TimelineMax();
+        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
+     
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('ysl.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('ysl.obj', function (object) {
+        scene.add(object);
+        ourObj5 = object;
+        object.position.x -= 370;
         object.rotation.x = 0;
 
         // this.tl = new TimelineMax();
