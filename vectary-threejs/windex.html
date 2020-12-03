@@ -9,11 +9,11 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.js"></script>
   <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
 
 
   <script type="module">
     import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
-  
 
     var scene = new THREE.Scene();
 
@@ -45,6 +45,14 @@
 
     camera.position.z = 70
 
+    const player = new Tone.Player("./tone.mp3").toDestination();
+    Tone.loaded().then(() => {
+      
+    });
+
+    Tone.context.resume();
+
+
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
     domEvents.addEventListener(sphere, 'click', event => {
@@ -52,6 +60,7 @@
     })
     domEvents.addEventListener(sphere2, 'click', event => {
       sphere2.scale.set(5,5,5)
+      player.start();
     })
     
     domEvents.addEventListener(sphere3, 'click', event => {
@@ -61,6 +70,8 @@
     var controls = new OrbitControls( camera, renderer.domElement );
     controls.minDistance = 1
     controls.maxDistance = 1000
+
+  
 
     const animate = () => {
       requestAnimationFrame(animate)
