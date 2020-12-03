@@ -46,6 +46,8 @@
     camera.position.z = 70
 
     const player = new Tone.Player("./tone.mp3").toDestination();
+    const player1 = new Tone.Player("./fed.mp3").toDestination();
+    const player2 = new Tone.Player("./grat.mp3").toDestination();
     Tone.loaded().then(() => {
       
     });
@@ -57,14 +59,18 @@
 
     domEvents.addEventListener(sphere, 'click', event => {
       material.wireframe = false
+      player1.start();
     })
     domEvents.addEventListener(sphere2, 'click', event => {
       sphere2.scale.set(5,5,5)
       player.start();
     })
+
+    Tone.context.resume();
     
     domEvents.addEventListener(sphere3, 'click', event => {
       sphere3.scale.set(15,15,15)
+      player2.start();
     })
 
     var controls = new OrbitControls( camera, renderer.domElement );
