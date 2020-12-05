@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YIP</title>
+</head>
+<body>
+  
+</body>
+</html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>React App</title>
+<style>
+  body {
+    margin: 0;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%
+  }
+</style><style type="text/css">body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+</style><style type="text/css">.App {
+  text-align: center;
+}
+
+.App-logo {
+  -webkit-animation: App-logo-spin infinite 20s linear;
+          animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@-webkit-keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+</style></head>
+
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"><div></div></div>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+<script type="text/javascript" src="/static/js/bundle.js"></script>
+<script src="js/three.js"></script>
+<script src="js/OrbitControls.js"></script>
+<script src="js/Detector.js"></script>
+<script src="js/threex.domevents.js"></script>
+<script src="js/OBJLoader.js"></script>
+<script src="js/stats.min.js"></script>
+<script src="js/tween.min.js"></script>
+<script>
+  if (!Detector.webgl) Detector.addGetWebGLMessage();
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+  camera.position.set(0, 600, 1000);
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  //click events binder
+  let domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+
+  // Camera Controlers
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+  controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+  controls.dampingFactor = 0.25;
+  controls.screenSpacePanning = false;
+  controls.minDistance = 1;
+  controls.maxDistance = 1500
+
+  // PARTICLES  
+  var material = new THREE.SpriteMaterial({
+    map: new THREE.CanvasTexture(generateSprite()),
+    blending: THREE.AdditiveBlending
+  });
+
+  //**********************************************************************
+  //  AUDIO VISUALIZER TRY
+  //**********************************************************************
+
+  var visualizer = new AudioVisualizer();
+  const executeVisualizer = () => {
+    visualizer.createBars();
+    visualizer.setupAudioProcessing();
+    visualizer.getAudio();
+    visualizer.start();
+  }
+
+  function AudioVisualizer() {
+
+    //constants
+    this.numberOfBars = 64;
+
+    //bars
+    this.bars = new Array();
+
+    //audio
+    this.javascriptNode;
+    this.audioContext;
+    this.sourceBuffer;
+    this.analyser;
+  }
+
+
+  //create the bars required to show the visualization
+  AudioVisualizer.prototype.createBars = function () {
+
+    //iterate and create bars
+    for (var i = 0; i < this.numberOfBars; i++) {
+
+      //create a bar
+      var barGeometry = new THREE.BoxGeometry(3, 2, 3);
+
+      //create a material
+      var material = new THREE.MeshPhongMaterial({
+        color: this.getRandomColor(),
+        ambient: 0x808080,
+        specular: 0xffffff
+      });
+
+      //create the geometry and set the initial position
+      this.bars[i] = new THREE.Mesh(barGeometry, material);
+      this.bars[i].position.set(i - this.numberOfBars / 1.5, 100, -80);
+      // this.bars[i].scale.set(1,1,1);
+
+      //add the created bar to the scene
+      scene.add(this.bars[i]);
+    }
+  };
+
+  AudioVisualizer.prototype.setupAudioProcessing = function () {
+    //get the audio context
+    this.audioContext = new AudioContext();
+
+    //create the javascript node
+    this.javascriptNode = this.audioContext.createScriptProcessor(2048, 1, 1);
+    this.javascriptNode.connect(this.audioContext.destination);
+
+    //create the source buffer
+    this.sourceBuffer = this.audioContext.createBufferSource();
+    this.sourceBuffer.loop = true;
+
+    //create the analyser node
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.smoothingTimeConstant = 0.3;
+    this.analyser.fftSize = 512;
+
+    //connect source to analyser
+    this.sourceBuffer.connect(this.analyser);
+
+    //analyser to speakers
+    this.analyser.connect(this.javascriptNode);
+
+    //connect source to analyser
+    this.sourceBuffer.connect(this.audioContext.destination);
+
+    var that = this;
+
+    //this is where we animates the bars
+    this.javascriptNode.onaudioprocess = function () {
+
+      // get the average for the first channel
+      var array = new Uint8Array(that.analyser.frequencyBinCount);
+      that.analyser.getByteFrequencyData(array);
+
+      //render the scene and update controls
+      renderer.render(scene, camera);
+      controls.update();
+
+      var step = Math.round(array.length / visualizer.numberOfBars);
+
+      //Iterate through the bars and scale the z axis
+      for (var i = 0; i < visualizer.numberOfBars; i++) {
+        var value = array[i * step] / 4;
+        value = value < 1 ? 1 : value;
+        visualizer.bars[i].scale.y = value;
+      }
+    }
+
+  };
+
+  //getAudio
+  AudioVisualizer.prototype.getAudio = function () {
+    var request = new XMLHttpRequest();
+    request.open("GET", "sounds/piano2128bpm7sTest.wav", true);
+    request.responseType = "arraybuffer";
+    request.send();
+    var that = this;
+    request.onload = function () {
+      that.start(request.response);
+    }
+  };
+
+  //start the audio processing
+  AudioVisualizer.prototype.start = function (buffer) {
+
+    this.audioContext.decodeAudioData(buffer, decodeAudioDataSuccess, decodeAudioDataFailed);
+    var that = this;
+
+    function decodeAudioDataSuccess(decodedBuffer) {
+      that.sourceBuffer.buffer = decodedBuffer
+      that.sourceBuffer.start(0);
+    }
+
+    function decodeAudioDataFailed() {
+      debugger
+    }
+  };
+
+  //util method to get random colors to make stuff interesting
+  AudioVisualizer.prototype.getRandomColor = function () {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+
+  //***********************************************************************
+
+  function generateSprite() {
+    var canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    var context = canvas.getContext('2d');
+    var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
+    gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+    gradient.addColorStop(1, 'rgba(0,0,0,1)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+
+  function initParticle(particle, delay) {
+    var particle = this instanceof THREE.Sprite ? this : particle;
+    var delay = delay !== undefined ? delay : 0;
+    particle.position.set(0, 100, 500);
+    particle.scale.x = particle.scale.y = Math.random() * 8 + 4;
+    new TWEEN.Tween(particle)
+      .delay(delay)
+      .to({}, 10000)
+      .onComplete(initParticle)
+      .start();
+    new TWEEN.Tween(particle.position)
+      .delay(delay)
+      .to({ x: Math.random() * 4000 - 2000, y: -(Math.random() * 1000 - 500), z: Math.random() * 4000 - 2000 }, 10000)
+      .start();
+    new TWEEN.Tween(particle.scale)
+      .delay(delay)
+      .to({ x: 0.01, y: 0.01 }, 10000)
+      .start();
+  }
+
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  stats = new Stats();
+  document.body.appendChild(stats.dom);
+
+
+  // Earth
+  group = new THREE.Group();
+  scene.add(group);
+  // earth
+  var earthLoader = new THREE.TextureLoader();
+  earthLoader.load('obj/land_ocean_ice_cloud_2048.jpg', function (texture) {
+    var geometry = new THREE.SphereGeometry(200, 20, 20);
+    var material = new THREE.MeshBasicMaterial({ map: texture, overdraw: 0.5 });
+    var mesh = new THREE.Mesh(geometry, material);
+    group.add(mesh);
+  });
+  group.position.set(700, -250, -750)
+  group.scale.set(1.2, 1.2, 1.2)
+
+  // LIGTHS
+
+  // let ambientLight = new THREE.AmbientLight(0xffffff, 0.)
+  // scene.add(ambientLight)
+  let pointLight = new THREE.PointLight(0xffffff, 0.8)
+  camera.add(pointLight)
+  scene.add(camera)
+
+  var drumsLight = new THREE.SpotLight(0x9718ce, 1, 100, 3, 0, 0.5);
+  drumsLight.position.set(0, 100, 0);
+  drumsLight.castShadow = true;
+  drumsLight.shadow.mapSize.width = 1024;
+  drumsLight.shadow.mapSize.height = 1024;
+  drumsLight.shadow.camera.near = 500;
+  drumsLight.shadow.camera.far = 4000;
+  drumsLight.shadow.camera.fov = 30;
+  scene.add(drumsLight);
+
+  var guitarLight = new THREE.SpotLight(0xffffff, 0, 85, 3, 0, 0.5);
+  guitarLight.position.set(86, 100, 78);
+  guitarLight.castShadow = true;
+  guitarLight.shadow.mapSize.width = 1024;
+  guitarLight.shadow.mapSize.height = 1024;
+  guitarLight.shadow.camera.near = 500;
+  guitarLight.shadow.camera.far = 4000;
+  guitarLight.shadow.camera.fov = 30;
+  scene.add(guitarLight);
+
+  var bassLight = new THREE.SpotLight(0xffffff, 0, 50, 3, 0, 0.5);
+  bassLight.position.set(0, 52, 86);
+  bassLight.castShadow = true;
+  bassLight.shadow.mapSize.width = 1024;
+  bassLight.shadow.mapSize.height = 1024;
+  bassLight.shadow.camera.near = 500;
+  bassLight.shadow.camera.far = 4000;
+  bassLight.shadow.camera.fov = 30;
+  scene.add(bassLight);
+
+  var pianoLight = new THREE.SpotLight(0xffffff, 0, 77, 3, 0, 0.5);
+  pianoLight.position.set(-75, 90, 90);
+  pianoLight.castShadow = true;
+  pianoLight.shadow.mapSize.width = 1024;
+  pianoLight.shadow.mapSize.height = 1024;
+  pianoLight.shadow.camera.near = 500;
+  pianoLight.shadow.camera.far = 4000;
+  pianoLight.shadow.camera.fov = 30;
+  scene.add(pianoLight);
+
+  var micLight = new THREE.SpotLight(0xffffff, 0, 52, 3, 0, 0.5);
+  micLight.position.set(10, 70, 130);
+  micLight.castShadow = true;
+  micLight.shadow.mapSize.width = 1024;
+  micLight.shadow.mapSize.height = 1024;
+  micLight.shadow.camera.near = 500;
+  micLight.shadow.camera.far = 4000;
+  micLight.shadow.camera.fov = 30;
+  scene.add(micLight);
+
+  //Event listener for onMouseMove
+  var mouseX = 0, mouseY = -400;
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
+  document.addEventListener('mousemove', onDocumentMouseMove, false);
+  function onDocumentMouseMove(event) {
+    mouseX = (event.clientX - windowHalfX) / 2;
+    mouseY = (event.clientY - windowHalfY) / 2;
+  }
+
+  //automatic resizes of the window
+  window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    renderer.setSize(width, height)
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  })
+
+  //STAGE
+  let manager = new THREE.LoadingManager()
+  manager.onProgress = function (item, loaded, total) {
+    // console.log(item, loaded, total)
+  }
+  let textureLoader = new THREE.TextureLoader(manager)
+
+  //white stage with color lights
+  let texture = textureLoader.load('obj/stage7.png')
+
+  let textureScene = textureLoader.load('obj/space.jpg');
+
+  let textureName = textureLoader.load('obj/name.jpg');
+
+  scene.background = textureScene;
+
+  // model
+  let onProgress = function (xhr) {
+    if (xhr.lengthComputable) {
+      let percentComplete = xhr.loaded / xhr.total * 100
+    }
+  }
+  let onError = function (xhr) { }
+  let loader = new THREE.OBJLoader(manager)
+  loader.load(
+    'obj/Concert Stage.obj',
+    function (object) {
+      object.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+          child.material.map = texture
+        }
+      })
+      object.position.set(0, 0, 50)
+      object.scale.set(.4, .4, .4)
+      scene.add(object)
+    },
+    onProgress,
+    onError
+  )
+
+  //Adding MixIt3d Name
+  let loader2 = new THREE.OBJLoader(manager)
+  loader2.load(
+    'obj/mixit3d.obj',
+    function (object) {
+      object.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+          child.material.map = textureName
+        }
+      })
+      object.position.set(0, 0, 0)
+      object.scale.set(1000, 1000, 1000)
+      scene.add(object)
+    },
+    onProgress,
+    onError
+  )
+
+  // EXTRA SOUNDS CONTROLERS
+  const xtraSoundsControlers = [];
+  for (let i = 0; i < 5; i++) {
+    let xsoundGeometry = new THREE.SphereGeometry(5, 5, 5);
+    let xsoundMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
+    let xtraSound = new THREE.Mesh(xsoundGeometry, xsoundMaterial);
+    xtraSoundsControlers[i] = xtraSound
+    scene.add(xtraSoundsControlers[i]);
+  }
+
+ 
+  xtraSoundsControlers[0].position.set(-200, 150, -100)
+  xtraSoundsControlers[0].scale.set(3, 3, 3)
+
+  xtraSoundsControlers[1].position.set(-100, 200, -100)
+  xtraSoundsControlers[1].scale.set(5, 5, 5)
+
+  xtraSoundsControlers[2].position.set(0, 150, -100)
+  xtraSoundsControlers[2].scale.set(3, 3, 3)
+
+  xtraSoundsControlers[3].position.set(100, 200, -100)
+  xtraSoundsControlers[3].scale.set(5, 5, 5)
+
+  xtraSoundsControlers[4].position.set(200, 150, -100)
+  xtraSoundsControlers[4].scale.set(3, 3, 3)
+
+  //EXTRA PRIMITIVES SOUNDS
+  const xtraSoundsTracks = ['sounds/clap4.wav', 'sounds/clap2.wav', 'sounds/satisfaction.wav', 'sounds/clap.wav', 'sounds/clap3.wav']
+  const xtraSoundsArr = [];
+  for (let i = 0; i < 5; i++) {
+    let xtraSound = new Audio(xtraSoundsTracks[i])
+    xtraSoundsArr[i] = xtraSound
+    domEvents.addEventListener(xtraSoundsControlers[i], 'mouseover', event => {
+      xtraSoundsArr[i].play()
+      xtraSoundsArr[i].loop = false;
+    })
+    domEvents.addEventListener(xtraSoundsControlers[i], 'dblclick', event => {
+      xtraSoundsArr[i].play()
+      xtraSoundsArr[i].loop = true;
+    })
+  }
+
+  //MUSIC CONTROLS
+  let pianoGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let pianoMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 });
+  const piano = new THREE.Mesh(pianoGeometry, pianoMaterial);
+  piano.position.set(-75, 45, 90)
+  piano.scale.set(50, 30, 15)
+  scene.add(piano);
+
+  let drumsGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let drumsMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 });
+  const drums = new THREE.Mesh(drumsGeometry, drumsMaterial);
+  drums.position.set(0, 50, 0)
+  drums.scale.set(50, 50, 50)
+  scene.add(drums);
+
+  let guitarGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let guitarMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 });
+  const guitar = new THREE.Mesh(guitarGeometry, guitarMaterial);
+  guitar.position.set(86, 52, 78)
+  guitar.scale.set(10, 55, 10)
+  guitar.rotation.x = 3;
+  scene.add(guitar);
+
+  let bassGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let bassMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 });
+  const bass = new THREE.Mesh(bassGeometry, bassMaterial);
+  bass.position.set(0, 52, 86)
+  bass.scale.set(10, 55, 10)
+  bass.rotation.x = 3;
+  scene.add(bass);
+
+  let micGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let micMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 });
+  const mic = new THREE.Mesh(micGeometry, micMaterial);
+  mic.position.set(10, 50, 130)
+  mic.scale.set(10, 40, 10)
+  scene.add(mic);
+
+
+  //ON CLICK EVENTS
+  let onPiano = false;
+  let audioPiano = new Audio('sounds/piano2128bpm7s.wav')
+  audioPiano.volume = 0.15;
+  audioPiano.loop = true;
+  audioPiano.muted = true;
+  audioPiano.playbackRate = 1;
+
+  domEvents.addEventListener(piano, 'click', event => {
+    if (!onPiano) {
+      startSounds()
+      audioPiano.muted = false;
+      pianoLight.intensity = 3;
+      onPiano = true
+    }
+    else {
+      audioPiano.muted = true;
+      pianoLight.intensity = 0;
+      onPiano = false;
+      checkSounds();
+    }
+  })
+
+  let introPlayed = false;
+  let welcomeIntro = new Audio('sounds/welcomeIntro.wav')
+  if (!introPlayed) {
+    welcomeIntro.play();
+    introPlayed = true;
+  }
+
+
+  let onDrums = false;
+  let audioDrums = new Audio('sounds/drum128bpm7s.wav')
+  audioDrums.loop = true;
+  audioDrums.muted = true;
+  audioDrums.playbackRate = 1;
+  domEvents.addEventListener(drums, 'click', event => {
+    if (!onDrums) {
+      startSounds()
+      audioDrums.muted = false;
+      drumsLight.intensity = 3;
+      onDrums = true
+    }
+    else {
+      audioDrums.muted = true;
+      drumsLight.intensity = 1;
+      onDrums = false;
+      checkSounds();
+    }
+  })
+
+  let onGuitar = false;
+  let audioGuitar = new Audio('sounds/guitar128bpm7s.wav')
+  audioGuitar.loop = true;
+  audioGuitar.muted = true;
+  audioGuitar.playbackRate = 1;
+  domEvents.addEventListener(guitar, 'click', event => {
+    if (!onGuitar) {
+      startSounds()
+      audioGuitar.muted = false
+      guitarLight.intensity = 3;
+      onGuitar = true
+    }
+    else {
+      audioGuitar.muted = true
+      guitarLight.intensity = 0;
+      onGuitar = false;
+      checkSounds();
+    }
+  })
+
+  let onBass = false;
+  let audioBass = new Audio('sounds/bass128bpm7s.wav')
+  audioBass.loop = true;
+  audioBass.muted = true;
+  audioBass.playbackRate = 1;
+  domEvents.addEventListener(bass, 'click', event => {
+    if (!onBass) {
+      startSounds()
+      audioBass.muted = false;
+      bassLight.intensity = 3;
+      onBass = true
+    }
+    else {
+      audioBass.muted = true;
+      bassLight.intensity = 0;
+      onBass = false;
+      checkSounds();
+    }
+  })
+
+  let onMic = false;
+  let audioMic = new Audio('sounds/mic128bpm7s.wav')
+  audioMic.loop = true;
+  audioMic.muted = true;
+  audioMic.playbackRate = 1;
+  domEvents.addEventListener(mic, 'click', event => {
+    if (!onMic) {
+      startSounds()
+      audioMic.muted = false;
+      micLight.intensity = 2.5;
+      onMic = true;
+    }
+    else {
+      audioMic.muted = true;
+      micLight.intensity = 0;
+      onMic = false;
+      checkSounds();
+    }
+  })
+
+  let started = false;
+  let bufferStarted = false;
+  const startSounds = () => {
+    if (!started) {
+      started = true;
+      audioMic.play()
+      audioBass.play()
+      audioGuitar.play()
+      // audioPiano.play()
+      audioDrums.play()
+      for (var i = 0; i < 500; i++) {
+        particle = new THREE.Sprite(material);
+        initParticle(particle, i * 10);
+        scene.add(particle);
+      }
+    }
+    if(!bufferStarted){
+      bufferStarted = true;
+      executeVisualizer();
+    }
+  }
+
+  const checkSounds = () => {
+
+    if (!onMic && !onDrums && !onGuitar && !onBass && !onMic && !onPiano && bufferStarted) {
+      visualizer.sourceBuffer.stop(0);
+      bufferStarted = false;
+    }
+  }
+
+  //
+
+  const animate = function () {
+    requestAnimationFrame(animate);
+    camera.position.x += (mouseX - camera.position.x) * .05;
+    camera.position.y += (- mouseY - camera.position.y) * .05;
+    camera.lookAt(scene.position);
+
+    //particles generation
+    stats.update();
+    TWEEN.update();
+
+    renderer.render(scene, camera);
+
+    //earth rotation
+    group.rotation.y -= 0.004;
+
+    //xsounds rotation
+    for (let i = 0; i < 5; i++) {
+      xtraSoundsControlers[i].rotation.x += .01
+      xtraSoundsControlers[i].rotation.y += .01
+    }
+  };
+
+  animate();
+</script><canvas width="442" height="1854" style="width: 221px; height: 927px;"></canvas><div style="position: fixed; top: 0px; left: 0px; cursor: pointer; opacity: 0.9; z-index: 10000;"><canvas width="160" height="96" style="width: 80px; height: 48px; display: block;"></canvas><canvas width="160" height="96" style="width: 80px; height: 48px; display: none;"></canvas><canvas width="160" height="96" style="width: 80px; height: 48px; display: none;"></canvas></div>
+
+</body>
+</html>
