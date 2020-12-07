@@ -16,24 +16,23 @@
 
   <script type="module">
     import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
     var scene = new THREE.Scene();
 
 
     var camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 11, 410);
-    camera.position.set(0.041, 1.9, 400);
-    camera.rotation.x = 3
-
+    camera.position.set(-30, 1.9, 275);
+    
     window.addEventListener('resize', () => {
       renderer.setSize(window.innerWidth,window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
-
       camera.updateProjectionMatrix();
     })
 
 
-    var light = new THREE.PointLight(0xFFFDDD, 2.4, 1000)
-    light.position.set(0,15,0);
+    var light = new THREE.HemisphereLight( 0xffffbb, 0xffffff, 2 )
+    // light.position.set(0,15,0);
     scene.add(light);
 
     var light = new THREE.PointLight(0xFFFDDD, 2.4, 1000)
@@ -42,25 +41,65 @@
     
 
     var geo = new THREE.PlaneBufferGeometry(2000, 2000, 8, 8);
-    const mat = new THREE.MeshBasicMaterial({color: '#17A666', side: THREE.DoubleSide });
+    const mat = new THREE.MeshBasicMaterial({color: '#000000', side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat);
     plane.rotateX( - Math.PI / 2);
     plane.position.set(0, -120, 0)
     scene.add(plane);
 
 
-    scene.fog = new THREE.Fog( 0x4ff904, 0, 750 );
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 900 );
    
 
-    var renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setClearColor("#00ff00");
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor("#70ee22");
     renderer.setSize(window.innerWidth,window.innerHeight);
     document.body.appendChild(renderer.domElement); 
 
-    
     var young;
     var stoner;
     var life;
+    
+
+    const loader = new GLTFLoader();
+
+    loader.load(
+      // resource URL
+      './scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        console.log("88")
+        console.log(gltf.scene)
+        gltf.scene.position.set(200,-100,0)
+        gltf.scene.scale.set(10,10,10)
+    })
+
+    loader.load(
+      // resource URL
+      './scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        console.log("88")
+        console.log(gltf.scene)
+        gltf.scene.position.set(20,-100,0)
+        gltf.scene.scale.set(10,10,10)
+    })
+
+    loader.load(
+      // resource URL
+      './scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        console.log("88")
+        console.log(gltf.scene)
+        gltf.scene.position.set(-150,-100,0)
+        gltf.scene.scale.set(10,10,10)
+    })
+
+    
 
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.load('Y.mtl', function (materials) {
@@ -73,8 +112,8 @@
       objLoader.load('Y.obj', function (object) {
         scene.add(object);
         young = object;
-        object.position.z = 10;
-        object.position.y = -100
+        object.position.z = 33;
+        object.position.y = 5;
         object.position.x = -175;
         object.rotation.z = 0;
       });
@@ -91,8 +130,8 @@
       objLoader.load('S.obj', function (object) {
         scene.add(object);
         stoner = object;
-        object.position.z = 10;
-        object.position.y = -100
+        object.position.z = 33;
+        object.position.y = 5
         object.position.x = 0;
         object.rotation.z = 0;
       });
@@ -109,9 +148,9 @@
       objLoader.load('L.obj', function (object) {
         scene.add(object);
         life = object;
-        object.position.z = 10;
-        object.position.y = -100
-        object.position.x = 200;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = 180;
         object.rotation.z = 0;
       });
     });
@@ -131,11 +170,11 @@
     moon.position.set(120,0,-200)
     scene.add(moon)
 
-    // const geometry3 = new THREE.SphereGeometry(10, 10, 10)
-    // const material3 = new THREE.MeshNormalMaterial()
-    // const sphere3 = new THREE.Mesh(geometry3, material3)
-    // sphere3.position.x = -40
-    // scene.add(sphere3)
+    const geometry3 = new THREE.SphereGeometry(10, 10, 10)
+    const material3 = new THREE.MeshPhongMaterial({color: "#17A519"})
+    const sphere3 = new THREE.Mesh(geometry3, material3)
+    sphere3.position.x = -40
+    scene.add(sphere3)
 
 
     const player = new Tone.Player("./fed.mp3").toDestination();
@@ -158,16 +197,23 @@
       player2.start();
     })
 
-    // Tone.context.resume();
+    Tone.context.resume();
     
-    // domEvents.addEventListener(sphere3, 'click', event => {
-    //   sphere3.scale.set(15,15,15)
-    //   player2.start();
-    // })
+    domEvents.addEventListener(sphere3, 'click', event => {
+      sphere3.scale.set(15,15,15)
+      player2.start();
+    })
+
+    function keyLog() {
+      document.onkeydown = function(e) {
+        console.log(e);
+      }
+    }
+    keyLog()
 
     var controls = new OrbitControls( camera, renderer.domElement );
-    controls.minDistance = 1
-    controls.maxDistance = 1000
+    controls.minDistance = -500
+    controls.maxDistance = 400
     var centerPosition = controls.target.clone();
     centerPosition.y = 0;
     var groundPosition = camera.position.clone();
@@ -179,7 +225,7 @@
     var angleRadians = Math.atan2(remote.y - origin.y, remote.x - origin.x);
     controls.maxPolarAngle = angleRadians;
 
-    var r = 180;
+    var r = 255;
     var theta = 0.2;
     var dTheta = 2 * Math.PI / 1000;
 
@@ -188,16 +234,16 @@
     const animate = () => {
       requestAnimationFrame(animate)
 
-      young.position.y += 0.10 
-      stoner.position.y += 0.20
-      life.position.y += 0.30
+      // young.position.y += 0.10 
+      // stoner.position.y += 0.20
+      // life.position.y += 0.30
       mercury.rotation.z -= 0.01
       mercury.rotation.x -= 0.01
 
       theta += dTheta;
-      moon.position.x = r * Math.cos(theta) - 100
+      moon.position.x = r * Math.cos(theta) 
       moon.position.z = r * Math.sin(theta)
-      mercury.position.x = r * Math.cos(theta) - 100
+      mercury.position.x = r * Math.cos(theta)
       mercury.position.z = (r * Math.sin(theta) * -1)
       
 
@@ -208,9 +254,11 @@
       // sphere3.rotation.y += 0.01
       controls.update();
       renderer.render(scene, camera)
+      console.log(camera.position)
     }
 
     animate()
+    
 
     
   </script>
