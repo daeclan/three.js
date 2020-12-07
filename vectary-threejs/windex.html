@@ -29,34 +29,35 @@
       renderer.setSize(window.innerWidth,window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+      renderer.outputEncoding = THREE.sRGBEncoding;
     })
 
 
-    var light = new THREE.HemisphereLight( 0xffffbb, 0xffffff, 2 )
+    var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
     // light.position.set(0,15,0);
     scene.add(light);
 
-    var light = new THREE.PointLight(0xFFFDDD, 2.4, 1000)
+    var light = new THREE.PointLight(0xFFFFFF, 2, 500)
     light.position.set(30,-15,-15);
     scene.add(light);
     
 
-    var geo = new THREE.PlaneBufferGeometry(2000, 2000, 8, 8);
-    const mat = new THREE.MeshBasicMaterial({color: '#000000', side: THREE.DoubleSide });
+    var geo = new THREE.PlaneBufferGeometry(20000, 20000, 8, 8);
+    const mat = new THREE.MeshBasicMaterial({color: '#4ff904', side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat);
     plane.rotateX( - Math.PI / 2);
     plane.position.set(0, -120, 0)
     scene.add(plane);
 
 
-
-    scene.fog = new THREE.Fog( 0x4ff904, 0, 900 );
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 2000 );
    
 
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setClearColor("#000000");
+    renderer.setClearColor("#007a33");
     renderer.setSize(window.innerWidth,window.innerHeight);
     document.body.appendChild(renderer.domElement); 
+    
 
     var young;
     var stoner;
@@ -175,6 +176,8 @@
     scene.add(mars)
 
 
+
+    const backsound = new Tone.Player("./hbsLoop.mp3").toDestination();
     const player = new Tone.Player("./fed.mp3").toDestination();
     // const player1 = new Tone.Player("./fed.mp3").toDestination();
     const player2 = new Tone.Player("./grat.mp3").toDestination();
@@ -200,6 +203,8 @@
     domEvents.addEventListener(mars, 'click', event => {
       // mars.scale.set(15,15,15)
       player2.start();
+      backsound.loop = true
+      backsound.start()
     })
 
     // function keyLog() {
@@ -212,6 +217,9 @@
     var controls = new OrbitControls( camera, renderer.domElement );
     controls.minDistance = -900
     controls.maxDistance = 600
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.27;
+    controls.target = new THREE.Vector3(0,0,-100);
     var centerPosition = controls.target.clone();
     centerPosition.y = 0;
     var groundPosition = camera.position.clone();
@@ -252,7 +260,6 @@
     var r = 333;
     var theta = 0.2;
     var dTheta = 2 * Math.PI / 1000;
-
   
 
     const animate = () => {
@@ -268,7 +275,7 @@
       moon.position.x = r * Math.cos(theta)
       moon.position.z = r * Math.sin(theta)
       mercury.position.x = r * Math.cos(theta) 
-      mercury.position.z = r * Math.sin(theta)
+      mercury.position.z = (r * Math.sin(theta))
       mars.position.x = r * Math.cos(theta) 
       mars.position.z = (r * Math.sin(theta) * -1)
       
