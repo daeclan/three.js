@@ -42,15 +42,22 @@
     scene.add(light);
     
 
-    var geo = new THREE.PlaneBufferGeometry(20000, 20000, 8, 8);
-    const mat = new THREE.MeshBasicMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    var geo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    const mat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat);
     plane.rotateX( - Math.PI / 2);
     plane.position.set(0, -120, 0)
     scene.add(plane);
 
+    var beo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    const bat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    var plane = new THREE.Mesh(beo, bat);
+    plane.rotateZ( - Math.PI / 2);
+    plane.position.set(0, 275, -400)
+    scene.add(plane);
 
-    scene.fog = new THREE.Fog( 0x4ff904, 0, 2000 );
+
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 800 );
    
 
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
