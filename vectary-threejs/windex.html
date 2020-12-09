@@ -188,19 +188,26 @@
       });
     });
 
-    // const geometry10 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
-    // const material10 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
-    // const snake = new THREE.Mesh(geometry10, material10)
-    // snake.position.set(0,0,0)
-    // snake.rotation.x = 5
-    // console.log(snake.geometry.parameters)
-    // scene.add(snake)
+    const geometry10 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    const material10 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    const snake = new THREE.Mesh(geometry10, material10)
+    snake.position.set(0,0,0)
+    snake.rotation.x = 5
+    console.log(snake.geometry.parameters)
+    scene.add(snake)
 
-    // const geometry11 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
-    // const material11 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
-    // const snake2 = new THREE.Mesh(geometry11, material9)
-    // snake2.position.set(0,0,0)
-    // scene.add(snake2)
+    const geometry11 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    const material11 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    const snake2 = new THREE.Mesh(geometry11, material11)
+    snake2.position.set(0,0,0)
+    scene.add(snake2)
+   
+    const geometry12 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    const material12 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    const snake3 = new THREE.Mesh(geometry12, material12)
+    snake3.position.set(0,0,0)
+    snake3.rotation.y = -2
+    scene.add(snake3)
 
     const geometry = new THREE.SphereGeometry(20, 20, 20)
     const material = new THREE.MeshPhongMaterial({color: '#ff0000'})
@@ -269,7 +276,7 @@
 
     var controls = new OrbitControls( camera, renderer.domElement );
     controls.minDistance = -900
-    controls.maxDistance = 2000
+    controls.maxDistance = 20000
     controls.enableDamping = true;
     controls.dampingFactor = 0.27;
     controls.target = new THREE.Vector3(0,0,-100);
@@ -338,6 +345,9 @@
 
       mars.rotation.x += 0.01
       mars.rotation.y += 0.01
+      snake.rotation.y += 0.01
+      snake2.rotation.z += 0.01
+      snake3.rotation.x += 0.01
 
       controls.update();
       renderer.render(scene, camera)
