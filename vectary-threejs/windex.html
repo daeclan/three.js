@@ -41,7 +41,7 @@
     scene.add(light);
     
     const geometry9 = new THREE.SphereGeometry(1200, 33, 33)
-    const material9 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    const material9 = new THREE.MeshPhongMaterial({color: "#ff0000"})
     const universe = new THREE.Mesh(geometry9, material9)
     universe.position.set(0,0,0)
     scene.add(universe)
@@ -252,6 +252,15 @@
       backsound.loop = true
       backsound.start()
     })
+
+    domEvents.addEventListener(sun, 'mouseover', event => {
+      sun.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(sun, 'mouseout', event => {
+      sun.material.color.setHex( 0x000000 );
+    })
+
     domEvents.addEventListener(mercury, 'click', event => {
       player.start();
     })
