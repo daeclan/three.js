@@ -32,55 +32,79 @@
     })
 
 
-    // var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
-    // // light.position.set(0,15,0);
-    // scene.add(light);
+    var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
+    // light.position.set(0,15,0);
+    scene.add(light);
 
     var light = new THREE.PointLight(0xFFFFFF, 2, 500)
-    light.position.set(30,-15,-15);
+    light.position.set(0,100,35);
     scene.add(light);
     
-    const geometry9 = new THREE.SphereGeometry(1200, 33, 33)
-    const material9 = new THREE.MeshPhongMaterial({color: "#ff0000"})
-    const universe = new THREE.Mesh(geometry9, material9)
-    universe.position.set(0,0,0)
-    scene.add(universe)
+    // const geometry9 = new THREE.SphereGeometry(2000, 33, 33)
+    // const material9 = new THREE.MeshPhongMaterial({color: "#ff0000"})
+    // const universe = new THREE.Mesh(geometry9, material9)
+    // universe.position.set(0,0,0)
+    // scene.add(universe)
 
-    var geo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    var geo = new THREE.PlaneBufferGeometry(8000, 8000, 8, 8);
     const mat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat);
     plane.rotateX( - Math.PI / 2);
     plane.position.set(0, -125, 0)
     scene.add(plane);
 
+
+      const sirk = new THREE.TorusKnotBufferGeometry( 1230, 0.3, 128, 64 );
+      const kull = new THREE.MeshBasicMaterial( { color: 'white' } );
+
+      const count = 800;
+      const scale = 50;
+
+      for ( let i = 0; i < count; i ++ ) {
+
+        const r = Math.random() * 2.0 * Math.PI;
+        const z = ( Math.random() * 2.0 ) - 1.0;
+        const zScale = Math.sqrt( 1.0 - z * z ) * scale;
+
+        const hesh = new THREE.Mesh( sirk, kull );
+        hesh.position.set(
+          Math.cos( r ) * zScale,
+          Math.sin( r ) * zScale,
+          z * scale
+        );
+        hesh.rotation.set( Math.random(), Math.random(), Math.random() );
+        scene.add( hesh );
+
+      }
+
   
-    var beo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
-    const bat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(beo, bat);
-    plane.rotateZ( - Math.PI / 2);
-    plane.position.set(0, 275, -400)
-    scene.add(plane);
+    // var beo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    // const bat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    // var plane = new THREE.Mesh(beo, bat);
+    // plane.rotateZ( - Math.PI / 2);
+    // plane.position.set(0, 275, -400)
+    // scene.add(plane);
 
-    var ceo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
-    const cat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(ceo, cat);
-    plane.rotateY( - Math.PI / 2);
-    plane.position.set(400, 275, 0)
-    scene.add(plane);
+    // var ceo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    // const cat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    // var plane = new THREE.Mesh(ceo, cat);
+    // plane.rotateY( - Math.PI / 2);
+    // plane.position.set(400, 275, 0)
+    // scene.add(plane);
 
-    var deo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
-    const dat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(deo, dat);
-    plane.rotateY( - Math.PI / 2);
-    plane.position.set(-400, 275, 0)
-    scene.add(plane);
+    // var deo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    // const dat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    // var plane = new THREE.Mesh(deo, dat);
+    // plane.rotateY( - Math.PI / 2);
+    // plane.position.set(-400, 275, 0)
+    // scene.add(plane);
 
-    var feo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
-    const fat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(feo, fat);
-    plane.rotateX( - Math.PI / 2);
-    plane.position.set(0, 675, 0)
-    scene.add(plane);
+    // var feo = new THREE.PlaneBufferGeometry(800, 800, 8, 8);
+    // const fat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    // var plane = new THREE.Mesh(feo, fat);
+    // plane.rotateX( - Math.PI / 2);
+    // plane.position.set(0, 675, 0)
+    // scene.add(plane);
 
 
 
