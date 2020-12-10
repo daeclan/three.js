@@ -74,11 +74,11 @@
     // sprite.position.set(2000,2000,-2000)
     // sprite.scale.set(900,900,1)
     
-    // const geometry9 = new THREE.SphereGeometry(2000, 33, 33)
-    // const material9 = new THREE.MeshPhongMaterial({color: "#ff0000"})
-    // const universe = new THREE.Mesh(geometry9, material9)
-    // universe.position.set(0,0,0)
-    // scene.add(universe)
+    const geometry9 = new THREE.SphereGeometry(2000, 33, 33)
+    const material9 = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+    const universe = new THREE.Mesh(geometry9, material9)
+    universe.position.set(0,0,0)
+    scene.add(universe)
 
     var geo = new THREE.PlaneBufferGeometry(8000, 8000, 8, 8);
     const mat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
@@ -271,21 +271,35 @@
 
 
     const backsound = new Tone.Player("./hbsLoop.mp3").toDestination();
-    const player = new Tone.Player("./fed.mp3").toDestination();
-    // const player1 = new Tone.Player("./fed.mp3").toDestination();
-    const player2 = new Tone.Player("./grat.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
 
-    Tone.context.resume();
+    const player = new Tone.Player("./fed.mp3").toDestination();
+    // const player1 = new Tone.Player("./fed.mp3").toDestination();
+    const player2 = new Tone.Player("./grat.mp3").toDestination();
+    
 
+    
 
+    var temp = true
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
+    
+
+    function loopSwitch() {
+      backsound.volume.value = -10;
+        if (backsound.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound.stop();
+        } else if (backsound.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.start();
+    }}
+
+  
     domEvents.addEventListener(sun, 'click', event => {
-      backsound.loop = true
-      backsound.start()
+      loopSwitch();
     })
 
     domEvents.addEventListener(sun, 'mouseover', event => {
