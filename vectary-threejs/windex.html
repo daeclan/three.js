@@ -88,7 +88,9 @@
     var controls = new FirstPersonControls( camera, renderer.domElement );
 				controls.movementSpeed = 1500;
         controls.lookSpeed = 0.1;
-        controls.lookVertical = false
+        controls.lookVertical = true
+        // controls.verticalMin = Math.PI
+        // controls.verticalMax = Math.PI
 
     
     window.addEventListener('resize', () => {
@@ -107,6 +109,9 @@
     var light = new THREE.PointLight(0xFFFFFF, 2, 500)
     light.position.set(0,100,35);
     scene.add(light);
+    // var light = new THREE.SpotLight(0xFFFFFF, 0.5, 5)
+    // light.position.set(0,500,35);
+    // scene.add(light);
 
     const grass = new THREE.TextureLoader().load('./grass.jpg');
 
@@ -308,6 +313,70 @@
         object.rotation.z = 0;
       });
     });
+
+    //add particles
+
+    var particleTexture = THREE.ImageUtils.loadTexture( './vvs.png' );
+    particleGroup = new THREE.Object3D();
+    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 500;
+    var radiusRange = 2400;
+    for( var i = 0; i < totalParticles; i++ ) 
+    {
+        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
+      
+      var sprite = new THREE.Sprite( spriteMaterial );
+      sprite.scale.set( 75, 75, 1.0 ); // imageWidth, imageHeight
+      sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
+      // for a cube:
+      // sprite.position.multiplyScalar( radiusRange );
+      // for a solid sphere:
+      // sprite.position.setLength( radiusRange * Math.random() );
+      // for a spherical shell:
+      sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+      
+      // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
+      sprite.material.color.setHex( "#ff0000" ); 
+      
+      // sprite.opacity = 0.80; // translucent particles
+      sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
+      
+      particleGroup.add( sprite );
+      // add variable qualities to arrays, if they need to be accessed later
+      particleAttributes.startPosition.push( sprite.position.clone() );
+      particleAttributes.randomness.push( Math.random() );
+    }
+    particleGroup.position.y = 50;
+    scene.add( particleGroup );
+    
+
+    var particleGroup, particleAttributes;
+
+    var time = 4 * clock.getElapsedTime();
+    for ( var c = 0; c < particleGroup.children.length; c ++ ) 
+    {
+      var sprite = particleGroup.children[ c ];
+
+      // particle wiggle
+      // var wiggleScale = 2;
+      // sprite.position.x += wiggleScale * (Math.random() - 0.5);
+      // sprite.position.y += wiggleScale * (Math.random() - 0.5);
+      // sprite.position.z += wiggleScale * (Math.random() - 0.5);
+      
+      // pulse away/towards center
+      // individual rates of movement
+      var a = particleAttributes.randomness[c] + 1;
+      var pulseFactor = Math.sin(a * time) * 0.1 + 0.9;
+      sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
+      sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor;
+      sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
+    }
+
+    // rotate the entire group
+    // particleGroup.rotation.x = time * 0.5;
+    particleGroup.rotation.y = time * 0.75;
+    // particleGroup.rotation.z = time * 1.0;
     
     //add snakes
 
@@ -370,19 +439,19 @@
     // scene.add(snake3)
 
     const geometry = new THREE.SphereGeometry(20, 20, 20)
-    const material = new THREE.MeshPhongMaterial({color: '#ff0000'})
+    const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const mercury = new THREE.Mesh(geometry, material)
     mercury.position.set(0,300,0)
     scene.add(mercury)
 
     const geometry2 = new THREE.SphereGeometry(20, 20, 20)
-    const material2 = new THREE.MeshPhongMaterial({color: "#ff0000"})
+    const material2 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const moon = new THREE.Mesh(geometry2, material2)
     moon.position.set(180,300,0)
     scene.add(moon)
 
     const geometry3 = new THREE.SphereGeometry(20, 20, 20)
-    const material3 = new THREE.MeshPhongMaterial({color: "#ff0000"})
+    const material3 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const mars = new THREE.Mesh(geometry3, material3)
     mars.position.set(-200,300,0)
     scene.add(mars)
@@ -433,9 +502,26 @@
     domEvents.addEventListener(mercury, 'click', event => {
       player.start();
     })
+
+    domEvents.addEventListener(mercury, 'mouseover', event => {
+      mercury.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(mercury, 'mouseout', event => {
+      mercury.material.color.setHex( 0xff0000 );
+    })
+    
     domEvents.addEventListener(moon, 'click', event => {
       // moon.scale.set(5,5,5)
       player2.start();
+    })
+
+    domEvents.addEventListener(moon, 'mouseover', event => {
+      moon.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(moon, 'mouseout', event => {
+      moon.material.color.setHex( 0xff0000 );
     })
 
     Tone.context.resume();
@@ -445,6 +531,13 @@
       player2.start();
     })
 
+    domEvents.addEventListener(mars, 'mouseover', event => {
+      mars.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(mars, 'mouseout', event => {
+      mars.material.color.setHex( 0xff0000 );
+    })
 
 
     var r = 333;
@@ -479,7 +572,7 @@
       // snake.rotation.y += 0.01
       // snake2.rotation.z += 0.01
       // snake3.rotation.x += 0.01
-
+      particleGroup.rotation.z =+ 2
       controls.update( clock.getDelta() );
       scene.simulate();
 
