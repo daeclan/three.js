@@ -316,7 +316,7 @@
 
     //add particles
 
-    var particleTexture = THREE.ImageUtils.loadTexture( './vvs.png' );
+    var particleTexture = new THREE.TextureLoader().load( './vvs.png' );
     particleGroup = new THREE.Object3D();
     particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
@@ -347,27 +347,28 @@
       particleAttributes.startPosition.push( sprite.position.clone() );
       particleAttributes.randomness.push( Math.random() );
     }
-    particleGroup.position.y = 50;
+    particleGroup.position.y = 535;
     scene.add( particleGroup );
     
 
     var particleGroup, particleAttributes;
 
+    function particleUpdate(){
     var time = 4 * clock.getElapsedTime();
     for ( var c = 0; c < particleGroup.children.length; c ++ ) 
     {
       var sprite = particleGroup.children[ c ];
 
       // particle wiggle
-      // var wiggleScale = 2;
-      // sprite.position.x += wiggleScale * (Math.random() - 0.5);
-      // sprite.position.y += wiggleScale * (Math.random() - 0.5);
-      // sprite.position.z += wiggleScale * (Math.random() - 0.5);
+      var wiggleScale = 2;
+      sprite.position.x += wiggleScale * (Math.random() - 0.5);
+      sprite.position.y += wiggleScale * (Math.random() - 0.5);
+      sprite.position.z += wiggleScale * (Math.random() - 0.5);
       
       // pulse away/towards center
       // individual rates of movement
       var a = particleAttributes.randomness[c] + 1;
-      var pulseFactor = Math.sin(a * time) * 0.1 + 0.9;
+      var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
       sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
       sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor;
       sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
@@ -377,6 +378,7 @@
     // particleGroup.rotation.x = time * 0.5;
     particleGroup.rotation.y = time * 0.75;
     // particleGroup.rotation.z = time * 1.0;
+    }
     
     //add snakes
 
@@ -455,7 +457,13 @@
     const mars = new THREE.Mesh(geometry3, material3)
     mars.position.set(-200,300,0)
     scene.add(mars)
-    
+   
+    const geometry4 = new THREE.SphereGeometry(100,100,100)
+    const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const sun = new THREE.Mesh(geometry4, material4)
+    sun.position.set(0,520,0)
+    scene.add(sun)
+
     const geometry5 = new THREE.SphereGeometry(20, 20, 20)
     const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const neptune = new THREE.Mesh(geometry5, material5)
@@ -473,15 +481,28 @@
     const saturn = new THREE.Mesh(geometry7, material7)
     saturn.position.set(-200,750,0)
     scene.add(saturn)
+    
+    const geometry8 = new THREE.SphereGeometry(20, 20, 20)
+    const material8 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const pluto = new THREE.Mesh(geometry8, material8)
+    pluto.position.set(0,1000,0)
+    scene.add(pluto)
 
-    const geometry4 = new THREE.SphereGeometry(100,100,100)
-    const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
-    const sun = new THREE.Mesh(geometry4, material4)
-    sun.position.set(0,520,0)
-    scene.add(sun)
+    const geometry9 = new THREE.SphereGeometry(20, 20, 20)
+    const material9 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const jupiter = new THREE.Mesh(geometry9, material9)
+    jupiter.position.set(400,300,0)
+    scene.add(jupiter)
+
+    const geometry10 = new THREE.SphereGeometry(20, 20, 20)
+    const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const venus = new THREE.Mesh(geometry10, material10)
+    venus.position.set(-400,300,0)
+    scene.add(venus)
 
 
-    const backsound = new Tone.Player("./hbsLoop.mp3").toDestination();
+
+    const backsound = new Tone.Player("./trial.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -505,9 +526,11 @@
       backsound.volume.value = -5;
         if (backsound.state == "started") {
             // Use the Tone.Transport to pause audio
+            backsound.loop = false
             backsound.stop();
         } else if (backsound.state == "stopped") {
             // Use the Tone.Transport to start again
+            backsound.loop = true
             backsound.start();
     }}
 
@@ -529,23 +552,26 @@
     })
 
     domEvents.addEventListener(mercury, 'mouseover', event => {
+      mercury.scale.set(3,3,3)
       mercury.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(mercury, 'mouseout', event => {
+      mercury.scale.set(1,1,1)
       mercury.material.color.setHex( 0xff0000 );
     })
     
     domEvents.addEventListener(moon, 'click', event => {
-      // moon.scale.set(5,5,5)
       adlib2.start();
     })
 
     domEvents.addEventListener(moon, 'mouseover', event => {
+      moon.scale.set(3,3,3)
       moon.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(moon, 'mouseout', event => {
+      moon.scale.set(1,1,1)
       moon.material.color.setHex( 0xff0000 );
     })
 
@@ -556,10 +582,12 @@
     })
 
     domEvents.addEventListener(mars, 'mouseover', event => {
+      mars.scale.set(3,3,3)
       mars.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(mars, 'mouseout', event => {
+      mars.scale.set(1,1,1)
       mars.material.color.setHex( 0xff0000 );
     })
 
@@ -568,10 +596,12 @@
     })
 
     domEvents.addEventListener(neptune, 'mouseover', event => {
+      neptune.scale.set(3,3,3)
       neptune.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(neptune, 'mouseout', event => {
+      neptune.scale.set(1,1,1)
       neptune.material.color.setHex( 0xff0000 );
     })
 
@@ -580,10 +610,12 @@
     })
 
     domEvents.addEventListener(uranus, 'mouseover', event => {
+      uranus.scale.set(3,3,3)
       uranus.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(uranus, 'mouseout', event => {
+      uranus.scale.set(1,1,1)
       uranus.material.color.setHex( 0xff0000 );
     })
 
@@ -592,11 +624,55 @@
     })
 
     domEvents.addEventListener(saturn, 'mouseover', event => {
+      saturn.scale.set(3,3,3)
       saturn.material.color.setHex( 0xffffff );
     })
 
     domEvents.addEventListener(saturn, 'mouseout', event => {
+      saturn.scale.set(1,1,1)
       saturn.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(pluto, 'click', event => {
+      adlib7.start();
+    })
+
+    domEvents.addEventListener(pluto, 'mouseover', event => {
+      pluto.scale.set(3,3,3)
+      pluto.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(pluto, 'mouseout', event => {
+      pluto.scale.set(1,1,1)
+      pluto.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(venus, 'click', event => {
+      adlib8.start();
+    })
+
+    domEvents.addEventListener(venus, 'mouseover', event => {
+      venus.scale.set(3,3,3)
+      venus.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(venus, 'mouseout', event => {
+      venus.scale.set(1,1,1)
+      venus.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(jupiter, 'click', event => {
+      adlib9.start();
+    })
+
+    domEvents.addEventListener(jupiter, 'mouseover', event => {
+      jupiter.scale.set(3,3,3)
+      jupiter.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(jupiter, 'mouseout', event => {
+      jupiter.scale.set(1,1,1)
+      jupiter.material.color.setHex( 0xff0000 );
     })
 
 
@@ -624,10 +700,10 @@
       // snake2.rotation.z += 0.01
       // snake3.rotation.x += 0.01
 
-      // particleGroup.rotation.z =+ 2
+     
       controls.update( clock.getDelta() );
       scene.simulate();
-
+      particleUpdate();
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
   
