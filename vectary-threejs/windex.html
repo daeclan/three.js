@@ -88,7 +88,7 @@
     var controls = new FirstPersonControls( camera, renderer.domElement );
 				controls.movementSpeed = 1500;
         controls.lookSpeed = 0.1;
-        controls.lookVertical = true
+        // controls.lookVertical = true
         // controls.verticalMin = Math.PI
         // controls.verticalMax = Math.PI
 
@@ -455,6 +455,24 @@
     const mars = new THREE.Mesh(geometry3, material3)
     mars.position.set(-200,300,0)
     scene.add(mars)
+    
+    const geometry5 = new THREE.SphereGeometry(20, 20, 20)
+    const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
+    const neptune = new THREE.Mesh(geometry5, material5)
+    neptune.position.set(0,750,0)
+    scene.add(neptune)
+
+    const geometry6 = new THREE.SphereGeometry(20, 20, 20)
+    const material6 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const uranus = new THREE.Mesh(geometry6, material6)
+    uranus.position.set(180,750,0)
+    scene.add(uranus)
+
+    const geometry7 = new THREE.SphereGeometry(20, 20, 20)
+    const material7 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const saturn = new THREE.Mesh(geometry7, material7)
+    saturn.position.set(-200,750,0)
+    scene.add(saturn)
 
     const geometry4 = new THREE.SphereGeometry(100,100,100)
     const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
@@ -468,16 +486,23 @@
       Tone.context.resume();
     });
 
-    const player = new Tone.Player("./fed.mp3").toDestination();
-    // const player1 = new Tone.Player("./fed.mp3").toDestination();
-    const player2 = new Tone.Player("./grat.mp3").toDestination();
+    const adlib = new Tone.Player("./fed.mp3").toDestination();
+    const adlib2 = new Tone.Player("./grat.mp3").toDestination();
+    const adlib3 = new Tone.Player("./wavy.mp3").toDestination();
+    const adlib4 = new Tone.Player("./YSLUber.mp3").toDestination();
+    const adlib5 = new Tone.Player("./ohOKAY.mp3").toDestination();
+    const adlib6 = new Tone.Player("./pshPSH.mp3").toDestination();
+    const adlib7 = new Tone.Player("./coolRack.mp3").toDestination();
+    const adlib8 = new Tone.Player("./slimeSLIME.mp3").toDestination();
+    const adlib9 = new Tone.Player("./bling.mp3").toDestination();
+    const adlib10 = new Tone.Player("./slimeLove.mp3").toDestination();
     
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
     
 
     function loopSwitch() {
-      backsound.volume.value = -10;
+      backsound.volume.value = -5;
         if (backsound.state == "started") {
             // Use the Tone.Transport to pause audio
             backsound.stop();
@@ -500,7 +525,7 @@
     })
 
     domEvents.addEventListener(mercury, 'click', event => {
-      player.start();
+      adlib.start();
     })
 
     domEvents.addEventListener(mercury, 'mouseover', event => {
@@ -513,7 +538,7 @@
     
     domEvents.addEventListener(moon, 'click', event => {
       // moon.scale.set(5,5,5)
-      player2.start();
+      adlib2.start();
     })
 
     domEvents.addEventListener(moon, 'mouseover', event => {
@@ -527,8 +552,7 @@
     Tone.context.resume();
     
     domEvents.addEventListener(mars, 'click', event => {
-      // mars.scale.set(15,15,15)
-      player2.start();
+      adlib3.start();
     })
 
     domEvents.addEventListener(mars, 'mouseover', event => {
@@ -539,6 +563,42 @@
       mars.material.color.setHex( 0xff0000 );
     })
 
+    domEvents.addEventListener(neptune, 'click', event => {
+      adlib4.start();
+    })
+
+    domEvents.addEventListener(neptune, 'mouseover', event => {
+      neptune.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(neptune, 'mouseout', event => {
+      neptune.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(uranus, 'click', event => {
+      adlib5.start();
+    })
+
+    domEvents.addEventListener(uranus, 'mouseover', event => {
+      uranus.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(uranus, 'mouseout', event => {
+      uranus.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(saturn, 'click', event => {
+      adlib6.start();
+    })
+
+    domEvents.addEventListener(saturn, 'mouseover', event => {
+      saturn.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(saturn, 'mouseout', event => {
+      saturn.material.color.setHex( 0xff0000 );
+    })
+
 
     var r = 333;
     var theta = 0.2;
@@ -547,14 +607,6 @@
   
 
     const animate = () => { 
-  
-
-      // young.position.y += 0.10 
-      // stoner.position.y += 0.20
-      // life.position.y += 0.30
-      // mercury.rotation.z -= 0.01
-      // mercury.rotation.x -= 0.01
-
       // theta += dTheta;
       // moon.position.x = r * Math.cos(theta)
       // moon.position.z = r * Math.sin(theta)
@@ -562,17 +614,17 @@
       // mercury.position.z = (r * Math.sin(theta))
       // mars.position.x = r * Math.cos(theta) 
       // mars.position.z = (r * Math.sin(theta) * -1)
-      
-
-      moon.rotation.x += 0.01
-      moon.rotation.z += 0.01
-
-      mars.rotation.x += 0.01
-      mars.rotation.y += 0.01
+      // mercury.rotation.z -= 0.01
+      // mercury.rotation.x -= 0.01
+      // moon.rotation.x += 0.01
+      // moon.rotation.z += 0.01
+      // mars.rotation.x += 0.01
+      // mars.rotation.y += 0.01
       // snake.rotation.y += 0.01
       // snake2.rotation.z += 0.01
       // snake3.rotation.x += 0.01
-      particleGroup.rotation.z =+ 2
+
+      // particleGroup.rotation.z =+ 2
       controls.update( clock.getDelta() );
       scene.simulate();
 
