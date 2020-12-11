@@ -48,9 +48,9 @@
   <div id="blocker">
 
     <div id="instructions">
-      <span style="font-size:36px">Click to play</span>
+      <span style="font-size:36px">Click to slime</span>
       <br /><br />
-      Move: WASD<br/>
+      Move: WASD or Arrows<br/>
       Jump: SPACE<br/>
       Look: MOUSE
     </div>
@@ -221,9 +221,9 @@
     })
 
 
-    var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
-    light.position.set(0,15,0);
-    scene.add(light);
+    // var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
+    // light.position.set(0,15,0);
+    // scene.add(light);
 
     var light = new THREE.PointLight(0xFFFFFF, 2, 500)
     light.position.set(0,100,35);
@@ -242,7 +242,7 @@
     )
 
 
-    var balue = -400
+    var balue = -3
 
     var ground_geometry = new THREE.PlaneGeometry(2400,2200,100,100)
     
@@ -254,8 +254,8 @@
       // } else {
       //   balue = 0;
       // }
-      balue = noise.simplex2(vertex.x/10,vertex.y/10)
-      vertex.z = Math.abs(balue)*75;
+      balue = noise.simplex2(vertex.x/11,vertex.y/10)
+      vertex.z = Math.abs(balue)*44;
       // vertex.z = balue
     }
 
@@ -465,6 +465,44 @@
         object.rotation.z = 0;
       });
     });
+    
+    
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('ysl.mtl', function (materials) {
+
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('Snake_by_Swp.obj', function (object) {
+        scene.add(object);
+        life = object;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = 2000;
+        object.rotation.z = 0;
+        object.scale.set(50,50,50)
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('ysl.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('Snake_by_Swp.obj', function (object) {
+        scene.add(object);
+        life = object;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = -2000;
+        object.rotation.z = 0;
+        object.scale.set(50,50,50)
+      });
+    });
 
     // const geometry10 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
     // const material10 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
@@ -563,13 +601,6 @@
       player2.start();
     })
 
-    // function keyLog() {
-    //   document.onkeydown = function(e) {
-       
-    //   }
-    // }
-    // keyLog()
-
     // var controls = new OrbitControls( camera, renderer.domElement );
     // controls.minDistance = -900
     // controls.maxDistance = 20000
@@ -609,8 +640,6 @@
 //     }
 //     // render();
 // };
-
-
 
 
     var r = 333;
@@ -674,8 +703,8 @@
       // young.position.y += 0.10 
       // stoner.position.y += 0.20
       // life.position.y += 0.30
-      mercury.rotation.z -= 0.01
-      mercury.rotation.x -= 0.01
+      // mercury.rotation.z -= 0.01
+      // mercury.rotation.x -= 0.01
 
       // theta += dTheta;
       // moon.position.x = r * Math.cos(theta)
