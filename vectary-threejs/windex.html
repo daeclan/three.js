@@ -5,8 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slime Time</title>
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    #blocker {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+			}
+
+			#instructions {
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+				font-family: Arial;
+				font-size: 14px;
+				line-height: 24px;
+
+				cursor: pointer;
+			}
+  </style>
 </head>
 <body>
+
+  <div id="blocker">
+
+    <div id="instructions">
+      <span style="font-size:36px">Click to play</span>
+      <br /><br />
+      Move: WASD<br/>
+      Jump: SPACE<br/>
+      Look: MOUSE
+    </div>
+
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.js"></script>
   <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
@@ -18,7 +68,8 @@
 
   <script type="module">
     // import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
-    import { FirstPersonControls } from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
+    // import { FirstPersonControls } from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
+    import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js';
     import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
 
@@ -27,6 +78,8 @@
     
     var scene = new Physijs.Scene;
     scene.setGravity(new THREE.Vector3(0,-1000,0));
+
+    const objects = []
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.set(-200,200,5000)
@@ -38,14 +91,125 @@
     renderer.setSize(window.innerWidth,window.innerHeight);
     document.body.appendChild(renderer.domElement); 
 
-    var controls = new FirstPersonControls( camera, renderer.domElement );
-				controls.movementSpeed = 1500;
-				controls.lookSpeed = 0.1;
-        controls.verticalMin = 0;
-        controls.minDistance = -900;
-        controls.maxDistance = 20000;
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.27;
+    // var controls = new PointerLockControls( camera, renderer.domElement );
+				// controls.movementSpeed = 1500;
+				// controls.lookSpeed = 0.1;
+        // controls.verticalMin = 0;
+        // controls.minDistance = -900;
+        // controls.maxDistance = 20000;
+        // controls.enableDamping = true;
+        // controls.dampingFactor = 0.27;
+
+      let moveForward = false;
+			let moveBackward = false;
+			let moveLeft = false;
+			let moveRight = false;
+			let canJump = false;
+
+			let prevTime = performance.now();
+			const velocity = new THREE.Vector3();
+			const direction = new THREE.Vector3();
+			const vertex = new THREE.Vector3();
+			const color = new THREE.Color();
+        
+    var controls = new PointerLockControls( camera, document.body );
+
+    const blocker = document.getElementById( 'blocker' );
+    const instructions = document.getElementById( 'instructions' );
+
+    instructions.addEventListener( 'click', function () {
+
+      controls.lock();
+
+    }, false );
+
+    controls.addEventListener( 'lock', function () {
+
+      instructions.style.display = 'none';
+      blocker.style.display = 'none';
+
+    } );
+
+    controls.addEventListener( 'unlock', function () {
+
+      blocker.style.display = 'block';
+      instructions.style.display = '';
+
+    } );
+
+    scene.add( controls.getObject() );
+
+    const onKeyDown = function ( event ) {
+
+      switch ( event.keyCode ) {
+
+        case 38: // up
+        case 87: // w
+          moveForward = true;
+          break;
+
+        case 37: // left
+        case 65: // a
+          moveLeft = true;
+          break;
+
+        case 40: // down
+        case 83: // s
+          moveBackward = true;
+          break;
+
+        case 39: // right
+        case 68: // d
+          moveRight = true;
+          break;
+
+        case 32: // space
+          if ( canJump === true ) velocity.y += 350;
+          canJump = false;
+          break;
+
+      }
+
+    };
+
+    const onKeyUp = function ( event ) {
+
+      switch ( event.keyCode ) {
+
+        case 38: // up
+        case 87: // w
+          moveForward = false;
+          break;
+
+        case 37: // left
+        case 65: // a
+          moveLeft = false;
+          break;
+
+        case 40: // down
+        case 83: // s
+          moveBackward = false;
+          break;
+
+        case 39: // right
+        case 68: // d
+          moveRight = false;
+          break;
+
+      }
+
+    };
+
+    document.addEventListener( 'keydown', onKeyDown, false );
+    document.addEventListener( 'keyup', onKeyUp, false );
+    document.addEventListener( 'click', function() {
+          
+          console.log( 'click' );
+                
+      } );
+
+
+    var raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
     
     window.addEventListener('resize', () => {
@@ -53,7 +217,7 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.outputEncoding = THREE.sRGBEncoding;
-      controls.handleResize();
+      // controls.handleResize();
     })
 
 
@@ -204,7 +368,7 @@
 
 
 
-    // scene.fog = new THREE.Fog( 0x4ff904, 0, 2000 );
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
     
 
     var young;
@@ -357,10 +521,6 @@
     // const player1 = new Tone.Player("./fed.mp3").toDestination();
     const player2 = new Tone.Player("./grat.mp3").toDestination();
     
-
-    
-
-    var temp = true
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
     
@@ -461,7 +621,55 @@
 
     const animate = () => { 
       step += 1
+
+      const time = performance.now();
       
+      if ( controls.isLocked === true ) {
+        raycaster.ray.origin.copy( controls.getObject().position );
+        raycaster.ray.origin.y -= 10;
+
+        const intersections = raycaster.intersectObjects( objects );
+
+        const onObject = intersections.length > 0;
+
+        const delta = ( time - prevTime ) / 1000;
+
+        velocity.x -= velocity.x * 1.0 * delta;
+        velocity.z -= velocity.z * 1.0 * delta;
+
+        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+        direction.z = Number( moveForward ) - Number( moveBackward );
+        direction.x = Number( moveRight ) - Number( moveLeft );
+        direction.normalize(); // this ensures consistent movements in all directions
+
+        if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
+        if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
+
+        if ( onObject === true ) {
+
+          velocity.y = Math.max( 0, velocity.y );
+          canJump = true;
+
+        }
+
+        controls.moveRight( - velocity.x * delta );
+        controls.moveForward( - velocity.z * delta );
+
+        controls.getObject().position.y += ( velocity.y * delta ); // new behavior
+
+        if ( controls.getObject().position.y < 10 ) {
+
+          velocity.y = 0;
+          controls.getObject().position.y = 10;
+
+          canJump = true;
+
+        }
+
+        }
+
+        prevTime = time;
 
       // young.position.y += 0.10 
       // stoner.position.y += 0.20
@@ -491,7 +699,7 @@
         add_sphere();
       }
 
-      controls.update( clock.getDelta() );
+      // controls.update( clock.getDelta() );
       scene.simulate();
 
       requestAnimationFrame(animate)
