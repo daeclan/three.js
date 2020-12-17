@@ -67,7 +67,9 @@
 
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
+    camera.lookAt(0, -600, 0)
     camera.position.set(-200,200,3900)
+ 
 
     var cam3D = new Physijs.BoxMesh(
 			new THREE.BoxGeometry(1000, 1000, 1000),
@@ -88,6 +90,7 @@
     var controls = new FirstPersonControls( camera, renderer.domElement );
 				controls.movementSpeed = 1500;
         controls.lookSpeed = 0.1;
+        controls.target = new THREE.Vector3(0, 0, 0)
         // controls.lookVertical = true
         // controls.verticalMin = Math.PI
         // controls.verticalMax = Math.PI
@@ -502,7 +505,7 @@
 
 
 
-    const backsound = new Tone.Player("./trial.mp3").toDestination();
+    const backsound = new Tone.Player("./trial46.aac").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
