@@ -107,7 +107,7 @@
     // scene.add(light);
 
     var light = new THREE.PointLight(0xFFFFFF, 2, 500)
-    light.position.set(0,100,35);
+    light.position.set(0,1500,400);
     scene.add(light);
     // var light = new THREE.SpotLight(0xFFFFFF, 0.5, 5)
     // light.position.set(0,500,35);
@@ -115,20 +115,20 @@
 
     // make the floor
 
-    const grass = new THREE.TextureLoader().load('./assets/3D/grass.jpg');
+    const snow = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
 
     function createTerrain(){
 
     var ground_material = Physijs.createMaterial(
       new THREE.MeshLambertMaterial({
-        map: grass
+        map: snow
       }),
       0.1,
       10
     )
 
 
-    var balue = -3
+    var value1 = -3
 
     var ground_geometry = new THREE.PlaneGeometry(2400,2200,100,100)
     
@@ -136,13 +136,13 @@
     for (var i=0; i<ground_geometry.vertices.length; i++){
       var vertex = ground_geometry.vertices[i];
       // if ((vertex.x%10 ==0) | (vertex.y%10==0)){
-      //   balue = 25;
+      //   value1 = 25;
       // } else {
-      //   balue = 0;
+      //   value1 = 0;
       // }
-      balue = noise.simplex2(vertex.x/11,vertex.y/10)
-      vertex.z = Math.abs(balue)*44;
-      // vertex.z = balue
+      value1 = noise.simplex2(vertex.x/11,vertex.y/10)
+      vertex.z = Math.abs(value1)*44;
+      // vertex.z = value1
     }
 
     ground_geometry.computeFaceNormals();
@@ -155,7 +155,7 @@
       100,
       100
     )
-    ground.position.y = -200
+    ground.position.y = -100
     ground.scale.set(5,5,5)
     ground.rotation.x = Math.PI / -2 ;
 
@@ -230,19 +230,19 @@
       function ( gltf ) {
         scene.add( gltf.scene );
         gltf.scene.position.set(200,-100,0)
-        gltf.scene.scale.set(10,10,10)
+        gltf.scene.scale.set(100,100,100)
         gltf.scene.color = "#000000"
     })
 
-    loader.load(
-      // resource URL
-      './assets/3D/scene.gltf',
-      // called when the resource is loaded
-      function ( gltf ) {
-        scene.add( gltf.scene );
-        gltf.scene.position.set(20,-100,0)
-        gltf.scene.scale.set(10,10,10)
-    })
+    // loader.load(
+    //   // resource URL
+    //   './assets/3D/scene.gltf',
+    //   // called when the resource is loaded
+    //   function ( gltf ) {
+    //     scene.add( gltf.scene );
+    //     gltf.scene.position.set(20,-100,0)
+    //     gltf.scene.scale.set(100,100,100)
+    // })
 
     loader.load(
       // resource URL
@@ -251,7 +251,7 @@
       function ( gltf ) {
         scene.add( gltf.scene );
         gltf.scene.position.set(-170,-100,0)
-        gltf.scene.scale.set(10,10,10)
+        gltf.scene.scale.set(100,100,100)
     })
 
   //load statues   
@@ -273,10 +273,11 @@
         scene.add(object);
         young = object;
         object.position.z = 33;
-        object.position.y = 200;
-        object.position.x = -200;
-        object.rotation.z = -0.2;
-        object.scale.set(2000,2000,2000)
+        object.position.y = 1069;
+        object.position.x = -300;
+        object.rotation.z = THREE.Math.radToDeg(1.1);
+        
+        object.scale.set(3000,3000,3000)
       });
     });
 
@@ -292,10 +293,10 @@
         scene.add(object);
         stoner = object;
         object.position.z = 33;
-        object.position.y = 5
-        object.position.x = 0;
-        object.rotation.z = 0;
-        object.scale.set(2000,2000,2000)
+        object.position.y = 1069;
+        object.position.x = 100;
+        object.rotation.z = THREE.Math.radToDeg(0.99);
+        object.scale.set(3000,3000,3000)
       });
     });
 
@@ -311,10 +312,10 @@
         scene.add(object);
         life = object;
         object.position.z = 33;
-        object.position.y = 10;
-        object.position.x = 180;
-        object.rotation.z = 0;
-        object.scale.set(2000,2000,2000)
+        object.position.y = 1069;
+        object.position.x = 500;
+        object.rotation.z = THREE.Math.radToDeg(0.99000001);
+        object.scale.set(3000,3000,3000)
       });
     });
 
@@ -331,29 +332,18 @@
         var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
       
       var sprite = new THREE.Sprite( spriteMaterial );
-      sprite.scale.set( 75, 75, 1.0 ); // imageWidth, imageHeight
+      sprite.scale.set( 75, 75, 1.0 ); 
       sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
-      // for a cube:
-      // sprite.position.multiplyScalar( radiusRange );
-      // for a solid sphere:
-      // sprite.position.setLength( radiusRange * Math.random() );
-      // for a spherical shell:
       sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-      
-      // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
       sprite.material.color.setHex( "#ff0000" ); 
-      
-      // sprite.opacity = 0.80; // translucent particles
-      sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
-      
+      sprite.material.blending = THREE.AdditiveBlending
       particleGroup.add( sprite );
-      // add variable qualities to arrays, if they need to be accessed later
       particleAttributes.startPosition.push( sprite.position.clone() );
       particleAttributes.randomness.push( Math.random() );
     }
     particleGroup.position.y = 535;
+    particleGroup.position.z = 1100;
     scene.add( particleGroup );
-    
 
     var particleGroup, particleAttributes;
 
@@ -363,14 +353,11 @@
     {
       var sprite = particleGroup.children[ c ];
 
-      // particle wiggle
       var wiggleScale = 2;
       sprite.position.x += wiggleScale * (Math.random() - 0.5);
       sprite.position.y += wiggleScale * (Math.random() - 0.5);
       sprite.position.z += wiggleScale * (Math.random() - 0.5);
-      
-      // pulse away/towards center
-      // individual rates of movement
+
       var a = particleAttributes.randomness[c] + 1;
       var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
       sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
@@ -378,10 +365,8 @@
       sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
     }
 
-    // rotate the entire group
-    // particleGroup.rotation.x = time * 0.5;
     particleGroup.rotation.y = time * 0.75;
-    // particleGroup.rotation.z = time * 1.0;
+    particleGroup.rotation.z = time * 1.0;
     }
     
     //add snakes
@@ -447,61 +432,61 @@
     const geometry = new THREE.SphereGeometry(20, 20, 20)
     const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const mercury = new THREE.Mesh(geometry, material)
-    mercury.position.set(0,300,0)
+    mercury.position.set(0,300,1100)
     scene.add(mercury)
 
     const geometry2 = new THREE.SphereGeometry(20, 20, 20)
     const material2 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const moon = new THREE.Mesh(geometry2, material2)
-    moon.position.set(180,300,0)
+    moon.position.set(180,300,1100)
     scene.add(moon)
 
     const geometry3 = new THREE.SphereGeometry(20, 20, 20)
     const material3 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const mars = new THREE.Mesh(geometry3, material3)
-    mars.position.set(-200,300,0)
+    mars.position.set(-200,300,1100)
     scene.add(mars)
    
     const geometry4 = new THREE.SphereGeometry(100,100,100)
     const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
     const sun = new THREE.Mesh(geometry4, material4)
-    sun.position.set(0,520,0)
+    sun.position.set(0,520,1100)
     scene.add(sun)
 
     const geometry5 = new THREE.SphereGeometry(20, 20, 20)
     const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const neptune = new THREE.Mesh(geometry5, material5)
-    neptune.position.set(0,750,0)
+    neptune.position.set(0,750,1100)
     scene.add(neptune)
 
     const geometry6 = new THREE.SphereGeometry(20, 20, 20)
     const material6 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const uranus = new THREE.Mesh(geometry6, material6)
-    uranus.position.set(180,750,0)
+    uranus.position.set(180,750,1100)
     scene.add(uranus)
 
     const geometry7 = new THREE.SphereGeometry(20, 20, 20)
     const material7 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const saturn = new THREE.Mesh(geometry7, material7)
-    saturn.position.set(-200,750,0)
+    saturn.position.set(-200,750,1100)
     scene.add(saturn)
     
     const geometry8 = new THREE.SphereGeometry(20, 20, 20)
     const material8 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const pluto = new THREE.Mesh(geometry8, material8)
-    pluto.position.set(0,1000,0)
+    pluto.position.set(0,1000,1100)
     scene.add(pluto)
 
     const geometry9 = new THREE.SphereGeometry(20, 20, 20)
     const material9 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const jupiter = new THREE.Mesh(geometry9, material9)
-    jupiter.position.set(400,300,0)
+    jupiter.position.set(400,300,1100)
     scene.add(jupiter)
 
     const geometry10 = new THREE.SphereGeometry(20, 20, 20)
     const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const venus = new THREE.Mesh(geometry10, material10)
-    venus.position.set(-400,300,0)
+    venus.position.set(-400,300,1100)
     scene.add(venus)
 
 
@@ -704,9 +689,6 @@
       // snake2.rotation.z += 0.01
       // snake3.rotation.x += 0.01
 
-
-
-     
       controls.update( clock.getDelta() );
       scene.simulate();
       particleUpdate();
