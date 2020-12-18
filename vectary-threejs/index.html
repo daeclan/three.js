@@ -67,7 +67,7 @@
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
     camera.lookAt(0, -600, 0)
-    camera.position.set(-200,200,3900)
+    camera.position.set(-55,200,3900)
  
     var cam3D = new Physijs.BoxMesh(
 			new THREE.BoxGeometry(1000, 1000, 1000),
@@ -102,15 +102,18 @@
     })
 
 
-    // var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
-    // light.position.set(0,15,0);
-    // scene.add(light);
-
-    var light = new THREE.PointLight(0xFFFFFF, 2, 500)
-    light.position.set(0,1500,400);
+    var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.09 )
+    light.position.set(0,15,0);
     scene.add(light);
-    // var light = new THREE.SpotLight(0xFFFFFF, 0.5, 5)
-    // light.position.set(0,500,35);
+
+    var light = new THREE.PointLight(0xffff00, 2, 500)
+    light.position.set(0,2000,500);
+    scene.add(light);
+    var light = new THREE.SpotLight(0xFFFFFF, 0.75, 5)
+    light.position.set(0,3000,35);
+    scene.add(light);
+    // var light = new THREE.AmbientLight(0xFFFFFF, 2, 500)
+    // light.position.set(200,2000,400);
     // scene.add(light);
 
     // make the floor
@@ -341,7 +344,7 @@
       particleAttributes.startPosition.push( sprite.position.clone() );
       particleAttributes.randomness.push( Math.random() );
     }
-    particleGroup.position.y = 535;
+    particleGroup.position.y = 430;
     particleGroup.position.z = 1100;
     scene.add( particleGroup );
 
@@ -432,61 +435,61 @@
     const geometry = new THREE.SphereGeometry(20, 20, 20)
     const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const mercury = new THREE.Mesh(geometry, material)
-    mercury.position.set(0,300,1100)
+    mercury.position.set(0,200,1100)
     scene.add(mercury)
 
     const geometry2 = new THREE.SphereGeometry(20, 20, 20)
     const material2 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const moon = new THREE.Mesh(geometry2, material2)
-    moon.position.set(180,300,1100)
+    moon.position.set(180,200,1100)
     scene.add(moon)
 
     const geometry3 = new THREE.SphereGeometry(20, 20, 20)
     const material3 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const mars = new THREE.Mesh(geometry3, material3)
-    mars.position.set(-200,300,1100)
+    mars.position.set(-200,200,1100)
     scene.add(mars)
    
     const geometry4 = new THREE.SphereGeometry(100,100,100)
     const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
     const sun = new THREE.Mesh(geometry4, material4)
-    sun.position.set(0,520,1100)
+    sun.position.set(0,420,1100)
     scene.add(sun)
 
     const geometry5 = new THREE.SphereGeometry(20, 20, 20)
     const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const neptune = new THREE.Mesh(geometry5, material5)
-    neptune.position.set(0,750,1100)
+    neptune.position.set(0,650,1100)
     scene.add(neptune)
 
     const geometry6 = new THREE.SphereGeometry(20, 20, 20)
     const material6 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const uranus = new THREE.Mesh(geometry6, material6)
-    uranus.position.set(180,750,1100)
+    uranus.position.set(180,650,1100)
     scene.add(uranus)
 
     const geometry7 = new THREE.SphereGeometry(20, 20, 20)
     const material7 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const saturn = new THREE.Mesh(geometry7, material7)
-    saturn.position.set(-200,750,1100)
+    saturn.position.set(-200,650,1100)
     scene.add(saturn)
     
     const geometry8 = new THREE.SphereGeometry(20, 20, 20)
     const material8 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const pluto = new THREE.Mesh(geometry8, material8)
-    pluto.position.set(0,1000,1100)
+    pluto.position.set(0,900,1100)
     scene.add(pluto)
 
     const geometry9 = new THREE.SphereGeometry(20, 20, 20)
     const material9 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const jupiter = new THREE.Mesh(geometry9, material9)
-    jupiter.position.set(400,300,1100)
+    jupiter.position.set(400,200,1100)
     scene.add(jupiter)
 
     const geometry10 = new THREE.SphereGeometry(20, 20, 20)
     const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
     const venus = new THREE.Mesh(geometry10, material10)
-    venus.position.set(-400,300,1100)
+    venus.position.set(-400,200,1100)
     scene.add(venus)
 
 
