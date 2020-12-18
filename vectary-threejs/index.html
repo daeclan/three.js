@@ -374,63 +374,41 @@
     
     //add snakes
 
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
-
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('./assets/3D/Snake_by_Swp.obj', function (object) {
-        scene.add(object);
-        life = object;
+    var snexture = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
+    var basic = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setPath( './assets/3D/');
+    objLoader.load( 'Snake_by_Swp.obj', function ( object ) {
+        object.traverse(function(child) {
+            if (child instanceof THREE.Mesh){
+                child.material = basic;
+            }
+        });
+        scene.add( object );
         object.position.z = 33;
         object.position.y = 10;
         object.position.x = 2000;
         object.rotation.z = 0;
         object.scale.set(50,50,50)
-      });
     });
 
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('./assets/3D/Snake_by_Swp.obj', function (object) {
-        scene.add(object);
-        life = object;
+    var snexture2 = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
+    var basic2 = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+    var objLoader2 = new THREE.OBJLoader();
+    objLoader2.setPath( './assets/3D/');
+    objLoader2.load( 'Snake_by_Swp.obj', function ( object ) {
+        object.traverse(function(child) {
+            if (child instanceof THREE.Mesh){
+                child.material = basic;
+            }
+        });
+        scene.add( object );
         object.position.z = 33;
         object.position.y = 10;
         object.position.x = -2000;
         object.rotation.z = 0;
         object.scale.set(50,50,50)
-      });
     });
-
-    // const geometry10 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
-    // const material10 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
-    // const snake = new THREE.Mesh(geometry10, material10)
-    // snake.position.set(0,0,0)
-    // snake.rotation.x = 5
-    // console.log(snake.geometry.parameters)
-    // scene.add(snake)
-
-    // const geometry11 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
-    // const material11 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
-    // const snake2 = new THREE.Mesh(geometry11, material11)
-    // snake2.position.set(0,0,0)
-    // scene.add(snake2)
-   
-    // const geometry12 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
-    // const material12 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
-    // const snake3 = new THREE.Mesh(geometry12, material12)
-    // snake3.position.set(0,0,0)
-    // snake3.rotation.y = -2
-    // scene.add(snake3)
 
     const geometry = new THREE.SphereGeometry(20, 20, 20)
     const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
