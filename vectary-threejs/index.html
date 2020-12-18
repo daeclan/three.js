@@ -5,178 +5,720 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slime Time</title>
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    #blocker {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+			}
+
+			#instructions {
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+				font-family: Arial;
+				font-size: 14px;
+				line-height: 24px;
+
+				cursor: pointer;
+			}
+  </style>
 </head>
 <body>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.js"></script>
+  <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
   <script src="./js/obj.js"></script>
   <script src="./js/mtl.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+  <script src="./js/physi.js"></script>
+  <script src="./js/perlin_noise.js"></script>
 
 
   <script type="module">
-    import { GUI } from './node_modules/three/examples/jsm/libs/dat.gui.module.js';
-    import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
-
-    var scene = new THREE.Scene();
-
-    var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-		camera.position.set( 779, 389, 4 );
-    camera.rotation.z =  1200
+    import { FirstPersonControls } from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
+    import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
 
-    var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-    renderer.setClearColor("#DDDDDD");
+    Physijs.scripts.worker = './js/physijs_worker.js'
+    Physijs.scripts.ammo = 'https://chandlerprall.github.io/Physijs/examples/js/ammo.js';
+    
+    var scene = new Physijs.Scene;
+    scene.setGravity(new THREE.Vector3(0,-1000,0));
+
+    var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
+    camera.lookAt(0, -600, 0)
+    camera.position.set(-200,200,3900)
+ 
+    var cam3D = new Physijs.BoxMesh(
+			new THREE.BoxGeometry(1000, 1000, 1000),
+			new THREE.MeshBasicMaterial({color: "#000000"}),
+			0 // mass
+    );
+    scene.add(cam3D)
+    camera.add(cam3D)
+
+    var clock = new THREE.Clock();
+
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor("#007a33");
     renderer.setSize(window.innerWidth,window.innerHeight);
+    document.body.appendChild(renderer.domElement); 
 
-    document.body.appendChild(renderer.domElement);
+    var controls = new FirstPersonControls( camera, renderer.domElement );
+				controls.movementSpeed = 1500;
+        controls.lookSpeed = 0.1;
+        controls.target = new THREE.Vector3(0, 0, 0)
+        // controls.lookVertical = true
+        // controls.verticalMin = Math.PI
+        // controls.verticalMax = Math.PI
 
+    
     window.addEventListener('resize', () => {
       renderer.setSize(window.innerWidth,window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
-
       camera.updateProjectionMatrix();
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      controls.handleResize();
     })
 
-    var light = new THREE.PointLight(0xFFFDDD, 2.4, 1000)
-    light.position.set(0,15,15);
+
+    // var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.75 )
+    // light.position.set(0,15,0);
+    // scene.add(light);
+
+    var light = new THREE.PointLight(0xFFFFFF, 2, 500)
+    light.position.set(0,100,35);
     scene.add(light);
+    // var light = new THREE.SpotLight(0xFFFFFF, 0.5, 5)
+    // light.position.set(0,500,35);
+    // scene.add(light);
 
-    var ourObj;
-    var ourObj2;
-    var ourObj3;
-    var ourObj4;
-    var ourObj5;
+    // make the floor
 
-    var controls = new OrbitControls( camera, renderer.domElement );
-    controls.enableDamping = true;
-    controls.enableZoom = true;
-    controls.keys = {
-      LEFT: 37, //left arrow
-      UP: 38, // up arrow
-      RIGHT: 39, // right arrow
-      BOTTOM: 40 // down arrow
-    } 
+    const grass = new THREE.TextureLoader().load('./assets/3D/grass.jpg');
 
+    function createTerrain(){
 
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('2.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('2.obj', function (object) {
-        scene.add(object);
-        ourObj = object;
-        object.position.z = 0;
-        object.position.y = 0;
-        object.position.x = 0;
-        object.rotation.x = 0;
-
-        // this.tl = new TimelineMax();
-        // this.tl.from(ourObj.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-      });
-    });
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('Slime.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('Slime.obj', function (object) {
-        scene.add(object);
-        ourObj2 = object;
-        object.position.z = 0;
-        object.rotation.x = 250;
-
-        // this.tl = new TimelineMax();
-        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-     
-      });
-    });
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('Slime.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('Slime.obj', function (object) {
-        scene.add(object);
-        ourObj3 = object;
-        object.position.z -= 370;
-        object.rotation.x = 0;
-
-        // this.tl = new TimelineMax();
-        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-     
-      });
-    });
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('ysl.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('ysl.obj', function (object) {
-        scene.add(object);
-        ourObj4 = object;
-        object.position.z -= 370;
-        object.rotation.x = 0;
-
-        // this.tl = new TimelineMax();
-        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-     
-      });
-    });
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('ysl.mtl', function (materials) {
-
-      materials.preload();
-
-      var objLoader = new THREE.OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load('ysl.obj', function (object) {
-        scene.add(object);
-        ourObj5 = object;
-        object.position.x -= 370;
-        object.rotation.x = 0;
-
-        // this.tl = new TimelineMax();
-        // this.tl.from(ourObj2.scale, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-        // this.tl.from(ourObj2.rotation, 2, {y: 0, x: 0, z: 0, ease: Expo.easeOut});
-     
-      });
-    });
-
-    var render = function() {
-      requestAnimationFrame(render);
-
-      // ourObj.rotation.x -= 0
-      // ourObj2.rotation.z += 2
-      camera.rotation.z += .001
-      camera.rotation.z += .02
+    var ground_material = Physijs.createMaterial(
+      new THREE.MeshLambertMaterial({
+        map: grass
+      }),
+      0.1,
+      10
+    )
 
 
-      controls.update(); 
+    var balue = -3
 
-      renderer.render(scene, camera);
-      // console.log(camera.position)
+    var ground_geometry = new THREE.PlaneGeometry(2400,2200,100,100)
+    
+
+    for (var i=0; i<ground_geometry.vertices.length; i++){
+      var vertex = ground_geometry.vertices[i];
+      // if ((vertex.x%10 ==0) | (vertex.y%10==0)){
+      //   balue = 25;
+      // } else {
+      //   balue = 0;
+      // }
+      balue = noise.simplex2(vertex.x/11,vertex.y/10)
+      vertex.z = Math.abs(balue)*44;
+      // vertex.z = balue
     }
 
-    render();
+    ground_geometry.computeFaceNormals();
+    ground_geometry.computeVertexNormals();
+
+    var ground  = new Physijs.HeightfieldMesh(
+      ground_geometry,
+      ground_material,
+      0,
+      100,
+      100
+    )
+    ground.position.y = -200
+    ground.scale.set(5,5,5)
+    ground.rotation.x = Math.PI / -2 ;
+
+    return ground
+
+    }
+    scene.add(createTerrain())
+
+    // var count = 500
+    // var scale = 2000
+    const texture = new THREE.TextureLoader().load( './assets/3D/SL2.jpg' );
+
+    // for ( let i = 0; i < count; i ++ ) {
+
+    // const geometry66 = new THREE.SphereGeometry(100,20,10)
+    // const material66 = new THREE.MeshBasicMaterial({map: texture})
+    
+
+    // const r = Math.random() * 1.2 * Math.PI;
+    // const z = ( Math.random() * 2.0 ) - 1.0;
+    // const zScale = Math.sqrt( 1.0 - z * z ) * scale;
+
+    // const bun = new THREE.Mesh(geometry66, material66)
+    // bun.position.set(
+    //   Math.cos( r ) * zScale,
+    //   Math.sin( r ) * zScale,
+    //   z * scale
+    // );
+    // bun.rotation.set( Math.random(), Math.random(), Math.random() );
+    // scene.add( bun );
+    // console.log
+    // }
+
+
+    // const map = new THREE.TextureLoader().load( 'SL2.jpg' );
+
+
+    // const geometry7 = new THREE.SphereGeometry(2000, 33, 33)
+    // const material7 = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
+    // const blender = new Physijs.SphereMesh(geometry7, material7)
+    // blender.position.set(0,10000,0)
+    // scene.add(blender)
+
+    // var geo = new THREE.PlaneBufferGeometry(8000, 8000, 8, 8);
+    // const mat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
+    // var plane = new Physijs.BoxMesh(geo, mat);
+    // plane.rotateX( - Math.PI / 2);
+    // plane.position.set(0, -125, 0)
+    // scene.add(plane);
+  
+    var beo = new THREE.BoxBufferGeometry(8000,8000, 8000, 8);
+    const bat = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
+    var plane = new Physijs.BoxMesh(beo, bat, 0);
+    plane.rotateZ( - Math.PI / 2);
+    plane.rotation.z = - Math.PI * 2.0;
+    plane.position.set(0, 3900, 0)
+    scene.add(plane);
+
+
+
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
+    
+  // load statue pillars
+   
+
+    const loader = new GLTFLoader();
+
+    loader.load(
+      // resource URL
+      './assets/3D/scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        gltf.scene.position.set(200,-100,0)
+        gltf.scene.scale.set(10,10,10)
+        gltf.scene.color = "#000000"
+    })
+
+    loader.load(
+      // resource URL
+      './assets/3D/scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        gltf.scene.position.set(20,-100,0)
+        gltf.scene.scale.set(10,10,10)
+    })
+
+    loader.load(
+      // resource URL
+      './assets/3D/scene.gltf',
+      // called when the resource is loaded
+      function ( gltf ) {
+        scene.add( gltf.scene );
+        gltf.scene.position.set(-170,-100,0)
+        gltf.scene.scale.set(10,10,10)
+    })
+
+  //load statues   
+  
+    var young;
+    var stoner;
+    var life;
+        
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/Y.mtl', function (materials) {
+
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/Y.obj', function (object) {
+        scene.add(object);
+        young = object;
+        object.position.z = 33;
+        object.position.y = 200;
+        object.position.x = -200;
+        object.rotation.z = -0.2;
+        object.scale.set(2000,2000,2000)
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/S.mtl', function (materials) {
+
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/S.obj', function (object) {
+        scene.add(object);
+        stoner = object;
+        object.position.z = 33;
+        object.position.y = 5
+        object.position.x = 0;
+        object.rotation.z = 0;
+        object.scale.set(2000,2000,2000)
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/L.mtl', function (materials) {
+
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/L.obj', function (object) {
+        scene.add(object);
+        life = object;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = 180;
+        object.rotation.z = 0;
+        object.scale.set(2000,2000,2000)
+      });
+    });
+
+    //add particles
+
+    var particleTexture = new THREE.TextureLoader().load( './assets/3D/vvs.png' );
+    particleGroup = new THREE.Object3D();
+    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 500;
+    var radiusRange = 2400;
+    for( var i = 0; i < totalParticles; i++ ) 
+    {
+        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
+      
+      var sprite = new THREE.Sprite( spriteMaterial );
+      sprite.scale.set( 75, 75, 1.0 ); // imageWidth, imageHeight
+      sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
+      // for a cube:
+      // sprite.position.multiplyScalar( radiusRange );
+      // for a solid sphere:
+      // sprite.position.setLength( radiusRange * Math.random() );
+      // for a spherical shell:
+      sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+      
+      // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
+      sprite.material.color.setHex( "#ff0000" ); 
+      
+      // sprite.opacity = 0.80; // translucent particles
+      sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
+      
+      particleGroup.add( sprite );
+      // add variable qualities to arrays, if they need to be accessed later
+      particleAttributes.startPosition.push( sprite.position.clone() );
+      particleAttributes.randomness.push( Math.random() );
+    }
+    particleGroup.position.y = 535;
+    scene.add( particleGroup );
+    
+
+    var particleGroup, particleAttributes;
+
+    function particleUpdate(){
+    var time = 4 * clock.getElapsedTime();
+    for ( var c = 0; c < particleGroup.children.length; c ++ ) 
+    {
+      var sprite = particleGroup.children[ c ];
+
+      // particle wiggle
+      var wiggleScale = 2;
+      sprite.position.x += wiggleScale * (Math.random() - 0.5);
+      sprite.position.y += wiggleScale * (Math.random() - 0.5);
+      sprite.position.z += wiggleScale * (Math.random() - 0.5);
+      
+      // pulse away/towards center
+      // individual rates of movement
+      var a = particleAttributes.randomness[c] + 1;
+      var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
+      sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
+      sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor;
+      sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
+    }
+
+    // rotate the entire group
+    // particleGroup.rotation.x = time * 0.5;
+    particleGroup.rotation.y = time * 0.75;
+    // particleGroup.rotation.z = time * 1.0;
+    }
+    
+    //add snakes
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
+
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/Snake_by_Swp.obj', function (object) {
+        scene.add(object);
+        life = object;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = 2000;
+        object.rotation.z = 0;
+        object.scale.set(50,50,50)
+      });
+    });
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/Snake_by_Swp.obj', function (object) {
+        scene.add(object);
+        life = object;
+        object.position.z = 33;
+        object.position.y = 10;
+        object.position.x = -2000;
+        object.rotation.z = 0;
+        object.scale.set(50,50,50)
+      });
+    });
+
+    // const geometry10 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    // const material10 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    // const snake = new THREE.Mesh(geometry10, material10)
+    // snake.position.set(0,0,0)
+    // snake.rotation.x = 5
+    // console.log(snake.geometry.parameters)
+    // scene.add(snake)
+
+    // const geometry11 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    // const material11 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    // const snake2 = new THREE.Mesh(geometry11, material11)
+    // snake2.position.set(0,0,0)
+    // scene.add(snake2)
+   
+    // const geometry12 = new THREE.TorusKnotBufferGeometry( 2000, 220.3, 128, 64 )
+    // const material12 = new THREE.MeshPhongMaterial({color: "#ff0000", side: THREE.BacksSide})
+    // const snake3 = new THREE.Mesh(geometry12, material12)
+    // snake3.position.set(0,0,0)
+    // snake3.rotation.y = -2
+    // scene.add(snake3)
+
+    const geometry = new THREE.SphereGeometry(20, 20, 20)
+    const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
+    const mercury = new THREE.Mesh(geometry, material)
+    mercury.position.set(0,300,0)
+    scene.add(mercury)
+
+    const geometry2 = new THREE.SphereGeometry(20, 20, 20)
+    const material2 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const moon = new THREE.Mesh(geometry2, material2)
+    moon.position.set(180,300,0)
+    scene.add(moon)
+
+    const geometry3 = new THREE.SphereGeometry(20, 20, 20)
+    const material3 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const mars = new THREE.Mesh(geometry3, material3)
+    mars.position.set(-200,300,0)
+    scene.add(mars)
+   
+    const geometry4 = new THREE.SphereGeometry(100,100,100)
+    const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const sun = new THREE.Mesh(geometry4, material4)
+    sun.position.set(0,520,0)
+    scene.add(sun)
+
+    const geometry5 = new THREE.SphereGeometry(20, 20, 20)
+    const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
+    const neptune = new THREE.Mesh(geometry5, material5)
+    neptune.position.set(0,750,0)
+    scene.add(neptune)
+
+    const geometry6 = new THREE.SphereGeometry(20, 20, 20)
+    const material6 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const uranus = new THREE.Mesh(geometry6, material6)
+    uranus.position.set(180,750,0)
+    scene.add(uranus)
+
+    const geometry7 = new THREE.SphereGeometry(20, 20, 20)
+    const material7 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const saturn = new THREE.Mesh(geometry7, material7)
+    saturn.position.set(-200,750,0)
+    scene.add(saturn)
+    
+    const geometry8 = new THREE.SphereGeometry(20, 20, 20)
+    const material8 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const pluto = new THREE.Mesh(geometry8, material8)
+    pluto.position.set(0,1000,0)
+    scene.add(pluto)
+
+    const geometry9 = new THREE.SphereGeometry(20, 20, 20)
+    const material9 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const jupiter = new THREE.Mesh(geometry9, material9)
+    jupiter.position.set(400,300,0)
+    scene.add(jupiter)
+
+    const geometry10 = new THREE.SphereGeometry(20, 20, 20)
+    const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+    const venus = new THREE.Mesh(geometry10, material10)
+    venus.position.set(-400,300,0)
+    scene.add(venus)
+
+
+
+    const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
+    Tone.loaded().then(() => {
+      Tone.context.resume();
+    });
+
+    const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
+    const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
+    const adlib3 = new Tone.Player("./assets/MP3/wavy.mp3").toDestination();
+    const adlib4 = new Tone.Player("./assets/MP3/YSLUber.mp3").toDestination();
+    const adlib5 = new Tone.Player("./assets/MP3/ohOKAY.mp3").toDestination();
+    const adlib6 = new Tone.Player("./assets/MP3/pshPSH.mp3").toDestination();
+    const adlib7 = new Tone.Player("./assets/MP3/coolRack.mp3").toDestination();
+    const adlib8 = new Tone.Player("./assets/MP3/slimeSLIME.mp3").toDestination();
+    const adlib9 = new Tone.Player("./assets/MP3/bling.mp3").toDestination();
+    const adlib10 = new Tone.Player("./assets/MP3/slimeLove.mp3").toDestination();
+    
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+
+    
+
+    function loopSwitch() {
+      backsound.volume.value = -5;
+        if (backsound.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound.loop = false
+            backsound.stop();
+        } else if (backsound.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.loop = true
+            backsound.start();
+    }}
+
+  
+    domEvents.addEventListener(sun, 'click', event => {
+      loopSwitch();
+    })
+
+    domEvents.addEventListener(sun, 'mouseover', event => {
+      sun.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(sun, 'mouseout', event => {
+      sun.material.color.setHex( 0x000000 );
+    })
+
+    domEvents.addEventListener(mercury, 'click', event => {
+      adlib.start();
+    })
+
+    domEvents.addEventListener(mercury, 'mouseover', event => {
+      mercury.scale.set(3,3,3)
+      mercury.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(mercury, 'mouseout', event => {
+      mercury.scale.set(1,1,1)
+      mercury.material.color.setHex( 0xff0000 );
+    })
+    
+    domEvents.addEventListener(moon, 'click', event => {
+      adlib2.start();
+    })
+
+    domEvents.addEventListener(moon, 'mouseover', event => {
+      moon.scale.set(3,3,3)
+      moon.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(moon, 'mouseout', event => {
+      moon.scale.set(1,1,1)
+      moon.material.color.setHex( 0xff0000 );
+    })
+
+    Tone.context.resume();
+    
+    domEvents.addEventListener(mars, 'click', event => {
+      adlib3.start();
+    })
+
+    domEvents.addEventListener(mars, 'mouseover', event => {
+      mars.scale.set(3,3,3)
+      mars.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(mars, 'mouseout', event => {
+      mars.scale.set(1,1,1)
+      mars.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(neptune, 'click', event => {
+      adlib4.start();
+    })
+
+    domEvents.addEventListener(neptune, 'mouseover', event => {
+      neptune.scale.set(3,3,3)
+      neptune.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(neptune, 'mouseout', event => {
+      neptune.scale.set(1,1,1)
+      neptune.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(uranus, 'click', event => {
+      adlib5.start();
+    })
+
+    domEvents.addEventListener(uranus, 'mouseover', event => {
+      uranus.scale.set(3,3,3)
+      uranus.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(uranus, 'mouseout', event => {
+      uranus.scale.set(1,1,1)
+      uranus.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(saturn, 'click', event => {
+      adlib6.start();
+    })
+
+    domEvents.addEventListener(saturn, 'mouseover', event => {
+      saturn.scale.set(3,3,3)
+      saturn.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(saturn, 'mouseout', event => {
+      saturn.scale.set(1,1,1)
+      saturn.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(pluto, 'click', event => {
+      adlib7.start();
+    })
+
+    domEvents.addEventListener(pluto, 'mouseover', event => {
+      pluto.scale.set(3,3,3)
+      pluto.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(pluto, 'mouseout', event => {
+      pluto.scale.set(1,1,1)
+      pluto.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(venus, 'click', event => {
+      adlib8.start();
+    })
+
+    domEvents.addEventListener(venus, 'mouseover', event => {
+      venus.scale.set(3,3,3)
+      venus.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(venus, 'mouseout', event => {
+      venus.scale.set(1,1,1)
+      venus.material.color.setHex( 0xff0000 );
+    })
+
+    domEvents.addEventListener(jupiter, 'click', event => {
+      adlib9.start();
+    })
+
+    domEvents.addEventListener(jupiter, 'mouseover', event => {
+      jupiter.scale.set(3,3,3)
+      jupiter.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(jupiter, 'mouseout', event => {
+      jupiter.scale.set(1,1,1)
+      jupiter.material.color.setHex( 0xff0000 );
+    })
+
+
+    var r = 333;
+    var theta = 0.2;
+    var dTheta = 2 * Math.PI / 1000;
+    var step = 0;
+  
+
+    const animate = () => { 
+      // theta += dTheta;
+      // moon.position.x = r * Math.cos(theta)
+      // moon.position.z = r * Math.sin(theta)
+      // mercury.position.x = r * Math.cos(theta) 
+      // mercury.position.z = (r * Math.sin(theta))
+      // mars.position.x = r * Math.cos(theta) 
+      // mars.position.z = (r * Math.sin(theta) * -1)
+      // mercury.rotation.z -= 0.01
+      // mercury.rotation.x -= 0.01
+      // moon.rotation.x += 0.01
+      // moon.rotation.z += 0.01
+      // mars.rotation.x += 0.01
+      // mars.rotation.y += 0.01
+      // snake.rotation.y += 0.01
+      // snake2.rotation.z += 0.01
+      // snake3.rotation.x += 0.01
+
+
+
+     
+      controls.update( clock.getDelta() );
+      scene.simulate();
+      particleUpdate();
+      requestAnimationFrame(animate)
+      renderer.render(scene, camera)
+  
+    }
+
+    animate()
+    
+
+    
   </script>
-
-
 </body>
 </html>
