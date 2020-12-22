@@ -27,8 +27,35 @@
     Physijs.scripts.worker = './js/physijs_worker.js'
     Physijs.scripts.ammo = 'https://chandlerprall.github.io/Physijs/examples/js/ammo.js';
 
+    var loadingScreen = {
+      scene: new THREE.Scene(),
+      camera: new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000),
+      box: new THREE.Mesh(
+        new THREE.BoxGeometry(0.5,0.5,0.5),
+        new THREE.MeshBasicMaterial({ color:0x444ff })
+      )
+    }
+
+    var resourcesLoaded = false;
+    var loadingManager = null;
+
     var scene = new Physijs.Scene;
     scene.setGravity(new THREE.Vector3(0,-1000,0));
+
+    loadingScreen.box.position.set(0,0,5);
+    loadingScreen.camera.lookAt(loadingScreen.box.position)
+    loadingScreen.scene.add(loadingScreen.box)
+
+    loadingManager = new THREE.LoadingManager()
+
+    loadingManager.onProgress = function(item, loaded, total){
+      console.log(item, loaded, total)
+      }
+
+    loadingManager.onLoad = function(){
+      console.log("She all loaded, babe.");
+      resourcesLoaded = true;
+    }
 
     var clock = new THREE.Clock();
 
@@ -83,7 +110,7 @@
 
     // create box environment
 
-    const texture = new THREE.TextureLoader().load( './assets/3D/SL2.jpg' );
+    const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/SL2.jpg' );
     
   
     var box1 = new THREE.BoxBufferGeometry(8000,8000, 8000, 8);
@@ -98,7 +125,7 @@
 
     // create floor
 
-    const snow = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
+    const snow = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
 
     function createTerrain(){
 
@@ -144,7 +171,7 @@
     
   // load statue pillars
 
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader(loadingManager);
 
     loader.load(
       './assets/3D/scene.gltf',
@@ -170,13 +197,13 @@
     var life;
         
 
-    var mtlLoader = new THREE.MTLLoader();
+    var mtlLoader = new THREE.MTLLoader(loadingManager);
     mtlLoader.load('./assets/3D/Y.mtl', function (materials) {
 
 
       materials.preload();
 
-      var objLoader = new THREE.OBJLoader();
+      var objLoader = new THREE.OBJLoader(loadingManager);
       objLoader.setMaterials(materials);
       objLoader.load('./assets/3D/Y.obj', function (object) {
         scene.add(object);
@@ -190,12 +217,12 @@
       });
     });
 
-    var mtlLoader = new THREE.MTLLoader();
+    var mtlLoader = new THREE.MTLLoader(loadingManager);
     mtlLoader.load('./assets/3D/S.mtl', function (materials) {
 
 
       materials.preload();
-      var objLoader = new THREE.OBJLoader();
+      var objLoader = new THREE.OBJLoader(loadingManager);
       objLoader.setMaterials(materials);
       objLoader.load('./assets/3D/S.obj', function (object) {
         scene.add(object);
@@ -208,13 +235,13 @@
       });
     });
 
-    var mtlLoader = new THREE.MTLLoader();
+    var mtlLoader = new THREE.MTLLoader(loadingManager);
     mtlLoader.load('./assets/3D/L.mtl', function (materials) {
 
 
       materials.preload();
 
-      var objLoader = new THREE.OBJLoader();
+      var objLoader = new THREE.OBJLoader(loadingManager);
       objLoader.setMaterials(materials);
       objLoader.load('./assets/3D/L.obj', function (object) {
         scene.add(object);
@@ -229,7 +256,7 @@
 
     // add particles
 
-    var particleTexture = new THREE.TextureLoader().load( './assets/3D/vvs.png' );
+    var particleTexture = new THREE.TextureLoader(loadingManager).load( './assets/3D/vvs.png' );
     particleGroup = new THREE.Object3D();
     particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
@@ -279,9 +306,9 @@
     
     //add snakes
 
-    var snexture = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
+    var snexture = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
     var basic = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
-    var objLoader = new THREE.OBJLoader();
+    var objLoader = new THREE.OBJLoader(loadingManager);
     objLoader.setPath( './assets/3D/');
     objLoader.load( 'Snake_by_Swp.obj', function ( object ) {
         object.traverse(function(child) {
@@ -297,9 +324,9 @@
         object.scale.set(50,50,50)
     });
 
-    var snexture2 = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
+    var snexture2 = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
     var basic2 = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
-    var objLoader2 = new THREE.OBJLoader();
+    var objLoader2 = new THREE.OBJLoader(loadingManager);
     objLoader2.setPath( './assets/3D/');
     objLoader2.load( 'Snake_by_Swp.obj', function ( object ) {
         object.traverse(function(child) {
@@ -564,22 +591,20 @@
       // mercury.position.z = (r * Math.sin(theta))
       // mars.position.x = r * Math.cos(theta) 
       // mars.position.z = (r * Math.sin(theta) * -1)
-      // mercury.rotation.z -= 0.01
-      // mercury.rotation.x -= 0.01
-      // moon.rotation.x += 0.01
-      // moon.rotation.z += 0.01
-      // mars.rotation.x += 0.01
-      // mars.rotation.y += 0.01
-      // snake.rotation.y += 0.01
-      // snake2.rotation.z += 0.01
-      // snake3.rotation.x += 0.01
+
+      if( resourcesLoaded == false){
+        requestAnimationFrame(animate);
+
+        renderer.render(loadingScreen.scene, loadingScreen.camera);
+        return;
+      }
 
       controls.update( clock.getDelta() );
       scene.simulate();
       particleUpdate();
-      requestAnimationFrame(animate)
+      
       renderer.render(scene, camera)
-  
+      requestAnimationFrame(animate)
     }
 
     animate()
