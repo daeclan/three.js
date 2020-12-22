@@ -72,7 +72,7 @@
     var cam3D = new Physijs.BoxMesh(
 			new THREE.BoxGeometry(1000, 1000, 1000),
 			new THREE.MeshBasicMaterial({color: "#000000"}),
-			0 // mass
+			0 
     );
     scene.add(cam3D)
     camera.add(cam3D)
@@ -101,6 +101,8 @@
       controls.handleResize();
     })
 
+    // add lights
+
 
     var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.09 )
     light.position.set(0,15,0);
@@ -109,14 +111,27 @@
     var light = new THREE.PointLight(0xffff00, 2, 500)
     light.position.set(0,2000,500);
     scene.add(light);
+
     var light = new THREE.SpotLight(0xFFFFFF, 0.75, 5)
     light.position.set(0,3000,35);
     scene.add(light);
-    // var light = new THREE.AmbientLight(0xFFFFFF, 2, 500)
-    // light.position.set(200,2000,400);
-    // scene.add(light);
 
-    // make the floor
+    // create box environment
+
+    const texture = new THREE.TextureLoader().load( './assets/3D/SL2.jpg' );
+    
+  
+    var box1 = new THREE.BoxBufferGeometry(8000,8000, 8000, 8);
+    const boxMesh1 = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
+    var plane = new Physijs.BoxMesh(box1, boxMesh1, 0);
+    plane.rotateZ( - Math.PI / 2);
+    plane.rotation.z = - Math.PI * 2.0;
+    plane.position.set(0, 3900, 0)
+    scene.add(plane);
+
+    scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
+
+    // create floor
 
     const snow = new THREE.TextureLoader().load('./assets/3D/snow.jpg');
 
@@ -138,14 +153,8 @@
 
     for (var i=0; i<ground_geometry.vertices.length; i++){
       var vertex = ground_geometry.vertices[i];
-      // if ((vertex.x%10 ==0) | (vertex.y%10==0)){
-      //   value1 = 25;
-      // } else {
-      //   value1 = 0;
-      // }
       value1 = noise.simplex2(vertex.x/11,vertex.y/10)
       vertex.z = Math.abs(value1)*44;
-      // vertex.z = value1
     }
 
     ground_geometry.computeFaceNormals();
@@ -167,69 +176,13 @@
     }
     scene.add(createTerrain())
 
-    // var count = 500
-    // var scale = 2000
-    const texture = new THREE.TextureLoader().load( './assets/3D/SL2.jpg' );
-
-    // for ( let i = 0; i < count; i ++ ) {
-
-    // const geometry66 = new THREE.SphereGeometry(100,20,10)
-    // const material66 = new THREE.MeshBasicMaterial({map: texture})
-    
-
-    // const r = Math.random() * 1.2 * Math.PI;
-    // const z = ( Math.random() * 2.0 ) - 1.0;
-    // const zScale = Math.sqrt( 1.0 - z * z ) * scale;
-
-    // const bun = new THREE.Mesh(geometry66, material66)
-    // bun.position.set(
-    //   Math.cos( r ) * zScale,
-    //   Math.sin( r ) * zScale,
-    //   z * scale
-    // );
-    // bun.rotation.set( Math.random(), Math.random(), Math.random() );
-    // scene.add( bun );
-    // console.log
-    // }
-
-
-    // const map = new THREE.TextureLoader().load( 'SL2.jpg' );
-
-
-    // const geometry7 = new THREE.SphereGeometry(2000, 33, 33)
-    // const material7 = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide})
-    // const blender = new Physijs.SphereMesh(geometry7, material7)
-    // blender.position.set(0,10000,0)
-    // scene.add(blender)
-
-    // var geo = new THREE.PlaneBufferGeometry(8000, 8000, 8, 8);
-    // const mat = new THREE.MeshPhongMaterial({color: '#4ff904', side: THREE.DoubleSide });
-    // var plane = new Physijs.BoxMesh(geo, mat);
-    // plane.rotateX( - Math.PI / 2);
-    // plane.position.set(0, -125, 0)
-    // scene.add(plane);
-  
-    var beo = new THREE.BoxBufferGeometry(8000,8000, 8000, 8);
-    const bat = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
-    var plane = new Physijs.BoxMesh(beo, bat, 0);
-    plane.rotateZ( - Math.PI / 2);
-    plane.rotation.z = - Math.PI * 2.0;
-    plane.position.set(0, 3900, 0)
-    scene.add(plane);
-
-
-
-    scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
     
   // load statue pillars
-   
 
     const loader = new GLTFLoader();
 
     loader.load(
-      // resource URL
       './assets/3D/scene.gltf',
-      // called when the resource is loaded
       function ( gltf ) {
         scene.add( gltf.scene );
         gltf.scene.position.set(200,-100,0)
@@ -237,27 +190,15 @@
         gltf.scene.color = "#000000"
     })
 
-    // loader.load(
-    //   // resource URL
-    //   './assets/3D/scene.gltf',
-    //   // called when the resource is loaded
-    //   function ( gltf ) {
-    //     scene.add( gltf.scene );
-    //     gltf.scene.position.set(20,-100,0)
-    //     gltf.scene.scale.set(100,100,100)
-    // })
-
     loader.load(
-      // resource URL
       './assets/3D/scene.gltf',
-      // called when the resource is loaded
       function ( gltf ) {
         scene.add( gltf.scene );
         gltf.scene.position.set(-170,-100,0)
         gltf.scene.scale.set(100,100,100)
     })
 
-  //load statues   
+  // load statues   
   
     var young;
     var stoner;
@@ -289,7 +230,6 @@
 
 
       materials.preload();
-
       var objLoader = new THREE.OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load('./assets/3D/S.obj', function (object) {
@@ -322,7 +262,7 @@
       });
     });
 
-    //add particles
+    // add particles
 
     var particleTexture = new THREE.TextureLoader().load( './assets/3D/vvs.png' );
     particleGroup = new THREE.Object3D();
@@ -410,6 +350,8 @@
         object.scale.set(50,50,50)
     });
 
+    // create soundboard orbs
+
     const geometry = new THREE.SphereGeometry(20, 20, 20)
     const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
     const mercury = new THREE.Mesh(geometry, material)
@@ -471,6 +413,7 @@
     scene.add(venus)
 
 
+    // create/load tone.js sounds
 
     const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
     Tone.loaded().then(() => {
@@ -489,8 +432,6 @@
     const adlib10 = new Tone.Player("./assets/MP3/slimeLove.mp3").toDestination();
     
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-
-    
 
     function loopSwitch() {
       backsound.volume.value = -5;
@@ -544,8 +485,6 @@
       moon.scale.set(1,1,1)
       moon.material.color.setHex( 0xff0000 );
     })
-
-    Tone.context.resume();
     
     domEvents.addEventListener(mars, 'click', event => {
       adlib3.start();
