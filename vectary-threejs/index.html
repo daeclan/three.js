@@ -33,10 +33,6 @@
         display: none;
     }
 
-
- 
-    
-
     #loader {
         display: block;
         position: relative;
@@ -121,7 +117,13 @@
             var resourcesLoaded = false;
             var loadingManager = null;
 
-            loadingManager = new THREE.LoadingManager()
+            loadingManager = new THREE.LoadingManager( () => {
+              const loadingScreen = document.getElementById( 'loading-screen' )
+              // document.getElementById('loading-screen').id = 'fade-out'
+              loadingScreen.classList.add( 'fade-out' );
+		          // optional: remove loader from DOM via event listener
+		          loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+            })
               
             loadingManager.onProgress = function(item, loaded, total){
               const loadingScreen = document.getElementById( 'loading-screen' );
@@ -134,7 +136,6 @@
               resourcesLoaded = true;
               ;
             };
-
             window.addEventListener ("load", function() {
             loader.style.display = 'none';
             });
@@ -188,12 +189,10 @@
 
         window.addEventListener('mouseover', () => {
           controls.lookSpeed = 0.05
-          console.log(controls)
         })
 
         window.addEventListener('mouseout', () => {
           controls.lookSpeed = 0.0001
-          console.log(controls)
         })
 
         // add lights
@@ -216,12 +215,13 @@
         const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/SL2.jpg' );
         
         var roomBox = new THREE.BoxBufferGeometry(8000,8000, 8000, 8);
-        const roomMesh = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
-        var plane = new Physijs.BoxMesh(roomBox, roomMesh, 0);
-        plane.rotateZ( - Math.PI / 2);
-        plane.rotation.z = - Math.PI * 2.0;
-        plane.position.set(0, 3900, 0)
-        scene.add(plane);
+        const roomMaterial = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
+        var roomMesh = new Physijs.BoxMesh(roomBox, roomMaterial, 0);
+        roomMesh.rotateZ( - Math.PI / 2);
+        roomMesh.scale.set = -1;
+        roomMesh.rotation.z = - Math.PI * 2.0;
+        roomMesh.position.set(0, 3900, 0)
+        scene.add(roomMesh);
 
         scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
 
@@ -239,12 +239,10 @@
           10
         )
 
-
         var value1 = -3
 
         var ground_geometry = new THREE.PlaneGeometry(2400,2200,100,100)
         
-
         for (var i=0; i<ground_geometry.vertices.length; i++){
           var vertex = ground_geometry.vertices[i];
           value1 = noise.simplex2(vertex.x/11,vertex.y/10)
@@ -292,19 +290,19 @@
             gltf.scene.scale.set(100,100,100)
         })
 
-      // load statues   
+      // load YSL statues   
       
         var young;
         var stoner;
         var life;
+
+
+        
             
 
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load('./assets/3D/Y.mtl', function (materials) {
-
-
           materials.preload();
-
           var objLoader = new THREE.OBJLoader(loadingManager);
           objLoader.setMaterials(materials);
           objLoader.load('./assets/3D/Y.obj', function (object) {
@@ -321,8 +319,6 @@
 
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load('./assets/3D/S.mtl', function (materials) {
-
-
           materials.preload();
           var objLoader = new THREE.OBJLoader(loadingManager);
           objLoader.setMaterials(materials);
@@ -339,10 +335,7 @@
 
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load('./assets/3D/L.mtl', function (materials) {
-
-
           materials.preload();
-
           var objLoader = new THREE.OBJLoader(loadingManager);
           objLoader.setMaterials(materials);
           objLoader.load('./assets/3D/L.obj', function (object) {
@@ -362,7 +355,7 @@
         particleGroup = new THREE.Object3D();
         particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
-        var totalParticles = 500;
+        var totalParticles = 777;
         var radiusRange = 2400;
         for( var i = 0; i < totalParticles; i++ ) 
         {
@@ -426,7 +419,7 @@
             object.scale.set(50,50,50)
         });
 
-        var snexture2 = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
+        
         var basic2 = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
         var objLoader2 = new THREE.OBJLoader(loadingManager);
         objLoader2.setPath( './assets/3D/');
@@ -682,9 +675,7 @@
         var r = 333;
         var theta = 0.2;
         var dTheta = 2 * Math.PI / 1000;
-        var step = 0;
       
-
         const animate = () => { 
           // theta += dTheta;
           // moon.position.x = r * Math.cos(theta)
@@ -703,9 +694,6 @@
         }
 
         animate()
-        
-
-      
       </script>
 </body>
 </html>
