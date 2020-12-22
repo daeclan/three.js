@@ -29,6 +29,14 @@
         opacity: 0;
     }
 
+    #loading-screen.hidden {
+        display: none;
+    }
+
+
+ 
+    
+
     #loader {
         display: block;
         position: relative;
@@ -96,8 +104,6 @@
   </style>
 </head>
 <body>
-  <section id="loading-screen">
-    <div id="loader">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.js"></script>
       <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
@@ -106,10 +112,39 @@
       <script src="./js/physi.js"></script>
       <script src="./js/perlin_noise.js"></script>
 
+      <section id="loading-screen">
+        <div id="loader">
+          <script>
+            var i = true
+            var loadAnimation = document.getElementById( 'loading-screen' )
+
+            var resourcesLoaded = false;
+            var loadingManager = null;
+
+            loadingManager = new THREE.LoadingManager()
+              
+            loadingManager.onProgress = function(item, loaded, total){
+              const loadingScreen = document.getElementById( 'loading-screen' );
+              console.log(item, loaded, total)
+              }
+
+            loadingManager.onLoad = function(){
+              document.getElementById('loading-screen').id = 'fade-out'
+              console.log("She all loaded.");
+              resourcesLoaded = true;
+              ;
+            };
+
+            window.addEventListener ("load", function() {
+            loader.style.display = 'none';
+            });
+        </script>
+      </div>
+    </section>
+
       <script type="module">
         import { FirstPersonControls } from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
         import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-
         Physijs.scripts.worker = './js/physijs_worker.js'
         Physijs.scripts.ammo = 'https://chandlerprall.github.io/Physijs/examples/js/ammo.js';
 
@@ -122,13 +157,13 @@
         camera.lookAt(0, -600, 0)
         camera.position.set(-55,200,3900)
     
-        var cam3D = new Physijs.BoxMesh(
-          new THREE.BoxGeometry(1000, 1000, 1000),
-          new THREE.MeshBasicMaterial({color: "#000000"}),
-          0 
-        );
-        scene.add(cam3D)
-        camera.add(cam3D)
+        // var cam3D = new Physijs.BoxMesh(
+        //   new THREE.BoxGeometry(1000, 1000, 1000),
+        //   new THREE.MeshBasicMaterial({color: "#000000"}),
+        //   0 
+        // ); 
+        // scene.add(cam3D)
+        // camera.add(cam3D)
 
         var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setClearColor("#007a33");
@@ -136,39 +171,12 @@
         document.body.appendChild(renderer.domElement); 
 
         var controls = new FirstPersonControls( camera, renderer.domElement );
-            controls.movementSpeed = 1500;
-            controls.lookSpeed = 0.1;
-            controls.target = new THREE.Vector3(0, 0, 0)
-            // controls.lookVertical = true
-            // controls.verticalMin = Math.PI
-            // controls.verticalMax = Math.PI
+        controls.movementSpeed = 1500;
+        controls.lookSpeed = 0.05;
+        controls.target = new THREE.Vector3(0, 0, 0)
+        // controls.verticalMin = Math.PI
+        // controls.verticalMax = Math.PI
             
-        var i = true
-
-        //we gotta make a class that is just blank and update to that POST fade out
-
-        if(i){
-        var loadAnimation = document.getElementById( 'loading-screen' )
-
-        var resourcesLoaded = false;
-        var loadingManager = null;
-
-        loadingManager = new THREE.LoadingManager()
-          
-        loadingManager.onProgress = function(item, loaded, total){
-          const loadingScreen = document.getElementById( 'loading-screen' );
-          console.log(item, loaded, total)
-          }
-
-        loadingManager.onLoad = function(){
-          const loadingScreen = document.getElementById( 'loading-screen' );
-          console.log("She all loaded, babe.");
-          loadingScreen.classList.add( 'fade-out' );
-          resourcesLoaded = true;
-          document.getElementById('loading-screen').id = '';
-          i = false
-          console.log(i)
-        }};
         
         window.addEventListener('resize', () => {
           renderer.setSize(window.innerWidth,window.innerHeight);
@@ -176,6 +184,16 @@
           camera.updateProjectionMatrix();
           renderer.outputEncoding = THREE.sRGBEncoding;
           controls.handleResize();
+        })
+
+        window.addEventListener('mouseover', () => {
+          controls.lookSpeed = 0.05
+          console.log(controls)
+        })
+
+        window.addEventListener('mouseout', () => {
+          controls.lookSpeed = 0.0001
+          console.log(controls)
         })
 
         // add lights
@@ -689,7 +707,5 @@
 
       
       </script>
-    </div>
-  </section>
 </body>
 </html>
