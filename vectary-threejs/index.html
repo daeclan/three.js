@@ -315,76 +315,82 @@
         var life;
 
 
-        // var OBJFile = 'my/mesh.obj';
-        // var MTLFile = 'my/mesh.mtl';
-        // var JPGFile = 'my/texture.jpg';
+        var yOBJFile = './assets/3D/Y.obj';
+        var yMTLFile = './assets/3D/Y.mtl';
+        var JPGFile = './assets/3D/snow.jpg';
 
-        // new THREE.MTLLoader()
-        // .load(MTLFile, function (materials) {
-        //     materials.preload();
-        //     new THREE.OBJLoader()
-        //         .setMaterials(materials)
-        //         .load(OBJFile, function (object) {
-        //             object.position.y = - 95;
-        //             var texture = new THREE.TextureLoader().load(JPGFile);
+        var yMTL = new THREE.MTLLoader(loadingManager)
+        yMTL.load(yMTLFile, function (materials) {
+            materials.preload();
+            var yOBJ = new THREE.OBJLoader(loadingManager)
+                .setMaterials(materials)
+                .load(yOBJFile, function (object) {
+                  object.position.z = 33;
+                  object.position.y = 1069;
+                  object.position.x = -300;
+                  object.scale.set(3200,3200,3200)
+                  object.rotation.z = THREE.Math.radToDeg(1.1);
+                    var texture = new THREE.TextureLoader().load(JPGFile);
 
-        //             object.traverse(function (child) {   // aka setTexture
-        //                 if (child instanceof THREE.Mesh) {
-        //                     child.material.map = texture;
-        //                 }
-        //             });
-        //             scene.add(object);
-        //         });
-        // });
-            
-        
-        var mtlLoader = new THREE.MTLLoader(loadingManager);
-        mtlLoader.load('./assets/3D/Y.mtl', function (materials) {
-          materials.preload();
-          var objLoader = new THREE.OBJLoader(loadingManager);
-          objLoader.setMaterials(materials);
-          objLoader.load('./assets/3D/Y.obj', function (object) {
-            scene.add(object);
-            young = object;
-            object.position.z = 33;
-            object.position.y = 1069;
-            object.position.x = -300;
-            object.rotation.z = THREE.Math.radToDeg(1.1);
-            
-            object.scale.set(3000,3000,3000)
-          });
+                    object.traverse(function (child) {  
+                        if (child instanceof THREE.Mesh) {
+                            child.material.map = texture;
+                        }
+                    });
+                    scene.add(object);
+                });
         });
 
-        var mtlLoader = new THREE.MTLLoader(loadingManager);
-        mtlLoader.load('./assets/3D/S.mtl', function (materials) {
-          materials.preload();
-          var objLoader = new THREE.OBJLoader(loadingManager);
-          objLoader.setMaterials(materials);
-          objLoader.load('./assets/3D/S.obj', function (object) {
-            scene.add(object);
-            stoner = object;
-            object.position.z = 33;
-            object.position.y = 1069;
-            object.position.x = 100;
-            object.rotation.z = THREE.Math.radToDeg(0.99);
-            object.scale.set(3000,3000,3000)
-          });
+        var sOBJFile = './assets/3D/S.obj';
+        var sMTLFile = './assets/3D/S.mtl';
+
+        var sMTL = new THREE.MTLLoader(loadingManager)
+        sMTL.load(sMTLFile, function (materials) {
+            materials.preload();
+            var sOBJ = new THREE.OBJLoader(loadingManager)
+                .setMaterials(materials)
+                .load(sOBJFile, function (object) {
+                  object.position.z = 33;
+                  object.position.y = 1069;
+                  object.position.x = 100;
+                  object.rotation.z = THREE.Math.radToDeg(0.99);
+                  object.scale.set(3200,3200,3200)
+                  object.rotation.z = THREE.Math.radToDeg(1.1);
+                    var texture = new THREE.TextureLoader().load(JPGFile);
+
+                    object.traverse(function (child) {  
+                        if (child instanceof THREE.Mesh) {
+                            child.material.map = texture;
+                        }
+                    });
+                    scene.add(object);
+                });
         });
 
-        var mtlLoader = new THREE.MTLLoader(loadingManager);
-        mtlLoader.load('./assets/3D/L.mtl', function (materials) {
-          materials.preload();
-          var objLoader = new THREE.OBJLoader(loadingManager);
-          objLoader.setMaterials(materials);
-          objLoader.load('./assets/3D/L.obj', function (object) {
-            scene.add(object);
-            life = object;
-            object.position.z = 33;
-            object.position.y = 1069;
-            object.position.x = 500;
-            object.rotation.z = THREE.Math.radToDeg(0.99000001);
-            object.scale.set(3000,3000,3000)
-          });
+        var lOBJFile = './assets/3D/L.obj';
+        var lMTLFile = './assets/3D/L.mtl';
+
+        var lMTL = new THREE.MTLLoader(loadingManager)
+        lMTL.load(lMTLFile, function (materials) {
+            materials.preload();
+            var lOBJ = new THREE.OBJLoader(loadingManager)
+                .setMaterials(materials)
+                .load(lOBJFile, function (object) {
+                  object.position.z = 33;
+                  object.position.y = 1069;
+                  object.position.x = 500;
+                  object.rotation.z = THREE.Math.radToDeg(0.9900001);
+                  object.scale.set(3200,3200,3200)
+                  object.rotation.z = THREE.Math.radToDeg(1.1);
+                    var texture = new THREE.TextureLoader().load(JPGFile);
+
+                    object.traverse(function (child) {  
+                        if (child instanceof THREE.Mesh) {
+                            child.material.map = texture;
+                        }
+                    });
+                    scene.add(object);
+                });
         });
 
         // add particles
@@ -570,7 +576,6 @@
                 backsound.start();
         }}
 
-      
         domEvents.addEventListener(sun, 'click', event => {
           loopSwitch();
         })
@@ -709,6 +714,7 @@
           jupiter.material.color.setHex( 0xff0000 );
         })
 
+        // create animation
 
         var r = 333;
         var theta = 0.2;
@@ -728,8 +734,6 @@
           particleUpdate();
           if(camera.position.x < -4000){controls.movementSpeed = 0}
 
-
-          
           renderer.render(scene, camera)
           requestAnimationFrame(animate)
         }
