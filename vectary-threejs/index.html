@@ -128,6 +128,7 @@
             loadingManager.onProgress = function(item, loaded, total){
               const loadingScreen = document.getElementById( 'loading-screen' );
               console.log(item, loaded, total)
+      
               }
 
             loadingManager.onLoad = function(){
@@ -158,14 +159,6 @@
         camera.lookAt(0, -600, 0)
         camera.position.set(-55,200,3900)
     
-        // var cam3D = new Physijs.BoxMesh(
-        //   new THREE.BoxGeometry(1000, 1000, 1000),
-        //   new THREE.MeshBasicMaterial({color: "#000000"}),
-        //   0 
-        // ); 
-        // scene.add(cam3D)
-        // camera.add(cam3D)
-
         var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setClearColor("#007a33");
         renderer.setSize(window.innerWidth,window.innerHeight);
@@ -175,10 +168,11 @@
         controls.movementSpeed = 1500;
         controls.lookSpeed = 0.05;
         controls.target = new THREE.Vector3(0, 0, 0)
-        // controls.verticalMin = Math.PI
-        // controls.verticalMax = Math.PI
+
+        if(camera.position.x < -2000){controls.movementSpeed = 0}
+        if(camera.position.z < -1000){controls.movementSpeed = 0}
+        console.log(controls.movementSpeed)
             
-        
         window.addEventListener('resize', () => {
           renderer.setSize(window.innerWidth,window.innerHeight);
           camera.aspect = window.innerWidth / window.innerHeight;
@@ -195,8 +189,8 @@
           controls.lookSpeed = 0.0001
         })
 
-        // add lights
 
+        // add lights
 
         var light = new THREE.HemisphereLight( 0xFFFFFF, 0xffffff, 0.09 )
         light.position.set(0,15,0);
@@ -222,6 +216,30 @@
         roomMesh.rotation.z = - Math.PI * 2.0;
         roomMesh.position.set(0, 3900, 0)
         scene.add(roomMesh);
+
+        var bbox = new THREE.Box3();
+        bbox.setFromObject(roomMesh)
+        console.log("***")
+        console.log(roomMesh.geometry)
+        console.log("***")
+        roomMesh.geometry.computeBoundingBox();
+        bbox.copy( roomMesh.geometry.boundingBox ).applyMatrix4( roomMesh.matrixWorld );
+
+        if(camera.position.x > bbox.max.x){
+        camera.position.x = bbox.max.x;
+        }
+
+        if(camera.position.x < bbox.min.x){
+            camera.position.x = bbox.max.x;
+        }
+
+        if(camera.position.z > bbox.max.z){
+            camera.position.z = bbox.max.z;
+        }
+
+        if(camera.position.z < bbox.min.z){
+            camera.position.z = bbox.max.z;
+        }
 
         scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
 
@@ -297,15 +315,40 @@
         var life;
 
 
-        
-            
+        // var OBJFile = 'my/mesh.obj';
+        // var MTLFile = 'my/mesh.mtl';
+        // var JPGFile = 'my/texture.jpg';
 
+        // new THREE.MTLLoader()
+        // .load(MTLFile, function (materials) {
+        //     materials.preload();
+        //     new THREE.OBJLoader()
+        //         .setMaterials(materials)
+        //         .load(OBJFile, function (object) {
+        //             object.position.y = - 95;
+        //             var texture = new THREE.TextureLoader().load(JPGFile);
+
+        //             object.traverse(function (child) {   // aka setTexture
+        //                 if (child instanceof THREE.Mesh) {
+        //                     child.material.map = texture;
+        //                 }
+        //             });
+        //             scene.add(object);
+        //         });
+        // });
+            
+        
         var mtlLoader = new THREE.MTLLoader(loadingManager);
         mtlLoader.load('./assets/3D/Y.mtl', function (materials) {
           materials.preload();
           var objLoader = new THREE.OBJLoader(loadingManager);
           objLoader.setMaterials(materials);
           objLoader.load('./assets/3D/Y.obj', function (object) {
+            var texture = new THREE.MeshBasicMaterial({color: 0x000000})
+            object.traverse(function (child) {  
+              if (child instanceof THREE.Mesh) {
+                  child.material.map = texture;
+            }
             scene.add(object);
             young = object;
             object.position.z = 33;
@@ -686,8 +729,12 @@
           // mars.position.z = (r * Math.sin(theta) * -1)
 
           controls.update( clock.getDelta() );
+          console.log(camera.position.x)
           scene.simulate();
           particleUpdate();
+          if(camera.position.x < -4000){controls.movementSpeed = 0}
+
+
           
           renderer.render(scene, camera)
           requestAnimationFrame(animate)

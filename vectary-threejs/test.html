@@ -1,163 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
 
-/*
-Three.js "tutorials by example"
-Author: Lee Stemkoski
-Date: July 2013 (three.js v59dev)
-*/
-
-// MAIN
-
-// standard global variables
-var container, scene, camera, renderer, controls, stats;
-var keyboard = new THREEx.KeyboardState();
-var clock = new THREE.Clock();
-// custom global variables
-var cube;
-
-init();
-animate();
-
-// FUNCTIONS 		
-function init() 
-{
-// SCENE
-scene = new THREE.Scene();
-// CAMERA
-var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
-scene.add(camera);
-camera.position.set(0,150,400);
-camera.lookAt(scene.position);	
-// RENDERER
-if ( Detector.webgl )
-  renderer = new THREE.WebGLRenderer( {antialias:true} );
-else
-  renderer = new THREE.CanvasRenderer(); 
-renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-container = document.getElementById( 'ThreeJS' );
-container.appendChild( renderer.domElement );
-// EVENTS
-THREEx.WindowResize(renderer, camera);
-THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
-// CONTROLS
-controls = new THREE.OrbitControls( camera, renderer.domElement );
-// STATS
-stats = new Stats();
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.bottom = '0px';
-stats.domElement.style.zIndex = 100;
-container.appendChild( stats.domElement );
-// LIGHT
-var light = new THREE.PointLight(0xffffff);
-light.position.set(0,250,0);
-scene.add(light);
-// FLOOR
-var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
-floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-floorTexture.repeat.set( 10, 10 );
-var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.position.y = -0.5;
-floor.rotation.x = Math.PI / 2;
-scene.add(floor);
-// SKYBOX/FOG
-var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
-var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
-var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
-scene.add(skyBox);
-// skybox works better for alpha blending with images.
-
-////////////
-// CUSTOM //
-////////////
-
-var particleTexture = THREE.ImageUtils.loadTexture( 'images/spark.png' );
-
-particleGroup = new THREE.Object3D();
-particleAttributes = { startSize: [], startPosition: [], randomness: [] };
-
-var totalParticles = 200;
-var radiusRange = 50;
-for( var i = 0; i < totalParticles; i++ ) 
-{
-    var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
-  
-  var sprite = new THREE.Sprite( spriteMaterial );
-  sprite.scale.set( 32, 32, 1.0 ); // imageWidth, imageHeight
-  sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
-  // for a cube:
-  // sprite.position.multiplyScalar( radiusRange );
-  // for a solid sphere:
-  // sprite.position.setLength( radiusRange * Math.random() );
-  // for a spherical shell:
-  sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-  
-  // sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
-  sprite.material.color.setHSL( Math.random(), 0.9, 0.7 ); 
-  
-  // sprite.opacity = 0.80; // translucent particles
-  sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
-  
-  particleGroup.add( sprite );
-  // add variable qualities to arrays, if they need to be accessed later
-  particleAttributes.startPosition.push( sprite.position.clone() );
-  particleAttributes.randomness.push( Math.random() );
-}
-particleGroup.position.y = 50;
-scene.add( particleGroup );
-}
-
-var particleGroup, particleAttributes;
-
-
-function animate() 
-{
-  requestAnimationFrame( animate );
-render();		
-update();
-}
-
-function update()
-{
-var time = 4 * clock.getElapsedTime();
-
-for ( var c = 0; c < particleGroup.children.length; c ++ ) 
-{
-  var sprite = particleGroup.children[ c ];
-
-  // particle wiggle
-  // var wiggleScale = 2;
-  // sprite.position.x += wiggleScale * (Math.random() - 0.5);
-  // sprite.position.y += wiggleScale * (Math.random() - 0.5);
-  // sprite.position.z += wiggleScale * (Math.random() - 0.5);
-  
-  // pulse away/towards center
-  // individual rates of movement
-  var a = particleAttributes.randomness[c] + 1;
-  var pulseFactor = Math.sin(a * time) * 0.1 + 0.9;
-  sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
-  sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor;
-  sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;	
-}
-
-// rotate the entire group
-// particleGroup.rotation.x = time * 0.5;
-particleGroup.rotation.y = time * 0.75;
-// particleGroup.rotation.z = time * 1.0;
-
-if ( keyboard.pressed("z") ) 
-{ 
-  // do something cool
-}
-
-controls.update();
-stats.update();
-}
-
-function render() 
-{
-renderer.render( scene, camera );
-}
-
+  			// debug = document.getElementById("debug"); // !!!!!  Debug  !!!!!
+        // ---------------------------------------------------
+        var point;        	// ein einzelner Punkt
+        var points;       	// Geometrie ( enthaelt die Punkte als "Knoten" ) 
+        var pointSystem;  	// System der Punkte (ohne weitere Dinge wie bei den Koerpern)
+        var pointCount;   	// Anzahl der Punkte (kann sehr gross sein)
+        var pointsMaterial;	// Material der Punkte, auch die Groesse des Punktes wird dort festgelegt
+    
+            pointCount = 30000;            		 	// Anzahl der Punkte (Schneeflocken)	
+            points = new THREE.Geometry();			// eine allgemeine Geometrie fuer die Punkte erzeugen	
+          var pointLoader = new THREE.TextureLoader(); // ein Lader fuer die Textur	
+          pointLoader.load("./assets/IMG/snow.jpg", function(texture){   // Textur laden und damit gleich Punktesystem erzeugen
+            pointsMaterial = new THREE.PointsMaterial({	size: 21, color: 0xcccccc, map: texture, transparent: true, opacity: 0.95 });
+            for (var p = 0; p < pointCount; p++) { 	 // zufaellige Koordinaten erzeugen
+              x = Math.random() * 4000 - 2000;
+              y = Math.random() * 2000 -  500;
+              z = Math.random() * 2000 - 2000;
+              point = new THREE.Vector3(x, y, z); // einzelnen Punkt erzeugen (als Ortsvektor seiner Koordinaten)
+              points.vertices.push(point);        // Punkt als Knoten der Punkte-Geometrie hinzufuegen
+            }
+            // System der Punkte
+              pointSystem = new THREE.Points(	points,	pointsMaterial);	//  entsprechend THREE.Mesh	bei Koerpern
+            // zur Szene hinzufuegen
+            scene.add(pointSystem); 
+            pointSystem.rotation.x = 0.9;
+          });	  
+        // Schneemann
+          var materialOne 	= new THREE.MeshBasicMaterial( { color: 0xffffff } );	
+          var materialTwo  	= new THREE.MeshBasicMaterial( { color: 0xff1133 } );
+          var materialThree	= new THREE.MeshBasicMaterial( { color: 0x000000 } );
+          var materialFour= new THREE.MeshBasicMaterial( { color: 0x222222 , side:THREE.DoubleSide} );	
+          var flake = new THREE.Mesh( new THREE.SphereGeometry( 20, 32, 32 ),materialOne );	
+          scene.add(flake);
+          flake.position.set(0,-1650, 1700);
+          var crystal  = new THREE.Mesh( new THREE.SphereGeometry( 16, 24, 24 ),materialOne );
+          flake.add(crystal);
+          flake.rotation.x = 0.8;
+          flake.rotation.y = -0.4;
+          var flak = new THREE.Mesh( new THREE.CylinderGeometry(1, 1, 48, 12, 1), materialFour);
+          flake.add( flak );
+          flak.position.x = 20;
+          flak.position.y = 24;
+          flak.rotation.z = -0.3;
+          crystal.position.y = 28;
+          var fleek = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 3, 16, 12, 4),materialTwo);
+          crystal.add(fleek);
+          fleek.position.z = 22;
+          fleek.rotation.x = 1.6;
+          var flonk = new THREE.Mesh( new THREE.CylinderGeometry(2, 2, 1, 12, 1), materialThree); 	
+          crystal.add(flonk)
+          flonk.rotation.x = 1.57;
+          flonk.position.set(6,4,16);	
+          flik = flonk.clone();
+          crystal.add(flik);
+          flik.rotation.x = 1.57;
+          flik.position.set(-6,4,16);
+          var flipt = new THREE.Mesh( new THREE.CylinderGeometry(10, 10, 14, 12, 1), materialFour); 
+          crystal.add(flipt)
+          flipt.position.y = 16;
+          var flek = new THREE.Mesh( new THREE.RingGeometry( 10, 16, 24, 1 ), materialFour);
+          flipt.add( flek );
+          flek.position.y = -3;
+          flek.rotation.x = 1.57;	
+        }
+        //--------------------------------------------------------------------
+        function animate() {
+            // debug.value = " ";          
+            requestAnimationFrame( animate );  // rekursiver Aufruf der Animation	
+          t = clock.getElapsedTime();  
+          pointSystem.rotation.x += 0.004;   // Rotation erzeugt durch sichtbar/ nicht sichtbar die Schneeschauer
+          flake.rotation.y = Math.sin(t);
+          crystal.rotation.x  = (1+Math.sin(t+2))* -0.3 ;
+          renderer.render( scene, camera );	 		
+        }
+        
+  </script>
+</body>
+</html>
