@@ -344,11 +344,6 @@
           var objLoader = new THREE.OBJLoader(loadingManager);
           objLoader.setMaterials(materials);
           objLoader.load('./assets/3D/Y.obj', function (object) {
-            var texture = new THREE.MeshBasicMaterial({color: 0x000000})
-            object.traverse(function (child) {  
-              if (child instanceof THREE.Mesh) {
-                  child.material.map = texture;
-            }
             scene.add(object);
             young = object;
             object.position.z = 33;
