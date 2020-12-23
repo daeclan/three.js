@@ -166,7 +166,7 @@
 
         var controls = new FirstPersonControls( camera, renderer.domElement );
         controls.movementSpeed = 1500;
-        controls.lookSpeed = 0.05;
+        controls.lookSpeed = 0.1;
         controls.target = new THREE.Vector3(0, 0, 0)
 
         if(camera.position.x < -2000){controls.movementSpeed = 0}
@@ -310,10 +310,13 @@
 
       // load YSL statues   
       
-        var young;
-        var stoner;
-        var life;
-
+        var young = new THREE.Object3D(loadingManager)
+        var stoner = new THREE.Object3D(loadingManager);
+        var life = new THREE.Object3D(loadingManager);
+        
+        scene.add( young )
+        scene.add( stoner )
+        scene.add( life )
 
         var yOBJFile = './assets/3D/Y.obj';
         var yMTLFile = './assets/3D/Y.mtl';
@@ -337,9 +340,12 @@
                             child.material.map = texture;
                         }
                     });
+                    young = object
                     scene.add(object);
                 });
         });
+
+        console.log(young)
 
         var sOBJFile = './assets/3D/S.obj';
         var sMTLFile = './assets/3D/S.mtl';
@@ -363,6 +369,7 @@
                             child.material.map = texture;
                         }
                     });
+                    stoner = object
                     scene.add(object);
                 });
         });
@@ -379,9 +386,8 @@
                   object.position.z = 33;
                   object.position.y = 1069;
                   object.position.x = 500;
-                  object.rotation.z = THREE.Math.radToDeg(0.9900001);
                   object.scale.set(3200,3200,3200)
-                  object.rotation.z = THREE.Math.radToDeg(1.1);
+                  object.rotation.z = THREE.Math.radToDeg(0.98911);
                     var texture = new THREE.TextureLoader().load(JPGFile);
 
                     object.traverse(function (child) {  
@@ -389,9 +395,11 @@
                             child.material.map = texture;
                         }
                     });
+                    life = object
                     scene.add(object);
-                });
+                  });
         });
+
 
         // add particles
 
@@ -710,6 +718,32 @@
         })
 
         domEvents.addEventListener(jupiter, 'mouseout', event => {
+          jupiter.scale.set(1,1,1)
+          jupiter.material.color.setHex( 0xff0000 );
+        })
+        
+         // create object events
+
+         document.addEventListener("keydown", event => {
+           console.log(event)
+          if (event.keyCode === 89) {
+            return young.scale.set(3600,3600,3600)
+          }
+        });
+         document.addEventListener("keydown", event => {
+           console.log(event)
+          if (event.keyCode === 83) {
+            return stoner.scale.set(3600,3600,3600)
+          }
+        });
+         document.addEventListener("keydown", event => {
+           console.log(event)
+          if (event.keyCode === 76) {
+            return life.scale.set(3600,3600,3600)
+          }
+        });
+
+         domEvents.addEventListener(sun, 'click', event => {
           jupiter.scale.set(1,1,1)
           jupiter.material.color.setHex( 0xff0000 );
         })
