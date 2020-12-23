@@ -724,7 +724,6 @@
           // mars.position.z = (r * Math.sin(theta) * -1)
 
           controls.update( clock.getDelta() );
-          console.log(camera.position.x)
           scene.simulate();
           particleUpdate();
           if(camera.position.x < -4000){controls.movementSpeed = 0}
