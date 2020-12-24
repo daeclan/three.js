@@ -29,10 +29,6 @@
         opacity: 0;
     }
 
-    #loading-screen.hidden {
-        display: none;
-    }
-
     #loader {
         display: block;
         position: relative;
@@ -103,6 +99,9 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.js"></script>
       <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
+      <script src="./js/movement-pad.js"></script>
+      <script src="./js/rotation-pad.js"></script>
+      <script src="./js/touch-controls.js"></script>
       <script src="./js/obj.js"></script>
       <script src="./js/mtl.js"></script>
       <script src="./js/physi.js"></script>
@@ -118,15 +117,14 @@
             var loadingManager = null;
 
             loadingManager = new THREE.LoadingManager( () => {
-              const loadingScreen = document.getElementById( 'loading-screen' )
-              // document.getElementById('loading-screen').id = 'fade-out'
-              loadingScreen.classList.add( 'fade-out' );
+              let loadingScreen = document.getElementById( 'loading-screen' )
+              // loadingScreen.classList.add( 'fade-out' );
 		          // optional: remove loader from DOM via event listener
-		          loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+		          // loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
             })
               
             loadingManager.onProgress = function(item, loaded, total){
-              const loadingScreen = document.getElementById( 'loading-screen' );
+              let loadingScreen = document.getElementById( 'loading-screen' );
               console.log(item, loaded, total)
       
               }
@@ -158,7 +156,7 @@
         var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
         camera.lookAt(0, -600, 0)
         camera.position.set(-55,200,3900)
-    
+       
         var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setClearColor("#007a33");
         renderer.setSize(window.innerWidth,window.innerHeight);
@@ -166,12 +164,9 @@
 
         var controls = new FirstPersonControls( camera, renderer.domElement );
         controls.movementSpeed = 1500;
-        controls.lookSpeed = 0.1;
+        controls.lookSpeed = 0.6;
         controls.target = new THREE.Vector3(0, 0, 0)
-
-        if(camera.position.x < -2000){controls.movementSpeed = 0}
-        if(camera.position.z < -1000){controls.movementSpeed = 0}
-        console.log(controls.movementSpeed)
+      
             
         window.addEventListener('resize', () => {
           renderer.setSize(window.innerWidth,window.innerHeight);
@@ -182,7 +177,7 @@
         })
 
         window.addEventListener('mouseover', () => {
-          controls.lookSpeed = 0.05
+          controls.lookSpeed = 0.2
         })
 
         window.addEventListener('mouseout', () => {
@@ -246,6 +241,7 @@
         // create floor
 
         const snow = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
+        let value1 = null
 
         function createTerrain(){
 
@@ -257,14 +253,13 @@
           10
         )
 
-        var value1 = -3
-
         var ground_geometry = new THREE.PlaneGeometry(2400,2200,100,100)
         
         for (var i=0; i<ground_geometry.vertices.length; i++){
           var vertex = ground_geometry.vertices[i];
           value1 = noise.simplex2(vertex.x/11,vertex.y/10)
           vertex.z = Math.abs(value1)*44;
+          
         }
 
         ground_geometry.computeFaceNormals();
@@ -407,8 +402,8 @@
         particleGroup = new THREE.Object3D();
         particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
-        var totalParticles = 777;
-        var radiusRange = 2400;
+        var totalParticles = 227;
+        var radiusRange = 800;
         for( var i = 0; i < totalParticles; i++ ) 
         {
             var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, color: 0xffffff } );
@@ -423,7 +418,7 @@
           particleAttributes.startPosition.push( sprite.position.clone() );
           particleAttributes.randomness.push( Math.random() );
         }
-        particleGroup.position.y = 430;
+        particleGroup.position.y = 1100;
         particleGroup.position.z = 1100;
         scene.add( particleGroup );
 
@@ -450,6 +445,91 @@
         particleGroup.rotation.y = time * 0.75;
         particleGroup.rotation.z = time * 1.0;
         }
+
+        var particleTexture2 = new THREE.TextureLoader(loadingManager).load( './assets/3D/vvs.png' );
+        particleGroup2 = new THREE.Object3D();
+        particleAttributes2 = { startSize: [], startPosition: [], randomness: [] };
+
+        for( var i = 0; i < totalParticles; i++ ) 
+        {
+            var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, color: 0xff0000 } );
+          
+          var sprite = new THREE.Sprite( spriteMaterial );
+          sprite.scale.set( 75, 75, 1.0 ); 
+          sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
+          sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+          sprite.material.color.setHex( "#ff0000" ); 
+          sprite.material.blending = THREE.AdditiveBlending
+          particleGroup2.add( sprite );
+          particleAttributes2.startPosition.push( sprite.position.clone() );
+          particleAttributes2.randomness.push( Math.random() );
+        }
+        particleGroup2.position.y = 1100;
+        particleGroup2.position.z = -1100;
+        scene.add( particleGroup2 );
+
+        var particleGroup2, particleAttributes2;
+
+        function particleUpdate2(){
+        var time = 4 * clock.getElapsedTime();
+        for ( var c = 0; c < particleGroup2.children.length; c ++ ) 
+        {
+          var sprite = particleGroup2.children[ c ];
+
+          var wiggleScale = 2;
+          sprite.position.x += wiggleScale * (Math.random() - 0.5);
+          sprite.position.y += wiggleScale * (Math.random() - 0.5);
+          sprite.position.z += wiggleScale * (Math.random() - 0.5);
+
+          var a = particleAttributes2.randomness[c] + 1;
+          var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
+          sprite.position.x = particleAttributes2.startPosition[c].x * pulseFactor;
+          sprite.position.y = particleAttributes2.startPosition[c].y * pulseFactor;
+          sprite.position.z = particleAttributes2.startPosition[c].z * pulseFactor;	
+        }
+
+        particleGroup2.rotation.y = time * 0.75;
+        particleGroup2.rotation.z = time * 1.0;
+        }
+
+        //add trees
+
+        var treeFront = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
+        var treeFrontMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+        var treeOBJLoader1 = new THREE.OBJLoader(loadingManager);
+        treeOBJLoader1.setPath( './assets/3D/');
+        treeOBJLoader1.load( 'Tree_OBJ.obj', function ( object ) {
+            object.traverse(function(child) {
+                if (child instanceof THREE.Mesh){
+                    child.material = basic;
+                }
+            });
+            scene.add( object );
+            object.position.z = 1100;
+            object.position.y = -10;
+            object.position.x = 0;
+            object.rotation.x = 180.64;
+            object.scale.set(200,200,200)
+        });
+
+        var treeBack = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
+        var treeBackMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+        var treeOBJLoader2 = new THREE.OBJLoader(loadingManager);
+        treeOBJLoader2.setPath( './assets/3D/');
+        treeOBJLoader2.load( 'Tree_OBJ.obj', function ( object ) {
+            object.traverse(function(child) {
+                if (child instanceof THREE.Mesh){
+                    child.material = basic;
+                }
+            });
+            scene.add( object );
+            object.position.z = -1100;
+            object.position.y = -10;
+            object.position.x = 0;
+            object.rotation.x = 180.64;
+            object.scale.set(200,200,200)
+        });
+        
         
         //add snakes
 
@@ -489,72 +569,158 @@
             object.scale.set(50,50,50)
         });
 
-        // create soundboard orbs
+        // add spider
+
+        var spiderMesh = new THREE.MeshBasicMaterial({color: 0x000000});
+        var objLoader3 = new THREE.OBJLoader(loadingManager);
+        objLoader3.setPath( './assets/3D/');
+        objLoader3.load( 'Spider.obj', function ( object ) {
+            object.traverse(function(child) {
+                if (child instanceof THREE.Mesh){
+                    child.material = spiderMesh;
+                }
+            });
+            scene.add( object );
+            object.position.z = 33;
+            object.position.y = 8000;
+            object.position.x = 0;
+            object.rotation.z = (Math.PI)
+            object.scale.set(500,500,500)
+        });
+
+        // create front tree ornaments
 
         const geometry = new THREE.SphereGeometry(20, 20, 20)
         const material = new THREE.MeshBasicMaterial({color: '#ff0000'})
         const mercury = new THREE.Mesh(geometry, material)
-        mercury.position.set(0,200,1100)
+        mercury.position.set(0,200,722)
         scene.add(mercury)
 
         const geometry2 = new THREE.SphereGeometry(20, 20, 20)
         const material2 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const moon = new THREE.Mesh(geometry2, material2)
-        moon.position.set(180,200,1100)
+        moon.position.set(200,200,1470)
         scene.add(moon)
 
         const geometry3 = new THREE.SphereGeometry(20, 20, 20)
         const material3 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const mars = new THREE.Mesh(geometry3, material3)
-        mars.position.set(-200,200,1100)
+        mars.position.set(-215,200,1470)
         scene.add(mars)
       
-        const geometry4 = new THREE.SphereGeometry(100,100,100)
+        const geometry4 = new THREE.SphereGeometry(60,60,60)
         const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
         const sun = new THREE.Mesh(geometry4, material4)
-        sun.position.set(0,420,1100)
+        sun.position.set(0,1100,1100)
         scene.add(sun)
 
         const geometry5 = new THREE.SphereGeometry(20, 20, 20)
         const material5 = new THREE.MeshBasicMaterial({color: '#ff0000'})
         const neptune = new THREE.Mesh(geometry5, material5)
-        neptune.position.set(0,650,1100)
+        neptune.position.set(0,500,860)
         scene.add(neptune)
 
         const geometry6 = new THREE.SphereGeometry(20, 20, 20)
         const material6 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const uranus = new THREE.Mesh(geometry6, material6)
-        uranus.position.set(180,650,1100)
+        uranus.position.set(260,500,1100)
         scene.add(uranus)
 
         const geometry7 = new THREE.SphereGeometry(20, 20, 20)
         const material7 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const saturn = new THREE.Mesh(geometry7, material7)
-        saturn.position.set(-200,650,1100)
+        saturn.position.set(-280,500,1100)
         scene.add(saturn)
         
         const geometry8 = new THREE.SphereGeometry(20, 20, 20)
         const material8 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const pluto = new THREE.Mesh(geometry8, material8)
-        pluto.position.set(0,900,1100)
+        pluto.position.set(0,520,1320)
         scene.add(pluto)
 
         const geometry9 = new THREE.SphereGeometry(20, 20, 20)
         const material9 = new THREE.MeshBasicMaterial({color: "#ff0000"})
         const jupiter = new THREE.Mesh(geometry9, material9)
-        jupiter.position.set(400,200,1100)
+        jupiter.position.set(410,200,1100)
         scene.add(jupiter)
 
-        const geometry10 = new THREE.SphereGeometry(20, 20, 20)
-        const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
-        const venus = new THREE.Mesh(geometry10, material10)
-        venus.position.set(-400,200,1100)
+        const geometry21 = new THREE.SphereGeometry(20, 20, 20)
+        const material21 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const venus = new THREE.Mesh(geometry21, material21)
+        venus.position.set(-410,200,1100)
         scene.add(venus)
+
+        // create back tree ornaments
+        
+        const geometry11 = new THREE.SphereGeometry(20, 20, 20)
+        const material11 = new THREE.MeshBasicMaterial({color: '#ff0000'})
+        const mercury2 = new THREE.Mesh(geometry11, material11)
+        mercury2.position.set(0,200,-722)
+        scene.add(mercury2)
+
+        const geometry12 = new THREE.SphereGeometry(20, 20, 20)
+        const material12 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const moon2 = new THREE.Mesh(geometry12, material12)
+        moon2.position.set(200,200,-1470)
+        scene.add(moon2)
+
+        const geometry13 = new THREE.SphereGeometry(20, 20, 20)
+        const material13 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const mars2 = new THREE.Mesh(geometry13, material13)
+        mars2.position.set(-215,200,-1470)
+        scene.add(mars2)
+      
+        const geometry14 = new THREE.SphereGeometry(60,60,60)
+        const material14 = new THREE.MeshBasicMaterial({color: "#000000"})
+        const sun2 = new THREE.Mesh(geometry14, material14)
+        sun2.position.set(0,1100,-1100)
+        scene.add(sun2)
+
+        const geometry15 = new THREE.SphereGeometry(20, 20, 20)
+        const material15 = new THREE.MeshBasicMaterial({color: '#ff0000'})
+        const neptune2 = new THREE.Mesh(geometry15, material15)
+        neptune2.position.set(0,500,-860)
+        scene.add(neptune2)
+
+        const geometry16 = new THREE.SphereGeometry(20, 20, 20)
+        const material16 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const uranus2 = new THREE.Mesh(geometry16, material16)
+        uranus2.position.set(260,500,-1100)
+        scene.add(uranus2)
+
+        const geometry17 = new THREE.SphereGeometry(20, 20, 20)
+        const material17 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const saturn2 = new THREE.Mesh(geometry17, material17)
+        saturn2.position.set(-280,500,-1100)
+        scene.add(saturn2)
+        
+        const geometry18 = new THREE.SphereGeometry(20, 20, 20)
+        const material18 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const pluto2 = new THREE.Mesh(geometry18, material18)
+        pluto2.position.set(0,520,-1320)
+        scene.add(pluto2)
+
+        const geometry19 = new THREE.SphereGeometry(20, 20, 20)
+        const material19 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const jupiter2 = new THREE.Mesh(geometry19, material19)
+        jupiter2.position.set(410,200,-1100)
+        scene.add(jupiter2)
+
+        const geometry20 = new THREE.SphereGeometry(20, 20, 20)
+        const material10 = new THREE.MeshBasicMaterial({color: "#ff0000"})
+        const venus2 = new THREE.Mesh(geometry20, material10)
+        venus2.position.set(-410,200,1100)
+        scene.add(venus2)
 
 
         // create/load tone.js sounds
 
         const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
+        Tone.loaded().then(() => {
+          Tone.context.resume();
+        });
+
+        const backsound2 = new Tone.Player("./assets/MP3/hbsLoop.mp3").toDestination();
         Tone.loaded().then(() => {
           Tone.context.resume();
         });
@@ -584,8 +750,24 @@
                 backsound.start();
         }}
 
+        function loopSwitch2() {
+          backsound2.volume.value = -5;
+            if (backsound2.state == "started") {
+                // Use the Tone.Transport to pause audio
+                backsound2.loop = false
+                backsound2.stop();
+            } else if (backsound2.state == "stopped") {
+                // Use the Tone.Transport to start again
+                backsound2.loop = true
+                backsound2.start();
+        }}
+
         domEvents.addEventListener(sun, 'click', event => {
           loopSwitch();
+        })
+
+        domEvents.addEventListener(sun2, 'click', event => {
+          loopSwitch2();
         })
 
         domEvents.addEventListener(sun, 'mouseover', event => {
@@ -594,6 +776,14 @@
 
         domEvents.addEventListener(sun, 'mouseout', event => {
           sun.material.color.setHex( 0x000000 );
+        })
+
+        domEvents.addEventListener(sun2, 'mouseover', event => {
+          sun2.material.color.setHex( 0xffffff );
+        })
+
+        domEvents.addEventListener(sun2, 'mouseout', event => {
+          sun2.material.color.setHex( 0x000000 );
         })
 
         domEvents.addEventListener(mercury, 'click', event => {
@@ -724,22 +914,32 @@
         
          // create object events
 
+         var animateY = false
+         var animateS = false
+         var animateL = false
+
          document.addEventListener("keydown", event => {
            console.log(event)
           if (event.keyCode === 89) {
-            return young.scale.set(3600,3600,3600)
+            return young.scale.set(3600,3600,3600),
+            young.position.set(-200,1200,500),
+            animateY = true
           }
         });
          document.addEventListener("keydown", event => {
            console.log(event)
           if (event.keyCode === 83) {
-            return stoner.scale.set(3600,3600,3600)
+            return stoner.scale.set(3600,3600,3600),
+            stoner.position.set(0,2000,500),
+            animateS = true
           }
         });
          document.addEventListener("keydown", event => {
            console.log(event)
           if (event.keyCode === 76) {
-            return life.scale.set(3600,3600,3600)
+            return life.scale.set(3600,3600,3600),
+            life.position.set(500,1500,500),
+            animateL = true
           }
         });
 
@@ -753,6 +953,7 @@
         var r = 333;
         var theta = 0.2;
         var dTheta = 2 * Math.PI / 1000;
+        console.log(roomMesh.position)
       
         const animate = () => { 
           // theta += dTheta;
@@ -766,8 +967,22 @@
           controls.update( clock.getDelta() );
           scene.simulate();
           particleUpdate();
-          if(camera.position.x < -4000){controls.movementSpeed = 0}
+          particleUpdate2();
+          var xDif = camera.position.x - roomMesh.position.x
+          var yDif = camera.position.z - roomMesh.position.z
 
+
+          if (yDif < 3 && yDif > -3 && xDif < 3 && xDif > -3){
+            controls.movementSpeed = 0
+          }
+          
+          if(animateY&&animateS&&animateL){young.rotation.y += 0.01}
+          if(animateY&&animateS&&animateL){young.rotation.z += 0.01}
+          if(animateY&&animateS&&animateL){stoner.rotation.y += 0.01}
+          if(animateY&&animateS&&animateL){stoner.rotation.z += 0.01}
+          if(animateY&&animateS&&animateL){life.rotation.y += 0.01}
+          if(animateY&&animateS&&animateL){life.rotation.z += 0.01}
+          
           renderer.render(scene, camera)
           requestAnimationFrame(animate)
         }
