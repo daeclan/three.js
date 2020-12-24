@@ -755,6 +755,7 @@
                 backsound.stop();
             } else if (backsound.state == "stopped") {
                 // Use the Tone.Transport to start again
+                backsound2.stop();
                 backsound.loop = true
                 backsound.start();
         }}
@@ -767,6 +768,7 @@
                 backsound2.stop();
             } else if (backsound2.state == "stopped") {
                 // Use the Tone.Transport to start again
+                backsound.stop();
                 backsound2.loop = true
                 backsound2.start();
         }}
