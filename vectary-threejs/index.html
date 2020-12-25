@@ -3,9 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slime Time</title>
+  <title>Slime.Surf: Wavy</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/png" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/snake_1f40d.png"/>
   <style>
+    #blocker {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+			}
+
+			#instructions {
+				width: 100%;
+        height: 100%;
+        margin: 1;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #85ec59;
+				text-align: center;
+				font-family: Garamond;
+				font-size: 14px;
+				line-height: 24px;
+
+				cursor: pointer;
+      }
     html, body {
       overflow: hidden;
       margin: 0;
@@ -140,6 +177,29 @@
             });
         </script>
       </div>
+
+      <div id="blocker">
+
+        <div id="instructions">
+          <span style="font-size:36px">🐍 Merry Christmas Slime 🐍</span><br />
+          <span style="font-size:20px">🌊 A 3D YSL Soundboard 🌊</span>
+          <br /><span style="font-size:10px">Click Anywhere To Dismiss</span><br /><br />
+    
+
+          <span style="font-size:27px">Instructions:</span></br>
+          Move Around: WAXD or Arrows<br/>
+          Look Around: Mouse<br/>
+          Play/Pause Loop: Click Black Orb on Top of Tree<br/>
+          Soundboard: Click Ornaments on The Xmas Trees<br/>
+          <br />
+          <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span><br />
+          <br/>
+          Currently, this is only optimized for laptop/desktop. Mobile coming soon.<br />
+          <br />
+        </div>
+  
+      </div>
+
     </section>
 
       <script type="module">
@@ -166,6 +226,22 @@
         controls.movementSpeed = 1500;
         controls.lookSpeed = 0.6;
         controls.target = new THREE.Vector3(0, 0, 0)
+      
+        const blocker = document.getElementById( 'blocker' );
+				const instructions = document.getElementById( 'instructions' );
+
+				instructions.addEventListener( 'click', function () {
+
+					instructions.style.display = 'none';
+					blocker.style.display = 'none';
+
+				}, false );
+
+
+
+        var isTouching = false;
+        window.addEventListener("touchstart", () => isTouching = true);
+        window.addEventListener("touchend", () => isTouching = false);
       
             
         window.addEventListener('resize', () => {
@@ -211,30 +287,6 @@
         roomMesh.rotation.z = - Math.PI * 2.0;
         roomMesh.position.set(0, 3900, 0)
         scene.add(roomMesh);
-
-        var bbox = new THREE.Box3();
-        bbox.setFromObject(roomMesh)
-        console.log("***")
-        console.log(roomMesh.geometry)
-        console.log("***")
-        roomMesh.geometry.computeBoundingBox();
-        bbox.copy( roomMesh.geometry.boundingBox ).applyMatrix4( roomMesh.matrixWorld );
-
-        if(camera.position.x > bbox.max.x){
-        camera.position.x = bbox.max.x;
-        }
-
-        if(camera.position.x < bbox.min.x){
-            camera.position.x = bbox.max.x;
-        }
-
-        if(camera.position.z > bbox.max.z){
-            camera.position.z = bbox.max.z;
-        }
-
-        if(camera.position.z < bbox.min.z){
-            camera.position.z = bbox.max.z;
-        }
 
         scene.fog = new THREE.Fog( 0x4ff904, 0, 11000 );
 
@@ -339,8 +391,6 @@
                     scene.add(object);
                 });
         });
-
-        console.log(young)
 
         var sOBJFile = './assets/3D/S.obj';
         var sMTLFile = './assets/3D/S.mtl';
@@ -533,6 +583,9 @@
         
         //add snakes
 
+        var snake1 = new THREE.Object3D(loadingManager)
+        var snake2 = new THREE.Object3D(loadingManager);
+
         var snexture = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
         var basic = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
         var objLoader = new THREE.OBJLoader(loadingManager);
@@ -549,6 +602,7 @@
             object.position.x = 2000;
             object.rotation.z = 0;
             object.scale.set(50,50,50)
+            snake1 = object
         });
 
         
@@ -567,9 +621,12 @@
             object.position.x = -2000;
             object.rotation.z = 0;
             object.scale.set(50,50,50)
+            snake2 = object
         });
 
         // add spider
+
+        var spider = new THREE.Object3D(loadingManager)
 
         var spiderMesh = new THREE.MeshBasicMaterial({color: 0x000000});
         var objLoader3 = new THREE.OBJLoader(loadingManager);
@@ -586,6 +643,7 @@
             object.position.x = 0;
             object.rotation.z = (Math.PI)
             object.scale.set(500,500,500)
+            spider = object
         });
 
         // create front tree ornaments
@@ -725,6 +783,11 @@
           Tone.context.resume();
         });
 
+        const backsound3 = new Tone.Player("./assets/MP3/surf.mp3").toDestination();
+        Tone.loaded().then(() => {
+          Tone.context.resume();
+        });
+
         const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
         const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
         const adlib3 = new Tone.Player("./assets/MP3/wavy.mp3").toDestination();
@@ -756,6 +819,7 @@
             } else if (backsound.state == "stopped") {
                 // Use the Tone.Transport to start again
                 backsound2.stop();
+                backsound3.stop();
                 backsound.loop = true
                 backsound.start();
         }}
@@ -769,8 +833,23 @@
             } else if (backsound2.state == "stopped") {
                 // Use the Tone.Transport to start again
                 backsound.stop();
+                backsound3.stop();
                 backsound2.loop = true
                 backsound2.start();
+        }}
+
+        function loopSwitch3() {
+          backsound3.volume.value = -5;
+            if (backsound3.state == "started") {
+                // Use the Tone.Transport to pause audio
+                backsound3.loop = false
+                backsound3.stop();
+            } else if (backsound3.state == "stopped") {
+                // Use the Tone.Transport to start again
+                backsound.stop();
+                backsound2.stop();
+                backsound3.loop = true
+                backsound3.start();
         }}
 
         domEvents.addEventListener(sun, 'click', event => {
@@ -1056,73 +1135,54 @@
          var animateL = false
 
          document.addEventListener("keydown", event => {
-           console.log(event)
           if (event.keyCode === 89) {
-            return young.scale.set(3600,3600,3600),
-            young.position.set(-200,1200,500),
+            return young.scale.set(4600,4600,4600),
+            young.position.set(-600,2000,0),
             animateY = true
           }
         });
          document.addEventListener("keydown", event => {
-           console.log(event)
           if (event.keyCode === 83) {
-            return stoner.scale.set(3600,3600,3600),
-            stoner.position.set(0,2000,500),
+            return stoner.scale.set(4600,4600,4600),
+            stoner.position.set(0,3500,0),
             animateS = true
           }
         });
          document.addEventListener("keydown", event => {
-           console.log(event)
           if (event.keyCode === 76) {
-            return life.scale.set(3600,3600,3600),
-            life.position.set(500,1500,500),
+            return life.scale.set(4600,4600,4600),
+            life.position.set(600,2000,0),
             animateL = true
           }
         });
 
-         domEvents.addEventListener(sun, 'click', event => {
-          jupiter.scale.set(1,1,1)
-          jupiter.material.color.setHex( 0xff0000 );
-        })
+        
 
         // create animation
 
-        var r = 333;
-        var theta = 0.2;
-        var dTheta = 2 * Math.PI / 1000;
-        console.log(roomMesh.position)
+        var isExecuted = false
       
-        const animate = () => { 
-          // theta += dTheta;
-          // moon.position.x = r * Math.cos(theta)
-          // moon.position.z = r * Math.sin(theta)
-          // mercury.position.x = r * Math.cos(theta) 
-          // mercury.position.z = (r * Math.sin(theta))
-          // mars.position.x = r * Math.cos(theta) 
-          // mars.position.z = (r * Math.sin(theta) * -1)
-
+        const animate = () => {
           controls.update( clock.getDelta() );
           scene.simulate();
           particleUpdate();
           particleUpdate2();
-          var xDif = camera.position.x - roomMesh.position.x
-          var yDif = camera.position.z - roomMesh.position.z
-
-
-          if (yDif < 3 && yDif > -3 && xDif < 3 && xDif > -3){
-            controls.movementSpeed = 0
-          }
           
           if(animateY&&animateS&&animateL){young.rotation.y += 0.01}
-          if(animateY&&animateS&&animateL){young.rotation.z += 0.01}
+          // if(animateY&&animateS&&animateL){young.rotation.z += 0.01}
           if(animateY&&animateS&&animateL){stoner.rotation.y += 0.01}
-          if(animateY&&animateS&&animateL){stoner.rotation.z += 0.01}
+          // if(animateY&&animateS&&animateL){stoner.rotation.z += 0.01}
           if(animateY&&animateS&&animateL){life.rotation.y += 0.01}
-          if(animateY&&animateS&&animateL){life.rotation.z += 0.01}
-          
+          if(animateY&&animateS&&animateL){snake1.rotation.y -= 0.01}
+          if(animateY&&animateS&&animateL){snake2.rotation.y += 0.01}
+          if(animateY&&animateS&&animateL){spider.rotation.y += 0.300}
+          if(animateY&&animateS&&animateL&&!isExecuted){loopSwitch3()}
+          if(animateY&&animateS&&animateL&&!isExecuted){isExecuted = true}
           renderer.render(scene, camera)
           requestAnimationFrame(animate)
         }
+
+       
 
         animate()
       </script>
