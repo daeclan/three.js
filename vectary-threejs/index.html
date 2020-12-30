@@ -468,8 +468,9 @@
           particleAttributes.startPosition.push( sprite.position.clone() );
           particleAttributes.randomness.push( Math.random() );
         }
-        particleGroup.position.y = 1100;
-        particleGroup.position.z = 1100;
+        particleGroup.position.y = 500;
+        particleGroup.position.z = 0;
+        particleGroup.position.x = 2000;
         scene.add( particleGroup );
 
         var particleGroup, particleAttributes;
@@ -514,8 +515,9 @@
           particleAttributes2.startPosition.push( sprite.position.clone() );
           particleAttributes2.randomness.push( Math.random() );
         }
-        particleGroup2.position.y = 1100;
-        particleGroup2.position.z = -1100;
+        particleGroup2.position.y = 500;
+        particleGroup2.position.z = 0;
+        particleGroup2.position.x = -2000;
         scene.add( particleGroup2 );
 
         var particleGroup2, particleAttributes2;
@@ -544,29 +546,29 @@
 
         //add trees
 
-        var treeFront = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
-        var treeFrontMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
-        var treeOBJLoader1 = new THREE.OBJLoader(loadingManager);
-        treeOBJLoader1.setPath( './assets/3D/');
-        treeOBJLoader1.load( 'Tree_OBJ.obj', function ( object ) {
-            object.traverse(function(child) {
-                if (child instanceof THREE.Mesh){
-                    child.material = basic;
-                }
-            });
-            scene.add( object );
-            object.position.z = 1100;
-            object.position.y = -10;
-            object.position.x = 0;
-            object.rotation.x = 180.64;
-            object.scale.set(200,200,200)
-        });
+        // var treeFront = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
+        // var treeFrontMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+        // var treeOBJLoader1 = new THREE.OBJLoader(loadingManager);
+        // treeOBJLoader1.setPath( './assets/3D/');
+        // treeOBJLoader1.load( 'Tree.obj', function ( object ) {
+        //     object.traverse(function(child) {
+        //         if (child instanceof THREE.Mesh){
+        //             child.material = basic;
+        //         }
+        //     });
+        //     scene.add( object );
+        //     object.position.z = 1100;
+        //     object.position.y = 0;
+        //     object.position.x = 0;
+        //     object.rotation.x = 0;
+        //     object.scale.set(200,200,200)
+        // });
 
         var treeBack = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
         var treeBackMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
         var treeOBJLoader2 = new THREE.OBJLoader(loadingManager);
         treeOBJLoader2.setPath( './assets/3D/');
-        treeOBJLoader2.load( 'Tree_OBJ.obj', function ( object ) {
+        treeOBJLoader2.load( 'Tree.obj', function ( object ) {
             object.traverse(function(child) {
                 if (child instanceof THREE.Mesh){
                     child.material = basic;
@@ -574,10 +576,10 @@
             });
             scene.add( object );
             object.position.z = -1100;
-            object.position.y = -10;
+            object.position.y = 0;
             object.position.x = 0;
-            object.rotation.x = 180.64;
-            object.scale.set(200,200,200)
+            object.rotation.x = 0
+            object.scale.set(500,500,500)
         });
         
         
@@ -669,7 +671,7 @@
         const geometry4 = new THREE.SphereGeometry(60,60,60)
         const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
         const sun = new THREE.Mesh(geometry4, material4)
-        sun.position.set(0,1100,1100)
+        sun.position.set(2000,500,0)
         scene.add(sun)
 
         const geometry5 = new THREE.SphereGeometry(20, 20, 20)
@@ -731,7 +733,7 @@
         const geometry14 = new THREE.SphereGeometry(60,60,60)
         const material14 = new THREE.MeshBasicMaterial({color: "#000000"})
         const sun2 = new THREE.Mesh(geometry14, material14)
-        sun2.position.set(0,1100,-1100)
+        sun2.position.set(-2000,500,0)
         scene.add(sun2)
 
         const geometry15 = new THREE.SphereGeometry(20, 20, 20)
