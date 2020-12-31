@@ -19,3 +19,11 @@ h1 {
   border: 5px solid black;
   padding: .2em
 }
+#container {
+	position: relative;
+	top: 10px;
+}
+
+#container3d canvas {
+	position: absolute;
+}

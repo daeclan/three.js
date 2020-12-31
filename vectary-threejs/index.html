@@ -204,6 +204,7 @@
 
       <script type="module">
         import { FirstPersonControls } from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
+        import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
         import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
         Physijs.scripts.worker = './js/physijs_worker.js'
         Physijs.scripts.ammo = 'https://chandlerprall.github.io/Physijs/examples/js/ammo.js';
@@ -223,10 +224,23 @@
         renderer.setSize(window.innerWidth,window.innerHeight);
         document.body.appendChild(renderer.domElement); 
 
+        //check if mobile or desktop
+        
+        function isMobileDevice() {
+          return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        };
+
+
+        if(isMobileDevice()){	controls = new OrbitControls(camera, renderer.domElement);
+        }else{
         var controls = new FirstPersonControls( camera, renderer.domElement );
         controls.movementSpeed = 1500;
         controls.lookSpeed = 0.6;
         controls.target = new THREE.Vector3(0, 0, 0)
+        }
+        
+        if(isMobileDevice()){controls.maxPolarAngle = Math.PI / 2}
+
       
         const blocker = document.getElementById( 'blocker' );
 				const instructions = document.getElementById( 'instructions' );
