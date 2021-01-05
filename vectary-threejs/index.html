@@ -29,7 +29,7 @@
         var resourcesLoaded = false;
         var loadingManager = null;
         loadingManager = new THREE.LoadingManager( () => {
-          let loadingScreen = document.getElementById( 'loading-screen' )
+          let loadingScreen = document.getdElementById( 'loading-screen' )
           // loadingScreen.classList.add( 'fade-out' );
           // optional: remove loader from DOM via event listener
           // loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
@@ -52,7 +52,8 @@
     <div id="blocker">
       <div id="instructions">
         <span style="font-size:36px">🐍 The Tree of Slimes 🐍</span><br />
-        <span style="font-size:20px">🌊 A 3D YSL Soundboard 🌊</span><br />
+        <span style="font-size:22px">🌊 A 3D YSL Soundboard 🌊</span><br />
+        <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
         <span style="font-size:10px">Click Anywhere To Dismiss</span><br /> <br />
         <span style="font-size:27px">Instructions:</span></br>
         Move Around: WAXD or Arrows<br/>
