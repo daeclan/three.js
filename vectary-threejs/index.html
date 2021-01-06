@@ -56,10 +56,11 @@
         <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
         <span style="font-size:10px">Click Anywhere To Dismiss</span><br /> <br />
         <span style="font-size:27px">Instructions:</span></br>
-        Move Around: WAXD or Arrows<br/>
-        Look Around: Mouse<br/>
+        Move Around: WAXD or ARROWS<br/>
+        Look Around: MOUSE<br/>
         Play/Pause Loop: Click Black Orbs Above The Snakes<br/>
-        Soundboard: Click Red Orbs On The Tree<br/><br />
+        Soundboard: Click Red Orbs On The Tree<br/>
+        Mute On/Off: Space Bar<br/><br />
         <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span><br /><br/>
         Currently only optimized for laptop/desktop. Mobile coming soon.<br />
         <br />
@@ -123,6 +124,7 @@
 
       instructions.style.display = 'none';
       blocker.style.display = 'none';
+      Tone.start()
 
     }, false );
 
@@ -665,6 +667,11 @@
       Tone.context.resume();
     });
 
+    const backsound4 = new Tone.Player("./assets/MP3/surf.mp3").toDestination();
+    Tone.loaded().then(() => {
+      Tone.context.resume();
+    });
+
     const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
     const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
     const adlib3 = new Tone.Player("./assets/MP3/wavy.mp3").toDestination();
@@ -1005,6 +1012,17 @@
       jupiter2.scale.set(1,1,1)
       jupiter2.material.color.setHex( 0x8b0000 );
     })
+
+    document.addEventListener("keydown", event => {
+      if (event.keyCode === 32) {
+        if(Tone.Master.mute){
+          Tone.Master.mute = false
+          }else{
+          Tone.Master.mute = true
+          }
+        }
+      }
+    );
     
     // create object events
 
