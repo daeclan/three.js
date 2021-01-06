@@ -1,3 +1,5 @@
+@font-face { font-family: VCR; src: url('./VCR_OSD_MONO_1.001.ttf'); } 
+
 body {
   margin: 0;
   height: 100vh;
@@ -49,7 +51,7 @@ h1 {
 
   color: #85ec59;
   text-align: center;
-  font-family: Garamond;
+  font-family: VCR;
   font-size: 14px;
   line-height: 24px;
 

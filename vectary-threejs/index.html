@@ -124,7 +124,8 @@
 
       instructions.style.display = 'none';
       blocker.style.display = 'none';
-      Tone.start()
+      Tone.start();
+      loopSwitch4();
 
     }, false );
 
@@ -667,7 +668,7 @@
       Tone.context.resume();
     });
 
-    const backsound4 = new Tone.Player("./assets/MP3/surf.mp3").toDestination();
+    const backsound4 = new Tone.Player("./assets/MP3/Cyber-Dream-Loop.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -701,6 +702,7 @@
             // Use the Tone.Transport to start again
             backsound2.stop();
             backsound3.stop();
+            backsound4.stop();
             backsound.loop = true
             backsound.start();
     }}
@@ -715,6 +717,7 @@
             // Use the Tone.Transport to start again
             backsound.stop();
             backsound3.stop();
+            backsound4.stop();
             backsound2.loop = true
             backsound2.start();
     }}
@@ -729,8 +732,24 @@
             // Use the Tone.Transport to start again
             backsound.stop();
             backsound2.stop();
+            backsound4.stop();
             backsound3.loop = true
             backsound3.start();
+    }}
+
+    function loopSwitch4() {
+      backsound4.volume.value = -5;
+        if (backsound4.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound4.loop = false
+            backsound4.stop();
+        } else if (backsound4.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.stop();
+            backsound2.stop();
+            backsound3.stop();
+            backsound4.loop = true
+            backsound4.start();
     }}
 
     // add in mouse events for sound objects
