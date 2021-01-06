@@ -729,8 +729,6 @@ THREE.OBJLoader = (function () {
 
           var buffergeometry = new THREE.BufferGeometry();
 
-          console.log(buffergeometry.getAttribute)
-
           buffergeometry.setAttribute('position', new THREE.Float32BufferAttribute(geometry.vertices, 3));
 
           if (geometry.normals.length > 0) {

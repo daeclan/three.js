@@ -36,7 +36,6 @@
         })
         loadingManager.onProgress = function(item, loaded, total){
           let loadingScreen = document.getElementById( 'loading-screen' );
-          console.log(item, loaded, total)
           }
         loadingManager.onLoad = function(){
           document.getElementById('loading-screen').id = 'fade-out'
@@ -51,16 +50,16 @@
     </div>
     <div id="blocker">
       <div id="instructions">
-        <span style="font-size:36px">🐍 The Tree of Slimes 🐍</span><br />
-        <span style="font-size:22px">🌊 A 3D YSL Soundboard 🌊</span><br />
+        <span style="font-size:36px">THE TREE OF SLIMES</span><br />
+        <span style="font-size:22px">🐍 A 3D YSL Soundboard 🌊</span><br />
         <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
         <span style="font-size:10px">Click Anywhere To Dismiss</span><br /> <br />
         <span style="font-size:27px">Instructions:</span></br>
         Move Around: WAXD or ARROWS<br/>
         Look Around: MOUSE<br/>
-        Play/Pause Loop: Click Black Orbs Above The Snakes<br/>
-        Soundboard: Click Red Orbs On The Tree<br/>
-        Mute On/Off: Space Bar<br/><br />
+        Play/Pause: CLICK BLACK ORBS<br/>
+        Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
+        Mute On/Off: SPACE<br/><br />
         <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span><br /><br/>
         Currently only optimized for laptop/desktop. Mobile coming soon.<br />
         <br />
@@ -155,6 +154,10 @@
     
     var light = new THREE.SpotLight(0xFFFFFF, 0.75, 5)
     light.position.set(0,3000,35);
+    scene.add(light);
+
+    var light = new THREE.SpotLight(0xFF0000, 0.75, 50)
+    light.position.set(0,10000,35);
     scene.add(light);
 
     // create room environment
@@ -529,31 +532,31 @@
 
     // create front tree ornaments
 
-    const geometry = new THREE.SphereGeometry(40, 40, 40)
+    const geometry = new THREE.SphereGeometry(50, 50, 50)
     const material = new THREE.MeshBasicMaterial({color: '#8b0000'})
     const mercury = new THREE.Mesh(geometry, material)
     mercury.position.set(-850,3039,900)
     scene.add(mercury)
 
-    const geometry2 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry2 = new THREE.SphereGeometry(70, 70, 70)
     const material2 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const moon = new THREE.Mesh(geometry2, material2)
     moon.position.set(-1200,2930,780)
     scene.add(moon)
 
-    const geometry3 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry3 = new THREE.SphereGeometry(48, 48, 48)
     const material3 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const mars = new THREE.Mesh(geometry3, material3)
     mars.position.set(-1590,3005,790)
     scene.add(mars)
 
-    const geometry7 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry7 = new THREE.SphereGeometry(50, 50, 50)
     const material7 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const saturn = new THREE.Mesh(geometry7, material7)
     saturn.position.set(-1080,4000,-1000)
     scene.add(saturn)
     
-    const geometry5 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry5 = new THREE.SphereGeometry(70, 70, 70)
     const material5 = new THREE.MeshBasicMaterial({color: '#8b0000'})
     const neptune = new THREE.Mesh(geometry5, material5)
     neptune.position.set(660,3400,790)
@@ -565,31 +568,31 @@
     sun.position.set(3000,500,0)
     scene.add(sun)
 
-    const geometry6 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry6 = new THREE.SphereGeometry(65, 65, 65)
     const material6 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const uranus = new THREE.Mesh(geometry6, material6)
     uranus.position.set(420,3050,650)
     scene.add(uranus)
     
-    const geometry8 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry8 = new THREE.SphereGeometry(45, 45, 45)
     const material8 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const pluto = new THREE.Mesh(geometry8, material8)
     pluto.position.set(0,2890,570)
     scene.add(pluto)
 
-    const geometry9 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry9 = new THREE.SphereGeometry(65, 65, 65)
     const material9 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const jupiter = new THREE.Mesh(geometry9, material9)
     jupiter.position.set(-1950,4200,200)
     scene.add(jupiter)
 
-    const geometry21 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry21 = new THREE.SphereGeometry(80, 80, 80)
     const material21 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const venus = new THREE.Mesh(geometry21, material21)
-    venus.position.set(-410,3000,400)
+    venus.position.set(-1970,4450,-1250)
     scene.add(venus)
 
-    const geometry20 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry20 = new THREE.SphereGeometry(65, 65, 65)
     const material10 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const venus2 = new THREE.Mesh(geometry20, material10)
     venus2.position.set(-410,3000,300)
@@ -603,7 +606,7 @@
     sun2.position.set(-3000,500,0)
     scene.add(sun2)
     
-    const geometry11 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry11 = new THREE.SphereGeometry(65, 65, 65)
     const material11 = new THREE.MeshBasicMaterial({color: '#8b0000'})
     const mercury2 = new THREE.Mesh(geometry11, material11)
     mercury2.position.set(1220,2930,0)
@@ -615,19 +618,19 @@
     moon2.position.set(0,3100,-750)
     scene.add(moon2)
 
-    const geometry13 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry13 = new THREE.SphereGeometry(65, 65, 65)
     const material13 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const mars2 = new THREE.Mesh(geometry13, material13)
     mars2.position.set(-1400,3580,-560)
     scene.add(mars2)
 
-    const geometry15 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry15 = new THREE.SphereGeometry(65, 65, 65)
     const material15 = new THREE.MeshBasicMaterial({color: '#8b0000'})
     const neptune2 = new THREE.Mesh(geometry15, material15)
     neptune2.position.set(-180,3700,785)
     scene.add(neptune2)
 
-    const geometry16 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry16 = new THREE.SphereGeometry(65, 65, 65)
     const material16 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const uranus2 = new THREE.Mesh(geometry16, material16)
     uranus2.position.set(-730,4200,-1340)
@@ -639,13 +642,13 @@
     pluto2.position.set(1120,4330,-1550)
     scene.add(pluto2)
     
-    const geometry19 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry19 = new THREE.SphereGeometry(65, 65, 65)
     const material19 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const jupiter2 = new THREE.Mesh(geometry19, material19)
     jupiter2.position.set(1250,4450,-950)
     scene.add(jupiter2)
     
-    const geometry17 = new THREE.SphereGeometry(40, 40, 40)
+    const geometry17 = new THREE.SphereGeometry(65, 65, 65)
     const material17 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const saturn2 = new THREE.Mesh(geometry17, material17)
     saturn2.position.set(1000,10,250)
@@ -792,7 +795,7 @@
 
     domEvents.addEventListener(mercury, 'mouseover', event => {
       mercury.scale.set(3,3,3)
-      mercury.material.color.setHex( 0xffffff );
+      mercury.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(mercury, 'mouseout', event => {
@@ -812,7 +815,7 @@
 
     domEvents.addEventListener(mercury2, 'mouseover', event => {
       mercury2.scale.set(3,3,3)
-      mercury2.material.color.setHex( 0xffffff );
+      mercury2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(mercury2, 'mouseout', event => {
@@ -832,7 +835,7 @@
 
     domEvents.addEventListener(moon, 'mouseover', event => {
       moon.scale.set(3,3,3)
-      moon.material.color.setHex( 0xffffff );
+      moon.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(moon, 'mouseout', event => {
@@ -852,7 +855,7 @@
 
     domEvents.addEventListener(moon2, 'mouseover', event => {
       moon2.scale.set(3,3,3)
-      moon2.material.color.setHex( 0xffffff );
+      moon2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(moon2, 'mouseout', event => {
@@ -872,7 +875,7 @@
 
     domEvents.addEventListener(mars, 'mouseover', event => {
       mars.scale.set(3,3,3)
-      mars.material.color.setHex( 0xffffff );
+      mars.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(mars, 'mouseout', event => {
@@ -892,7 +895,7 @@
 
     domEvents.addEventListener(mars2, 'mouseover', event => {
       mars2.scale.set(3,3,3)
-      mars2.material.color.setHex( 0xffffff );
+      mars2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(mars2, 'mouseout', event => {
@@ -912,7 +915,7 @@
 
     domEvents.addEventListener(neptune, 'mouseover', event => {
       neptune.scale.set(3,3,3)
-      neptune.material.color.setHex( 0xffffff );
+      neptune.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(neptune, 'mouseout', event => {
@@ -932,7 +935,7 @@
 
     domEvents.addEventListener(neptune2, 'mouseover', event => {
       neptune2.scale.set(3,3,3)
-      neptune2.material.color.setHex( 0xffffff );
+      neptune2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(neptune2, 'mouseout', event => {
@@ -952,7 +955,7 @@
 
     domEvents.addEventListener(uranus, 'mouseover', event => {
       uranus.scale.set(3,3,3)
-      uranus.material.color.setHex( 0xffffff );
+      uranus.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(uranus, 'mouseout', event => {
@@ -972,7 +975,7 @@
 
     domEvents.addEventListener(uranus2, 'mouseover', event => {
       uranus2.scale.set(3,3,3)
-      uranus2.material.color.setHex( 0xffffff );
+      uranus2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(uranus2, 'mouseout', event => {
@@ -992,7 +995,7 @@
 
     domEvents.addEventListener(saturn, 'mouseover', event => {
       saturn.scale.set(3,3,3)
-      saturn.material.color.setHex( 0xffffff );
+      saturn.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(saturn, 'mouseout', event => {
@@ -1006,7 +1009,7 @@
 
     domEvents.addEventListener(saturn2, 'mouseover', event => {
       saturn2.scale.set(3,3,3)
-      saturn2.material.color.setHex( 0xffffff );
+      saturn2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(saturn2, 'mouseout', event => {
@@ -1020,7 +1023,7 @@
 
     domEvents.addEventListener(pluto, 'mouseover', event => {
       pluto.scale.set(3,3,3)
-      pluto.material.color.setHex( 0xffffff );
+      pluto.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(pluto, 'mouseout', event => {
@@ -1034,7 +1037,7 @@
 
     domEvents.addEventListener(pluto2, 'mouseover', event => {
       pluto2.scale.set(3,3,3)
-      pluto2.material.color.setHex( 0xffffff );
+      pluto2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(pluto2, 'mouseout', event => {
@@ -1048,7 +1051,7 @@
 
     domEvents.addEventListener(venus, 'mouseover', event => {
       venus.scale.set(3,3,3)
-      venus.material.color.setHex( 0xffffff );
+      venus.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(venus, 'mouseout', event => {
@@ -1062,7 +1065,7 @@
 
     domEvents.addEventListener(venus2, 'mouseover', event => {
       venus2.scale.set(3,3,3)
-      venus2.material.color.setHex( 0xffffff );
+      venus2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(venus2, 'mouseout', event => {
@@ -1076,7 +1079,7 @@
 
     domEvents.addEventListener(jupiter, 'mouseover', event => {
       jupiter.scale.set(3,3,3)
-      jupiter.material.color.setHex( 0xffffff );
+      jupiter.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(jupiter, 'mouseout', event => {
@@ -1090,7 +1093,7 @@
 
     domEvents.addEventListener(jupiter2, 'mouseover', event => {
       jupiter2.scale.set(3,3,3)
-      jupiter2.material.color.setHex( 0xffffff );
+      jupiter2.material.color.setHex( 0xFFFFFF );
     })
 
     domEvents.addEventListener(jupiter2, 'mouseout', event => {
