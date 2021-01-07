@@ -427,7 +427,7 @@
     particleGroup2.rotation.z = time * 1.0;
     }
 
-    //add trees
+    //add tree
 
     var tree = new THREE.TextureLoader(loadingManager).load('./assets/3D/Christmas_Tre_BaseColor.png');
     var treeMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
@@ -447,13 +447,38 @@
         object.scale.set(700,700,700)
     });
     
+    //add mushroom
+
+    var mushroom = new THREE.Object3D(loadingManager)
+
+    var mushroomIMG = new THREE.TextureLoader(loadingManager).load('./assets/3D/mushroomTexture.png');
+    var mushroomMat = new THREE.MeshBasicMaterial({color: 0x000000});
+    var mushroomOBJLoader = new THREE.OBJLoader(loadingManager);
+    mushroomOBJLoader.setPath( './assets/3D/');
+    mushroomOBJLoader.load( 'mushroom.obj', function ( object ) {
+        object.traverse(function(child) {
+            if (child instanceof THREE.Mesh){
+              console.log('bang')
+                child.material = mushroomIMG;
+                console.log('bang')
+            }
+        });
+        scene.add( object );
+        object.position.z = 1000;
+        object.position.y = 2000;
+        object.position.x = -500;
+        object.rotation.x = 0
+        object.scale.set(2000,2000,2000)
+        mushroom = object
+    });
+    
     //add snakes
 
     var snake1 = new THREE.Object3D(loadingManager)
     var snake2 = new THREE.Object3D(loadingManager);
 
     var snexture = new THREE.TextureLoader(loadingManager).load('./assets/3D/snow.jpg');
-    var basic = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+    var basic = new THREE.MeshBasicMaterial({color: 0x000000});
     var objLoader = new THREE.OBJLoader(loadingManager);
     objLoader.setPath( './assets/3D/');
     objLoader.load( 'Snake_by_Swp.obj', function ( object ) {
@@ -471,7 +496,7 @@
         snake1 = object
     });
 
-    var basic2 = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+    var basic2 = new THREE.MeshBasicMaterial({color: 0x000000});
     var objLoader2 = new THREE.OBJLoader(loadingManager);
     objLoader2.setPath( './assets/3D/');
     objLoader2.load( 'Snake_by_Swp.obj', function ( object ) {
@@ -530,7 +555,7 @@
         spider2 = object
     });
 
-    // create front tree ornaments
+    // create tree fruits
 
     const geometry = new THREE.SphereGeometry(50, 50, 50)
     const material = new THREE.MeshBasicMaterial({color: '#8b0000'})
