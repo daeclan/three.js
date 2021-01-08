@@ -1,7 +1,7 @@
 "use strict";
 
 function RotationPad(container) {
-
+  console.log(container)
   var mouseDown = false;
   var mouseStopped = false;
   var mouseStopTimeout, eventRepeatTimeout;
@@ -60,11 +60,13 @@ function RotationPad(container) {
     mouseDown = true;
     self.handle.css("opacity", "1.0");
     update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY);
+    console.log("Down")
   });
 
   $(document).on("touchend touchcancel", function () {
     mouseDown = false;
     self.resetHandlePosition();
+    console.log("up")
   });
 
   $(document).on("touchmove", function (event) {
