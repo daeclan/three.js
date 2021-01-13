@@ -158,6 +158,10 @@
     var light = new THREE.PointLight(0x0afb02, 2, 420)
     light.position.set(0,550,3700);
     scene.add(light);
+
+    var light = new THREE.PointLight(0x5cd5fd, 0.8, 300)
+    light.position.set(0,400,-3500);
+    scene.add(light);
     
     var light = new THREE.SpotLight(0xFFFFFF, 0.75, 5)
     light.position.set(0,3000,35);
@@ -454,26 +458,19 @@
 
     var mushroom = new THREE.Object3D(loadingManager)
 
-    var mushTexture = new THREE.TextureLoader(loadingManager).load('./assets/3D/mushroomTexture.png');
-    var mushMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-    var mushOBJLoader = new THREE.OBJLoader(loadingManager);
-    mushOBJLoader.setPath( './assets/3D/');
-    treeOBJLoader.load( 'mushroom.obj', function ( object ) {
-        object.traverse(function(child) {
-            if (child instanceof THREE.Mesh){
-                child.material = basic;
-            }
-        });
-        scene.add( object );
-        object.position.z = -0;
-        object.position.y = 0;
-        object.position.x = -400;
-        object.rotation.x = 0
-        object.scale.set(2000,2000,2000)
-        console.log(object)
-        mushroom = object
-    });
-    
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(0,200,-3500)
+        z.scene.scale.set(2,2,2)
+        z.scene.color = "#000000"
+        mushroom = z
+    })
+
+    mushroom.scale.set(5,5,5)
+
+  
     //add snakes
 
     var snake1 = new THREE.Object3D(loadingManager)
@@ -1194,9 +1191,6 @@
       scene.simulate();
       particleUpdate();
       particleUpdate2();
-      mushroom.scale.x += 0.3;
-      mushroom.scale.y += 0.3;
-      mushroom.scale.z += 0.3;
       camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
       camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
       renderer.render(scene, camera)
