@@ -78,6 +78,7 @@
     // set up three.js scene, clock, camera, and webGL renderer
 
     var scene = new Physijs.Scene;
+    var sceneObject = scene
     scene.setGravity(new THREE.Vector3(0,-0.001,0))
 
     var clock = new THREE.Clock();
@@ -93,17 +94,22 @@
     document.body.appendChild(renderer.domElement); 
 
     // set up controls by checking if user is mobile or desktop
+
+    var intersected 
+    var mobileConfirm = false
+    var container = $('body');
     
     function isMobileDevice() {
       return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
     };
-    var container = $('body');
+
     if(isMobileDevice()){	
       var controls = new TouchControls(container, camera, renderer.domElement);
-      controls.movementSpeed = 1500;
-      controls.lookSpeed = 0.6;
-      controls.target = new THREE.Vector3(0, 0, 0)
-      camera.position.set(2000,6000,5000)
+      mobileConfirm = true;
+      controls.target = new THREE.Vector3(0, 0, 0);
+      camera.position.set(0,200,4998)
+      camera.lookAt(0,2000,-2000)
+		  controls.addToScene(scene);
       }else{
       var controls = new FirstPersonControls( camera, renderer.domElement );
       controls.movementSpeed = 1500;
@@ -465,10 +471,13 @@
         z.scene.position.set(0,200,-3500)
         z.scene.scale.set(2,2,2)
         z.scene.color = "#000000"
-        mushroom = z
+        console.log(z)
+        console.log(z.scene)
+        mushroom = z.scene
     })
-
-    mushroom.scale.set(5,5,5)
+    
+    mushroom.scale.set(50,50,50)
+ 
 
   
     //add snakes
@@ -1135,6 +1144,10 @@
         }
       }
     );
+
+    domEvents.addEventListener(scene, 'touchstart', event => {
+      console.log(camera)
+    })
     
     // create object events
 
@@ -1193,6 +1206,27 @@
       particleUpdate2();
       camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
       camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
+
+      if(mobileConfirm){
+        var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
+        vector.unproject(camera);
+
+        var raycaster = new THREE.Raycaster(controls.fpsBody.position, vector.sub(controls.fpsBody.position).normalize());
+
+        // var intersects = raycaster.intersectObjects(sceneObject.children);
+        // if (intersects.length > 0) {
+        //   if (intersected != intersects[0].object) {
+        //     if (intersected) intersected.material.emissive.setHex(intersected.currentHex);
+        //     intersected = intersects[0].object;
+        //     console.log(intersects);
+        //     intersected.currentHex = intersected.material.emissive.getHex();
+        //     intersected.material.emissive.setHex(0xdd0090);
+        //   }
+        // } else {
+        //   if (intersected) intersected.material.emissive.setHex(intersected.currentHex);
+        //   intersected = null;
+        // }
+      }
       renderer.render(scene, camera)
       requestAnimationFrame(animate)
     }

@@ -4,10 +4,10 @@ function TouchControls(container, camera, options) {
 
   var self = this;
   self.config = $.extend({
-    speedFactor: 0.5,
-    delta: 1,
+    speedFactor: 4,
+    delta: 0.1,
     rotationFactor: 0.002,
-    maxPitch: 55,
+    maxPitch: 12,
     hitTest: true,
     hitTestDistance: 40
   }, options);
@@ -249,8 +249,8 @@ function TouchControls(container, camera, options) {
   // Public functions:
   //
   self.update = function () {
-    if (self.config.hitTest)
-      self.hitTest();
+    // if (self.config.hitTest)
+    //   self.hitTest();
 
     velocity.x += (-1 * velocity.x) * 0.75 * self.config.delta;
     velocity.z += (-1 * velocity.z) * 0.75 * self.config.delta;

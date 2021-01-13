@@ -61,6 +61,7 @@ function RotationPad(container) {
     self.handle.css("opacity", "1.0");
     update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY);
     console.log("Down")
+    console.log(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
   });
 
   $(document).on("touchend touchcancel", function () {
