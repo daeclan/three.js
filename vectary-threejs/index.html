@@ -471,8 +471,6 @@
         z.scene.position.set(0,200,-3500)
         z.scene.scale.set(2,2,2)
         z.scene.color = "#000000"
-        console.log(z)
-        console.log(z.scene)
         mushroom = z.scene
     })
     
@@ -802,10 +800,18 @@
 
     domEvents.addEventListener(sun, 'touchstart', event => {
       loopSwitch();
+      sun.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          sun.material.color.setHex( 0x000000 );
+      }, 200);
     });
 
     domEvents.addEventListener(sun2, 'touchstart', event => {
       loopSwitch2();
+      sun2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          sun2.material.color.setHex( 0x000000 );
+      }, 200);
     });
 
     domEvents.addEventListener(sun, 'mouseover', event => {
@@ -830,6 +836,10 @@
 
     domEvents.addEventListener(mercury, 'touchstart', event => {
       adlib.start();
+      mercury.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          mercury.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -854,6 +864,10 @@
 
     domEvents.addEventListener(mercury2, 'touchstart', event => {
       adlib11.start();
+      mercury2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          mercury2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -878,6 +892,10 @@
 
     domEvents.addEventListener(moon, 'touchstart', event => {
       adlib2.start();
+      moon.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          moon.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -900,6 +918,14 @@
       adlib12.start();
     })
 
+    domEvents.addEventListener(moon2, 'touchstart', event => {
+      adlib12.start();
+      moon2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          moon2.material.color.setHex( 0x8b0000 );
+      }, 200);
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 51) {
         adlib12.start();
@@ -919,9 +945,13 @@
     domEvents.addEventListener(mars, 'click', event => {
       adlib3.start();
     })
-
+    
     domEvents.addEventListener(mars, 'touchstart', event => {
       adlib3.start();
+      mars.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          mars.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -946,6 +976,10 @@
 
     domEvents.addEventListener(mars2, 'touchstart', event => {
       adlib13.start();
+      mars2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          mars2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -970,6 +1004,10 @@
 
     domEvents.addEventListener(neptune, 'touchstart', event => {
       adlib4.start();
+      neptune.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          neptune.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -994,6 +1032,10 @@
 
     domEvents.addEventListener(neptune2, 'touchstart', event => {
       adlib14.start();
+      neptune2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          neptune2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -1018,6 +1060,10 @@
 
     domEvents.addEventListener(uranus, 'touchstart', event => {
       adlib5.start();
+      uranus.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          uranus.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -1042,6 +1088,10 @@
 
     domEvents.addEventListener(uranus2, 'touchstart', event => {
       adlib15.start();
+      uranus2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          uranus2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -1066,6 +1116,10 @@
 
     domEvents.addEventListener(saturn, 'touchstart', event => {
       adlib6.start();
+      saturn.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          saturn.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     document.addEventListener("keydown", event => {
@@ -1090,6 +1144,10 @@
 
     domEvents.addEventListener(saturn2, 'touchstart', event => {
       adlib16.start();
+      saturn2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          saturn2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     domEvents.addEventListener(saturn2, 'mouseover', event => {
@@ -1108,6 +1166,10 @@
 
     domEvents.addEventListener(pluto, 'touchstart', event => {
       adlib17.start();
+      pluto.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          pluto.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     domEvents.addEventListener(pluto, 'mouseover', event => {
@@ -1126,6 +1188,10 @@
 
     domEvents.addEventListener(pluto2, 'touchstart', event => {
       adlib7.start();
+      pluto2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          pluto2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     domEvents.addEventListener(pluto2, 'mouseover', event => {
@@ -1144,6 +1210,10 @@
 
     domEvents.addEventListener(venus, 'touchstart', event => {
       adlib8.start();
+      venus.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          venus.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     domEvents.addEventListener(venus, 'mouseover', event => {
@@ -1162,6 +1232,10 @@
 
     domEvents.addEventListener(venus2, 'touchstart', event => {
       adlib18.start();
+      venus2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          venus2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
 
     domEvents.addEventListener(venus2, 'mouseover', event => {
@@ -1176,6 +1250,10 @@
 
     domEvents.addEventListener(jupiter, 'touchstart', event => {
       adlib9.start();
+      jupiter.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          jupiter.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
     
     domEvents.addEventListener(jupiter, 'click', event => {
@@ -1198,6 +1276,10 @@
 
     domEvents.addEventListener(jupiter2, 'touchstart', event => {
       adlib9.start();
+      jupiter2.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          jupiter2.material.color.setHex( 0x8b0000 );
+      }, 200);
     })
     
     domEvents.addEventListener(jupiter2, 'mouseover', event => {
