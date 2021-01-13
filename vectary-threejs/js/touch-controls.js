@@ -4,7 +4,7 @@ function TouchControls(container, camera, options) {
 
   var self = this;
   self.config = $.extend({
-    speedFactor: 4,
+    speedFactor: 5,
     delta: 0.1,
     rotationFactor: 0.002,
     maxPitch: 12,
@@ -224,8 +224,8 @@ function TouchControls(container, camera, options) {
 
   function calculateCameraRotation(dx, dy, factor) {
     var factor = factor ? factor : self.config.rotationFactor;
-    var ry = self.fpsBody.rotation.y - (dx * factor);
-    var rx = cameraHolder.rotation.x - (dy * factor);
+    var ry = self.fpsBody.rotation.y + (dx * factor);
+    var rx = cameraHolder.rotation.x + (dy * factor);
     rx = Math.max(-maxPitch, Math.min(maxPitch, rx));
 
     return {
