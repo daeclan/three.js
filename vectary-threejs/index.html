@@ -800,6 +800,14 @@
       loopSwitch2();
     })
 
+    domEvents.addEventListener(sun, 'touchstart', event => {
+      loopSwitch();
+    });
+
+    domEvents.addEventListener(sun2, 'touchstart', event => {
+      loopSwitch2();
+    });
+
     domEvents.addEventListener(sun, 'mouseover', event => {
       sun.material.color.setHex( 0xffffff );
     })
@@ -817,6 +825,10 @@
     })
 
     domEvents.addEventListener(mercury, 'click', event => {
+      adlib.start();
+    })
+
+    domEvents.addEventListener(mercury, 'touchstart', event => {
       adlib.start();
     })
 
@@ -840,6 +852,10 @@
       adlib11.start();
     })
 
+    domEvents.addEventListener(mercury2, 'touchstart', event => {
+      adlib11.start();
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 50) {
         adlib11.start();
@@ -857,6 +873,10 @@
     })
     
     domEvents.addEventListener(moon, 'click', event => {
+      adlib2.start();
+    })
+
+    domEvents.addEventListener(moon, 'touchstart', event => {
       adlib2.start();
     })
 
@@ -900,6 +920,10 @@
       adlib3.start();
     })
 
+    domEvents.addEventListener(mars, 'touchstart', event => {
+      adlib3.start();
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 52) {
         adlib3.start();
@@ -917,6 +941,10 @@
     })
 
     domEvents.addEventListener(mars2, 'click', event => {
+      adlib13.start();
+    })
+
+    domEvents.addEventListener(mars2, 'touchstart', event => {
       adlib13.start();
     })
 
@@ -940,6 +968,10 @@
       adlib4.start();
     })
 
+    domEvents.addEventListener(neptune, 'touchstart', event => {
+      adlib4.start();
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 54) {
         adlib4.start();
@@ -957,6 +989,10 @@
     })
 
     domEvents.addEventListener(neptune2, 'click', event => {
+      adlib14.start();
+    })
+
+    domEvents.addEventListener(neptune2, 'touchstart', event => {
       adlib14.start();
     })
 
@@ -980,6 +1016,10 @@
       adlib5.start();
     })
 
+    domEvents.addEventListener(uranus, 'touchstart', event => {
+      adlib5.start();
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 56) {
         adlib5.start();
@@ -997,6 +1037,10 @@
     })
 
     domEvents.addEventListener(uranus2, 'click', event => {
+      adlib15.start();
+    })
+
+    domEvents.addEventListener(uranus2, 'touchstart', event => {
       adlib15.start();
     })
 
@@ -1020,6 +1064,10 @@
       adlib6.start();
     })
 
+    domEvents.addEventListener(saturn, 'touchstart', event => {
+      adlib6.start();
+    })
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 48) {
         adlib6.start();
@@ -1040,6 +1088,10 @@
       adlib16.start();
     })
 
+    domEvents.addEventListener(saturn2, 'touchstart', event => {
+      adlib16.start();
+    })
+
     domEvents.addEventListener(saturn2, 'mouseover', event => {
       saturn2.scale.set(3,3,3)
       saturn2.material.color.setHex( 0xFFFFFF );
@@ -1051,6 +1103,10 @@
     })
 
     domEvents.addEventListener(pluto, 'click', event => {
+      adlib17.start();
+    })
+
+    domEvents.addEventListener(pluto, 'touchstart', event => {
       adlib17.start();
     })
 
@@ -1068,6 +1124,10 @@
       adlib7.start();
     })
 
+    domEvents.addEventListener(pluto2, 'touchstart', event => {
+      adlib7.start();
+    })
+
     domEvents.addEventListener(pluto2, 'mouseover', event => {
       pluto2.scale.set(3,3,3)
       pluto2.material.color.setHex( 0xFFFFFF );
@@ -1079,6 +1139,10 @@
     })
 
     domEvents.addEventListener(venus, 'click', event => {
+      adlib8.start();
+    })
+
+    domEvents.addEventListener(venus, 'touchstart', event => {
       adlib8.start();
     })
 
@@ -1096,6 +1160,10 @@
       adlib18.start();
     })
 
+    domEvents.addEventListener(venus2, 'touchstart', event => {
+      adlib18.start();
+    })
+
     domEvents.addEventListener(venus2, 'mouseover', event => {
       venus2.scale.set(3,3,3)
       venus2.material.color.setHex( 0xFFFFFF );
@@ -1106,6 +1174,10 @@
       venus2.material.color.setHex( 0x8b0000 );
     })
 
+    domEvents.addEventListener(jupiter, 'touchstart', event => {
+      adlib9.start();
+    })
+    
     domEvents.addEventListener(jupiter, 'click', event => {
       adlib9.start();
     })
@@ -1124,6 +1196,10 @@
       adlib9.start();
     })
 
+    domEvents.addEventListener(jupiter2, 'touchstart', event => {
+      adlib9.start();
+    })
+    
     domEvents.addEventListener(jupiter2, 'mouseover', event => {
       jupiter2.scale.set(3,3,3)
       jupiter2.material.color.setHex( 0xFFFFFF );
@@ -1145,14 +1221,6 @@
       }
     );
 
-    domEvents.addEventListener(sun, 'touchstart', event => {
-      loopSwitch();
-    });
-
-    domEvents.addEventListener(sun2, 'touchstart', event => {
-      loopSwitch2();
-    });
-    
     // create object events
 
     var animateY = false
