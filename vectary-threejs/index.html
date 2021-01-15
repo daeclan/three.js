@@ -51,10 +51,15 @@
           })
           loadingManager.onProgress = function(item, loaded, total){
             let loadingScreen = document.getElementById( 'loading-screen' );
+            let instructionsScreen = document.getElementById( 'instructions' );
+            instructionsScreen.style.visibility = 'visible';
+
             }
           loadingManager.onLoad = function(){
             document.getElementById('loading-screen').id = 'fade-out'
             resourcesLoaded = true;
+            let instructionsScreen = document.getElementById( 'instructions' );
+            instructionsScreen.style.visibility = 'visible';
             ;
           };
           window.addEventListener ("load", function() {
