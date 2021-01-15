@@ -28,11 +28,13 @@
     <div id="blocker">
       <div id="loader">
         <div id="loadText">
+          <span style="font-size:40px">
           S<br /> 
           L<br /> 
           A<br /> 
           T<br /> 
           T<br /> 
+        </span>
           </div>
         <script>
           var i = true
@@ -64,7 +66,7 @@
         <span style="font-size:36px">THE TREE OF SLIME</span><br />
         <span style="font-size:22px">🐍 A 3D YSL Soundboard 🌊</span><br />
         <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
-        <span style="font-size:10px">Click Anywhere To Dismiss</span><br /> <br />
+        <span style="font-size:10px">Click or Tap Anywhere To Dismiss</span><br /> <br />
         <span style="font-size:27px">Instructions:</span></br>
         Move Around: WAXD or ARROWS<br/>
         Look Around: MOUSE<br/>
@@ -113,10 +115,19 @@
     };
 
     if(isMobileDevice()){	
+      console.log(camera)
+      var options = {
+			speedFactor: 0.5,
+			delta: 1,
+			rotationFactor: 0.002,
+			maxPitch: 55,
+			hitTest: true,
+			hitTestDistance: 40
+		};
       var controls = new TouchControls(container, camera, renderer.domElement);
       mobileConfirm = true;
-      controls.target = new THREE.Vector3(0, 0, 0);
-      camera.position.set(0,200,4998)
+      // controls.target = new THREE.Vector3(0, 0, 0);
+      camera.position.set(0,500,4998)
       camera.lookAt(0,2000,-2000)
 		  controls.addToScene(scene);
       }else{
@@ -207,7 +218,6 @@
     let value1 = 6
 
     function createTerrain(){
-
     var ground_material = Physijs.createMaterial(
       new THREE.MeshLambertMaterial({
         map: snow
@@ -311,7 +321,7 @@
             .setMaterials(materials)
             .load(sOBJFile, function (object) {
               object.position.z = 3500;
-              object.position.y = 500;
+              object.position.y = 480;
               object.position.x = 45;
               object.rotation.z = THREE.Math.radToDeg(0.99);
               object.scale.set(1700,1700,1700)
@@ -338,7 +348,7 @@
             .setMaterials(materials)
             .load(lOBJFile, function (object) {
               object.position.z = 3500;
-              object.position.y = 500;
+              object.position.y = 480;
               object.position.x = 270;
               object.scale.set(1700,1700,1700)
               object.rotation.z = THREE.Math.radToDeg(0.98911);
@@ -1395,6 +1405,7 @@
       particleUpdate2();
       camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
       camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
+      // console.log(controls)
 
       if(mobileConfirm){
         var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);

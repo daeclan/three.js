@@ -62,7 +62,7 @@ function RotationPad(container) {
     mouseDown = true;
     self.handle.css("opacity", "1.0");
     update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY);
-    console.log(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
+    // console.log(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
   });
 
   $(document).on("touchend touchcancel", function () {
@@ -123,15 +123,10 @@ function RotationPad(container) {
     var moveEvent = $.Event("YawPitch", {
       detail: {
         "deltaX": dx,
-        "deltaY": 0
+        "deltaY": dy
       },
       bubbles: false
     });
-    if (dy) {
-      dy = dy
-    } else {
-      dy = 0
-    }
     $(self).trigger(moveEvent);
   }
   self.resetHandlePosition();

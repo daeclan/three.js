@@ -4,12 +4,12 @@ function TouchControls(container, camera, options) {
 
   var self = this;
   self.config = $.extend({
-    speedFactor: 5,
+    speedFactor: 8,
     delta: 0.1,
     rotationFactor: 0.002,
     maxPitch: 12,
-    hitTest: true,
-    hitTestDistance: 40
+    // hitTest: true,
+    // hitTestDistance: 40
   }, options);
 
   var container = container;
@@ -132,7 +132,6 @@ function TouchControls(container, camera, options) {
     var movementX = event.originalEvent.movementX || event.originalEvent.mozMovementX || event.originalEvent.webkitMovementX || 0;
     var movementY = event.originalEvent.movementY || event.originalEvent.mozMovementY || event.originalEvent.webkitMovementY || 0;
     var rotation = calculateCameraRotation(-1 * movementX, -1 * movementY);
-
     // console.log(self.mouse, "\n", movementX, rotation);
 
     self.setRotation(rotation.rx, rotation.ry);
@@ -162,7 +161,7 @@ function TouchControls(container, camera, options) {
         break;
 
       case 40: // down
-      case 83: // s
+      case 88: // x
         moveBackward = true;
         break;
 
@@ -372,7 +371,6 @@ TouchControls.prototype = {
   },
 
   setPosition: function (x, y, z) {
-    console.log(this.fpsBody)
     this.fpsBody.position.set(x, y, z);
   },
 
@@ -382,10 +380,9 @@ TouchControls.prototype = {
 
   setRotation: function (x, y) {
     var camHolder = this.fpsBody.getObjectByName("cameraHolder");
-
     if (x !== null)
       camHolder.rotation.x = x;
-
+    console.log(camHolder)
     if (y !== null)
       this.fpsBody.rotation.y = y;
   },
