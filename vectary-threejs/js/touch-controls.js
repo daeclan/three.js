@@ -372,6 +372,7 @@ TouchControls.prototype = {
   },
 
   setPosition: function (x, y, z) {
+    console.log(this.fpsBody)
     this.fpsBody.position.set(x, y, z);
   },
 

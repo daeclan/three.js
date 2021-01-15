@@ -59,9 +59,9 @@
         <span style="font-size:27px">Instructions:</span></br>
         Move Around: WAXD or ARROWS<br/>
         Look Around: MOUSE<br/>
-        Play/Pause: CLICK BLACK ORBS<br/>
+        Play/Pause Loop: CLICK BLACK ORBS<br/>
         Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
-        Mute On/Off: SPACE<br/><br />
+        Play/Pause Game: SPACE<br/><br />
         <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span><br /><br/>
         Currently only optimized for laptop/desktop. Mobile coming soon.<br />
         <br />
@@ -95,9 +95,9 @@
 
     // set up controls by checking if user is mobile or desktop
 
-    var intersected 
     var mobileConfirm = false
     var container = $('body');
+    var intersected 
     
     function isMobileDevice() {
       return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
@@ -131,14 +131,16 @@
 
     const blocker = document.getElementById( 'blocker' );
     const instructions = document.getElementById( 'instructions' );
+    var firstClick = false
 
     instructions.addEventListener( 'click', function () {
-
-      instructions.style.display = 'none';
-      blocker.style.display = 'none';
+      if(!firstClick){
+      instructions.style.visibility = 'hidden';
+      blocker.style.visibility = 'hidden';
       Tone.start();
       loopSwitch4();
-
+      firstClick = true
+      }
     }, false );
 
     // set up window resize event
@@ -1291,6 +1293,10 @@
       jupiter2.scale.set(1,1,1)
       jupiter2.material.color.setHex( 0x8b0000 );
     })
+    
+    // pause screen & pause audio 
+
+    var inPlay = true
 
     document.addEventListener("keydown", event => {
       if (event.keyCode === 32) {
@@ -1298,11 +1304,31 @@
           Tone.Master.mute = false
           }else{
           Tone.Master.mute = true
-          }
+        }
+        if(inPlay){
+        instructions.style.visibility = 'visible';
+        blocker.style.visibility = 'visible';
+        inPlay = false
+        console.log('bing')
+        }else{
+        instructions.style.visibility = 'hidden';
+        blocker.style.visibility = 'hidden';
+        console.log('bang')
+        inPlay = true
         }
       }
-    );
+    });
 
+    // pause audio if you leave the tab
+
+    document.addEventListener("visibilitychange", function() {
+    if (document.hidden){
+        Tone.Master.mute = true;
+    } else {
+        Tone.Master.mute = false;
+    }
+    });
+    
     // create object events
 
     var animateY = false

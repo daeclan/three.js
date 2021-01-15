@@ -8,6 +8,8 @@ function RotationPad(container) {
   var newLeft, newTop, distance, angle;
   var self = this;
 
+
+
   self.container = container;
   self.regionData = {};
   self.handleData = {};
@@ -60,14 +62,12 @@ function RotationPad(container) {
     mouseDown = true;
     self.handle.css("opacity", "1.0");
     update(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY);
-    console.log("Down")
     console.log(event.originalEvent.targetTouches[0].pageX, event.originalEvent.targetTouches[0].pageY)
   });
 
   $(document).on("touchend touchcancel", function () {
     mouseDown = false;
     self.resetHandlePosition();
-    console.log("up")
   });
 
   $(document).on("touchmove", function (event) {
@@ -123,13 +123,17 @@ function RotationPad(container) {
     var moveEvent = $.Event("YawPitch", {
       detail: {
         "deltaX": dx,
-        "deltaY": dy
+        "deltaY": 0
       },
       bubbles: false
     });
+    if (dy) {
+      dy = dy
+    } else {
+      dy = 0
+    }
     $(self).trigger(moveEvent);
   }
-
   self.resetHandlePosition();
 };
 
