@@ -24,33 +24,42 @@
   <script src="./js/perlin_noise.js"></script>
 
   <section id="loading-screen">
-    <div id="loader">
-      <script>
-        var i = true
-        var loadAnimation = document.getElementById( 'loading-screen' )
-        var resourcesLoaded = false;
-        var loadingManager = null;
-        loadingManager = new THREE.LoadingManager( () => {
-          let loadingScreen = document.getdElementById( 'loading-screen' )
-          // loadingScreen.classList.add( 'fade-out' );
-          // optional: remove loader from DOM via event listener
-          // loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
-        })
-        loadingManager.onProgress = function(item, loaded, total){
-          let loadingScreen = document.getElementById( 'loading-screen' );
-          }
-        loadingManager.onLoad = function(){
-          document.getElementById('loading-screen').id = 'fade-out'
-          console.log("She all loaded.");
-          resourcesLoaded = true;
-          ;
-        };
-        window.addEventListener ("load", function() {
-        loader.style.display = 'none';
-        });
-      </script>
-    </div>
+  
     <div id="blocker">
+      <div id="loader">
+        <div id="loadText">
+          S<br /> 
+          L<br /> 
+          A<br /> 
+          T<br /> 
+          T<br /> 
+          </div>
+        <script>
+          var i = true
+          var loadAnimation = document.getElementById( 'loading-screen' )
+          var resourcesLoaded = false;
+          var loadingManager = null;
+          var instructionsScreen = null;
+          loadingManager = new THREE.LoadingManager( () => {
+            let loadingScreen = document.getdElementById( 'loading-screen' )
+            let instructionsScreen = document.getdElementById( 'instructions' )
+            // loadingScreen.classList.add( 'fade-out' );
+            // optional: remove loader from DOM via event listener
+            // loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+          })
+          loadingManager.onProgress = function(item, loaded, total){
+            let loadingScreen = document.getElementById( 'loading-screen' );
+            }
+          loadingManager.onLoad = function(){
+            document.getElementById('loading-screen').id = 'fade-out'
+            resourcesLoaded = true;
+            ;
+          };
+          window.addEventListener ("load", function() {
+          loader.style.display = 'none';
+          });
+        </script>
+      </div>
       <div id="instructions">
         <span style="font-size:36px">THE TREE OF SLIME</span><br />
         <span style="font-size:22px">🐍 A 3D YSL Soundboard 🌊</span><br />
