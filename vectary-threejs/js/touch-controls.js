@@ -31,7 +31,7 @@ function TouchControls(container, camera, options) {
   var ztouch = 1,
     xtouch = 1;
   var PI_2 = Math.PI / 2;
-  var maxPitch = (self.config.maxPitch * Math.PI) / 45;
+  var maxPitch = (self.config.maxPitch * (Math.PI * 4)) / 180;
   var velocity = new THREE.Vector3(0, 0, 0);
 
   self.object = camera;
