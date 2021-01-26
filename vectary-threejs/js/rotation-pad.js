@@ -1,7 +1,6 @@
 "use strict";
 
 function RotationPad(container) {
-  console.log(container)
   var mouseDown = false;
   var mouseStopped = false;
   var mouseStopTimeout, eventRepeatTimeout;
@@ -102,8 +101,8 @@ function RotationPad(container) {
     // Normalize x,y between -2 to 2 range.
     deltaX = -2 + (2 + 2) * (deltaX - (-self.regionData.radius)) / (self.regionData.radius - (-self.regionData.radius));
     deltaY = -2 + (2 + 2) * (deltaY - (-self.regionData.radius)) / (self.regionData.radius - (-self.regionData.radius));
-    deltaX = -1 * Math.round(deltaX * 10) / 10;
-    deltaY = -1 * Math.round(deltaY * 10) / 10;
+    deltaX = 1 * Math.round(deltaX * 10) / 10;
+    deltaY = 1 * Math.round(deltaY * 10) / 10;
     // console.log(deltaX, deltaY);
 
     sendEvent(deltaX, deltaY);
