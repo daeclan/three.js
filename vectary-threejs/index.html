@@ -52,7 +52,7 @@
           loadingManager.onProgress = function(item, loaded, total){
             let loadingScreen = document.getElementById( 'loading-screen' );
             let instructionsScreen = document.getElementById( 'instructions' );
-            instructionsScreen.style.visibility = 'visible';
+            // instructionsScreen.style.visibility = 'visible';
 
             }
           loadingManager.onLoad = function(){
@@ -78,9 +78,7 @@
         Play/Pause Loop: CLICK BLACK ORBS<br/>
         Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
         Play/Pause Game: SPACE<br/><br />
-        <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span><br /><br/>
-        Currently only optimized for laptop/desktop. Mobile coming soon.<br />
-        <br />
+        <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span>
       </div>
     </div>
   </section>
@@ -1390,6 +1388,15 @@
         young.rotation.y += 0.01;
         stoner.rotation.y += 0.01;
         life.rotation.y += 0.01;
+        young.scale.y += 10.5;
+        young.scale.x += 10.5;
+        young.scale.z += 10.5;
+        stoner.scale.y += 10.5;
+        stoner.scale.x += 10.5;
+        stoner.scale.z += 10.5;
+        life.scale.y += 10.5;
+        life.scale.x += 10.5;
+        life.scale.z += 10.5;
         snake1.rotation.y -= 0.01;
         snake2.rotation.y += 0.01;
         spider.rotation.y += 0.300;
