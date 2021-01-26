@@ -109,7 +109,7 @@
 
     // set up controls by checking if user is mobile or desktop
 
-    var mobileConfirm = false
+    var mobileConfirm = null
     var container = $('body');
     var intersected 
     
@@ -118,7 +118,6 @@
     };
 
     if(isMobileDevice()){	
-      console.log(camera)
       var options = {
 			speedFactor: 0.5,
 			delta: 1,
@@ -129,7 +128,7 @@
 		};
       var controls = new TouchControls(container.parent(), camera, renderer.domElement);
       mobileConfirm = true;
-      // controls.target = new THREE.Vector3(0, 0, 0);
+      // controls.target = new THREE.Vector3(0, 6000, 0);
       controls.setPosition(0,0,0)
       camera.position.set(0,200,4998)
       camera.lookAt(0,6000,-2000) 
@@ -1421,7 +1420,8 @@
         camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
         camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
         camera.position.y = Math.min(200, Math.max(200, camera.position.y))
-      // console.log(controls.fpsBody.position)
+      
+        // console.log(controls.object.getFocalLength())
     
       if(mobileConfirm){
         var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
