@@ -194,6 +194,10 @@
     var light = new THREE.PointLight(0x5cd5fd, 0.8, 300)
     light.position.set(0,400,-3500);
     scene.add(light);
+
+    var light = new THREE.PointLight(0x5cd5fd, 0.8, 300)
+    light.position.set(0,400,-3500);
+    scene.add(light);
     
     var light = new THREE.SpotLight(0xFFFFFF, 0.75, 5)
     light.position.set(0,3000,35);
@@ -368,6 +372,24 @@
               });
     });
 
+    // add YSL stele
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
+
+      materials.preload();
+
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/ysl.obj', function (object) {
+        scene.add(object);
+        object.scale.set(7,7,7);
+        object.position.z = -3500;
+        object.position.y = -10;
+        object.rotation.x = 0;
+      });
+    });
+
     // add particles
 
     var particleTexture = new THREE.TextureLoader(loadingManager).load( './assets/3D/vvs.png' );
@@ -493,13 +515,78 @@
       './assets/3D/mush.gltf',
       function ( z ) {
         scene.add( z.scene );
-        z.scene.position.set(0,200,-3500)
-        z.scene.scale.set(2,2,2)
+        z.scene.position.set(-600,100,-3500)
+        z.scene.scale.set(1,1,1)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(600,50,-3500)
+        z.scene.rotation.y = 300
+        z.scene.scale.set(0.5,0.5,0.5)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(-770,50,-3633)
+        z.scene.rotation.y = 300
+        z.scene.scale.set(0.5,0.5,0.5)
         z.scene.color = "#000000"
         mushroom = z.scene
     })
     
-    mushroom.scale.set(50,50,50)
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(400,100,-3300)
+        z.scene.rotation.y = 600
+        z.scene.scale.set(1.5,1.5,1.5)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+ 
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(-660,200,-4000)
+        z.scene.rotation.y = 190
+        z.scene.scale.set(3.5,3.5,3.5)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(0,100,-3500)
+        z.scene.rotation.y = 2340
+        z.scene.scale.set(2.5,4.5,1.5)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+
+    loader.load(
+      './assets/3D/mush.gltf',
+      function ( z ) {
+        scene.add( z.scene );
+        z.scene.position.set(800,200,-3700)
+        z.scene.rotation.y = 270
+        z.scene.scale.set(2.5,2.5,2.5)
+        z.scene.color = "#000000"
+        mushroom = z.scene
+    })
+    
  
 
   
