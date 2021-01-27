@@ -413,7 +413,7 @@
     particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
     var totalParticles = 227;
-    var radiusRange = 800;
+    var radiusRange = 2000;
     for( var i = 0; i < totalParticles; i++ ) 
     {
         var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, color: 0xffffff } );
@@ -602,9 +602,6 @@
         z.scene.color = "#000000"
         mushroom = z.scene
     })
-    
- 
-
   
     //add snakes
 
@@ -721,7 +718,7 @@
     neptune.position.set(660,3400,790)
     scene.add(neptune)
 
-    const geometry4 = new THREE.SphereGeometry(60,60,60)
+    const geometry4 = new THREE.SphereGeometry(100,100,100)
     const material4 = new THREE.MeshBasicMaterial({color: "#000000"})
     const sun = new THREE.Mesh(geometry4, material4)
     sun.position.set(3000,500,0)
@@ -759,7 +756,7 @@
 
     // create back tree ornaments
 
-    const geometry14 = new THREE.SphereGeometry(60,60,60)
+    const geometry14 = new THREE.SphereGeometry(100,100,100)
     const material14 = new THREE.MeshBasicMaterial({color: "#000000"})
     const sun2 = new THREE.Mesh(geometry14, material14)
     sun2.position.set(-3000,500,0)
@@ -820,12 +817,12 @@
       Tone.context.resume();
     });
 
-    const backsound2 = new Tone.Player("./assets/MP3/hbsLoop.mp3").toDestination();
+    const backsound2 = new Tone.Player("./assets/MP3/surf.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
 
-    const backsound3 = new Tone.Player("./assets/MP3/surf.mp3").toDestination();
+    const backsound3 = new Tone.Player("./assets/MP3/treasure.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -1520,10 +1517,11 @@
       scene.simulate();
       particleUpdate();
       particleUpdate2();
-      // console.log(camera.position)
+      // console.log(camera.rotation)
         camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
         camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
         camera.position.y = Math.min(200, Math.max(200, camera.position.y))
+        controls.object.rotation.eulerOrder = 'ZYX'
       
         // console.log(controls.object.getFocalLength())
     
