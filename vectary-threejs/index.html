@@ -225,7 +225,7 @@
 
     // create room environment
 
-    const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/SL2.jpg' );
+    const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/sl2-new.jpg' );
     
     var roomBox = new THREE.BoxBufferGeometry(10000,10000,10000, 8);
     const roomMaterial = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
@@ -841,12 +841,12 @@
     const adlib7 = new Tone.Player("./assets/MP3/coolRack.mp3").toDestination();
     const adlib8 = new Tone.Player("./assets/MP3/slimeSLIME.mp3").toDestination();
     const adlib9 = new Tone.Player("./assets/MP3/bling.mp3").toDestination();
-    const adlib10 = new Tone.Player("./assets/MP3/slimeLove.mp3").toDestination();
+    const adlib10 = new Tone.Player("./assets/MP3/git.mp3").toDestination();
     const adlib11 = new Tone.Player("./assets/MP3/eww.mp3").toDestination();
-    const adlib12 = new Tone.Player("./assets/MP3/git.mp3").toDestination();
-    const adlib13 = new Tone.Player("./assets/MP3/bliss.mp3").toDestination();
+    const adlib12 = new Tone.Player("./assets/MP3/slimeLove.mp3").toDestination();
+    const adlib13 = new Tone.Player("./assets/MP3/skreet.mp3").toDestination();
     const adlib14 = new Tone.Player("./assets/MP3/woo.mp3").toDestination();
-    const adlib15 = new Tone.Player("./assets/MP3/what.mp3").toDestination();
+    const adlib15 = new Tone.Player("./assets/MP3/skirt.mp3").toDestination();
     const adlib16 = new Tone.Player("./assets/MP3/uhuh.mp3").toDestination();
     const adlib17 = new Tone.Player("./assets/MP3/bad.mp3").toDestination();
     const adlib18 = new Tone.Player("./assets/MP3/uhyuh.mp3").toDestination();
@@ -1396,11 +1396,11 @@
     })
 
     domEvents.addEventListener(jupiter2, 'click', event => {
-      adlib9.start();
+      adlib10.start();
     })
 
     domEvents.addEventListener(jupiter2, 'touchstart', event => {
-      adlib9.start();
+      adlib10.start();
       jupiter2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           jupiter2.material.color.setHex( 0x8b0000 );
