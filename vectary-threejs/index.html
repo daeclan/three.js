@@ -128,12 +128,10 @@
 		};
       var controls = new TouchControls(container.parent(), camera, renderer.domElement);
       mobileConfirm = true;
-      // controls.target = new THREE.Vector3(0, 6000, 0);
       controls.setPosition(0,0,0)
       camera.position.set(0,200,4998)
       camera.lookAt(0,6000,-2000) 
       controls.addToScene(scene);
-      // console.log(controls.cameraHolder);
       }else{
       var controls = new FirstPersonControls( camera, renderer.domElement );
       controls.movementSpeed = 1500;
@@ -191,6 +189,10 @@
     light.position.set(0,550,3700);
     scene.add(light);
 
+    var light = new THREE.PointLight(0x0afb02, 300, 420)
+    light.position.set(0,2050,-3700);
+    scene.add(light);
+
     var light = new THREE.PointLight(0x5cd5fd, 0.8, 300)
     light.position.set(0,400,-3500);
     scene.add(light);
@@ -206,6 +208,20 @@
     var light = new THREE.SpotLight(0xFF0000, 0.75, 50)
     light.position.set(0,10000,35);
     scene.add(light);
+
+    const spotLight = new THREE.SpotLight( 0x0afb02 );
+    spotLight.position.set( 0, 1000, -5000 );
+
+    spotLight.castShadow = true;
+
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
+
+    scene.add( spotLight );
 
     // create room environment
 
@@ -1476,15 +1492,15 @@
         young.rotation.y += 0.01;
         stoner.rotation.y += 0.01;
         life.rotation.y += 0.01;
-        young.scale.y += 10.5;
-        young.scale.x += 10.5;
-        young.scale.z += 10.5;
-        stoner.scale.y += 10.5;
-        stoner.scale.x += 10.5;
-        stoner.scale.z += 10.5;
-        life.scale.y += 10.5;
-        life.scale.x += 10.5;
-        life.scale.z += 10.5;
+        young.scale.y = 15000;
+        young.scale.x = 15000;
+        young.scale.z = 15000;
+        stoner.scale.y = 15000;
+        stoner.scale.x = 15000;
+        stoner.scale.z = 15000;
+        life.scale.y = 15000;
+        life.scale.x = 15000;
+        life.scale.z = 15000;
         snake1.rotation.y -= 0.01;
         snake2.rotation.y += 0.01;
         spider.rotation.y += 0.300;
@@ -1504,6 +1520,7 @@
       scene.simulate();
       particleUpdate();
       particleUpdate2();
+      // console.log(camera.position)
         camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
         camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
         camera.position.y = Math.min(200, Math.max(200, camera.position.y))

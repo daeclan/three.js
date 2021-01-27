@@ -31,7 +31,7 @@ function TouchControls(container, camera, options) {
   var ztouch = 1,
     xtouch = 1;
   var PI_2 = Math.PI / 2;
-  var maxPitch = (self.config.maxPitch * (Math.PI * 4)) / 180;
+  var maxPitch = (self.config.maxPitch * Math.PI) / 50;
   var velocity = new THREE.Vector3(0, 0, 0);
 
   self.object = camera;
@@ -376,9 +376,10 @@ TouchControls.prototype = {
     isRightMouseDown = false;
   },
 
-  setRotation: function (x, y) {
+  setRotation: function (x, y, z) {
     if (x !== null) this.object.rotation.x = x;
     if (y !== null) this.object.rotation.y = y;
+    if (z !== null) this.object.rotation.z = 0;
   },
 
   getHitObjects: function () {
