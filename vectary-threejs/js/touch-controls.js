@@ -289,17 +289,14 @@ function TouchControls(container, camera, options) {
   self.getDirection2 = function (v) {
     var self = this;
     var direction = new THREE.Vector3(0, 0, -1);
-    var rotation = new THREE.Quaternion();
-    rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
-    const vector = new THREE.Vector3(1, 0, 0);
-    vector.applyQuaternion(rotation)
-    var rx = self.object.quaternion.x;
-    var ry = self.object.quaternion.y;
+    var rotation = new THREE.Euler(0, 0, 0, "YXZ");
+    var rx = self.object.rotation.x;
+    var ry = self.object.rotation.y;
 
     // console.log("DIRECTION:", this);
-    quaternion.set(rx, ry, 0);
-    v.copy(direction).applyQuaternion(quaternion);
-    console.log(v);
+    rotation.set(rx, ry, 0);
+    v.copy(direction).applyEuler(rotation);
+    // console.log(v);
     return v;
   };
 
@@ -308,11 +305,8 @@ function TouchControls(container, camera, options) {
     var rx = 0;
     var ry = 0;
     var direction = new THREE.Vector3(0, 0, -1);
-    // var rotation = new THREE.Euler(0, 0, 0, "YXZ");
-    var rotation = new THREE.Quaternion();
-    rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
-    const vector = new THREE.Vector3(1, 0, 0);
-    vector.applyQuaternion(rotation)
+    var rotation = new THREE.Euler(0, 0, 0, "YXZ");
+
     // console.log("DIRECTION:", this);
     if (self != undefined) {
       rx = self.object.rotation.x;
@@ -322,7 +316,7 @@ function TouchControls(container, camera, options) {
 
     return function (v) {
       rotation.set(rx, ry, 0);
-      v.copy(direction).applyQuaternion(rotation);
+      v.copy(direction).applyEuler(rotation);
       // console.log(v);
       return v;
     };
