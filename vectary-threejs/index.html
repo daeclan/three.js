@@ -24,7 +24,6 @@
   <script src="./js/perlin_noise.js"></script>
 
   <section id="loading-screen">
-  
     <div id="blocker">
       <div id="loader">
         <div id="loadText">
@@ -35,7 +34,7 @@
           T<br /> 
           T<br /> 
           </span>
-         </div>
+        </div>
         <script>
           var i = true
           var loadAnimation = document.getElementById( 'loading-screen' )
@@ -45,15 +44,10 @@
           loadingManager = new THREE.LoadingManager( () => {
             let loadingScreen = document.getdElementById( 'loading-screen' )
             let instructionsScreen = document.getdElementById( 'instructions' )
-            // loadingScreen.classList.add( 'fade-out' );
-            // optional: remove loader from DOM via event listener
-            // loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
           })
           loadingManager.onProgress = function(item, loaded, total){
             let loadingScreen = document.getElementById( 'loading-screen' );
             let instructionsScreen = document.getElementById( 'instructions' );
-            // instructionsScreen.style.visibility = 'visible';
-
             }
           loadingManager.onLoad = function(){
             document.getElementById('loading-screen').id = 'fade-out'
@@ -66,19 +60,44 @@
           loader.style.display = 'none';
           });
         </script>
-      </div>
-      <div id="instructions">
-        <span style="font-size:36px">THE TREE OF SLIME</span><br />
-        <span style="font-size:22px">🐍 A 3D YSL Soundboard 🌊</span><br />
-        <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
-        <span style="font-size:10px">Click or Tap Anywhere To Dismiss</span><br /> <br />
-        <span style="font-size:27px">Instructions:</span></br>
-        Move Around: WAXD or ARROWS<br/>
-        Look Around: MOUSE<br/>
-        Play/Pause Loop: CLICK BLACK ORBS<br/>
-        Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
-        Play/Pause Game: SPACE<br/><br />
-        <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span>
+        </div>
+          <div id="instructions">
+            <span style="font-size:36px">THE TREE OF SLIME</span><br />
+            <span style="font-size:22px">🐍 A 3D YSL Soundboard 🌊</span><br />
+            <span style="font-size:15px">Created by Declan Murphy (@daeclan)</span><br /><br />
+            <span style="font-size:10px">Click or Tap Anywhere To Dismiss</span><br /> <br />
+            <span style="font-size:27px">Instructions:</span></br>
+            Move Around: WAXD or ARROWS<br/>
+            Look Around: MOUSE<br/>
+            Play/Pause Loop: CLICK BLACK ORBS<br/>
+            Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
+            Play/Pause Game: SPACE<br/><br />
+            <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span>
+            <br/><br /><br/><br />
+            <br />
+            <div id="pause" style="display: none;">
+              <span style="font-size:11px">
+                WORK CITED 
+                <br />
+                Initial Loop:Cyber Dream Loop by Eric Matyas https://soundimage.org/looping-music/
+                <br />
+                Pedestal 3D Object by elouisetrewartha 
+                https://sketchfab.com/3d-models/pedestal-bbc51dca899346b6aa879c19bce82ebe
+                <br />
+                Snake 3D Object by https://www.cgtrader.com/free-3d-models/animals/reptile/snake-by-swp
+                <br />
+                Tree 3D Object by 10DollarsAnimation https://www.cgtrader.com/free-3d-models/plant/conifer/tree-with-no-leaves
+                <br />
+                Spider Object by lyrog https://www.cgtrader.com/free-3d-models/animals/insect/low-poly-spider-model
+                <br />
+                Mushroom Object by MA3D https://sketchfab.com/3d-models/magical-mushroom-blue-6f5da980f1534fb499aa157ab26a15d9
+                <br />
+                Particle Physics (ThreeJS) by Lee Stemkoski http://stemkoski.github.io/Three.js/Particles.html
+                <br />
+                Music courtesy of YSL Records and 300 Entertainment
+              </span>
+
+        </div>
       </div>
     </div>
   </section>
@@ -153,6 +172,7 @@
 
     const blocker = document.getElementById( 'blocker' );
     const instructions = document.getElementById( 'instructions' );
+    const pause = document.getElementById( 'pause' );
     var firstClick = false
 
     instructions.addEventListener( 'click', function () {
@@ -1431,12 +1451,12 @@
         if(inPlay){
         instructions.style.visibility = 'visible';
         blocker.style.visibility = 'visible';
+        pause.style.display = 'block';
         inPlay = false
-        console.log('bing')
         }else{
         instructions.style.visibility = 'hidden';
         blocker.style.visibility = 'hidden';
-        console.log('bang')
+        pause.style.display = 'none';
         inPlay = true
         }
       }

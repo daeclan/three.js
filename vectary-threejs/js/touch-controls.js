@@ -379,6 +379,7 @@ TouchControls.prototype = {
   setRotation: function (x, y, z) {
     if (x !== null) this.object.rotation.x = x;
     if (y !== null) this.object.rotation.y = y;
+    console.log(x, y)
     if (z !== null) this.object.rotation.z = 0;
   },
 
