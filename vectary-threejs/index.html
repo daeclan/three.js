@@ -1548,6 +1548,8 @@
       if(mobileConfirm){
         var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
         vector.unproject(camera);
+        var rotator = new THREE.Object3D(controls.object)
+        rotator.rotateOnWorldAxis(look, 0)
 
         // var raycaster = new THREE.Raycaster(controls.fpsBody.position, vector.sub(controls.fpsBody.position).normalize());
       }
