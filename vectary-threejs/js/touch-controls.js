@@ -31,7 +31,7 @@ function TouchControls(container, camera, options) {
   var ztouch = 1,
     xtouch = 1;
   var PI_2 = Math.PI / 2;
-  var maxPitch = (self.config.maxPitch * Math.PI) / 30;
+  var maxPitch = (self.config.maxPitch * Math.PI) / 35;
   var velocity = new THREE.Vector3(0, 0, 0);
 
   self.object = camera;
@@ -43,6 +43,7 @@ function TouchControls(container, camera, options) {
   self.rotationPad = new RotationPad(container);
   $(self.rotationPad).on("YawPitch", function (event) {
     var rotation = calculateRotation(event.detail.deltaX, event.detail.deltaY);
+    // console.log(rotation)
     self.setRotation(rotation.rx, rotation.ry);
   });
 
@@ -379,7 +380,8 @@ TouchControls.prototype = {
   setRotation: function (x, y, z) {
     if (x !== null) this.object.rotation.x = x;
     if (y !== null) this.object.rotation.y = y;
-    // console.log(x, y)
+    console.log(x, y)
+    console.log(this)
     if (z !== null) this.object.rotation.z = 0;
   },
 

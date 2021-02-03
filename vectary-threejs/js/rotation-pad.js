@@ -113,7 +113,7 @@ function RotationPad(container) {
       clearTimeout(eventRepeatTimeout);
       return;
     }
-
+    // console.log(dx)
     clearTimeout(eventRepeatTimeout);
     eventRepeatTimeout = setTimeout(function () {
       sendEvent(dx, dy);

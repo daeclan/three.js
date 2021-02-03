@@ -115,7 +115,7 @@
     scene.setGravity(new THREE.Vector3(0,-0.001,0))
 
     var clock = new THREE.Clock();
-    var look = new THREE.Vector3(0, -100, -63)
+    var look = new THREE.Vector3(0, 0, 0)
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
     camera.lookAt(look)
@@ -185,6 +185,10 @@
       }
     }, false );
 
+    window.addEventListener( 'click', function () {
+      console.log(controls.object.rotation)
+      console.log(controls.object.position)
+    });
     // set up window resize event
         
     window.addEventListener('resize', () => {
@@ -1541,15 +1545,14 @@
         camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
         camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
         camera.position.y = Math.min(200, Math.max(200, camera.position.y))
-        controls.object.rotation.eulerOrder = 'ZYX'
+    
       
         // console.log(controls.object.getFocalLength())
     
       if(mobileConfirm){
         var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
         vector.unproject(camera);
-        var rotator = new THREE.Object3D(controls.object)
-        rotator.rotateOnWorldAxis(look, 0)
+        
 
         // var raycaster = new THREE.Raycaster(controls.fpsBody.position, vector.sub(controls.fpsBody.position).normalize());
       }
