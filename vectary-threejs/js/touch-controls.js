@@ -43,7 +43,6 @@ function TouchControls(container, camera, options) {
   self.rotationPad = new RotationPad(container);
   $(self.rotationPad).on("YawPitch", function (event) {
     var rotation = calculateRotation(event.detail.deltaX, event.detail.deltaY);
-    // console.log(rotation)
     self.setRotation(rotation.rx, rotation.ry);
   });
 
@@ -307,18 +306,14 @@ function TouchControls(container, camera, options) {
     var ry = 0;
     var direction = new THREE.Vector3(0, 0, -1);
     var rotation = new THREE.Euler(0, 0, 0, "YXZ");
-
-    // console.log("DIRECTION:", this);
     if (self != undefined) {
       rx = self.object.rotation.x;
       ry = self.object.rotation.y;
-      console.log(rx, ry);
     }
 
     return function (v) {
       rotation.set(rx, ry, 0);
       v.copy(direction).applyEuler(rotation);
-      // console.log(v);
       return v;
     };
   })();
@@ -380,8 +375,6 @@ TouchControls.prototype = {
   setRotation: function (x, y, z) {
     if (x !== null) this.object.rotation.x = x;
     if (y !== null) this.object.rotation.y = y;
-    console.log(x, y)
-    console.log(this)
     if (z !== null) this.object.rotation.z = 0;
   },
 
