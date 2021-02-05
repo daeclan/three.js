@@ -182,3 +182,8 @@ transition: 1s opacity;
 #container3d canvas {
 	position: absolute;
 }
+
+#stop-scrolling { 
+  height: 100%; 
+  overflow: hidden; 
+} 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 
   <title>Slime.Surf: Wavy</title>
 
@@ -136,6 +136,10 @@
       return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
     };
 
+    function disableScroll() { 
+      document.body.classList.add("stop-scrolling"); 
+    }
+
     if(isMobileDevice()){	
       var options = {
 			speedFactor: 0.5,
@@ -152,6 +156,7 @@
       camera.lookAt(0,4000,-2000) 
       controls.object.rotation.order = 'ZYX'
       controls.addToScene(scene);
+      disableScroll();
       }else{
       var controls = new FirstPersonControls( camera, renderer.domElement );
       controls.movementSpeed = 1500;
