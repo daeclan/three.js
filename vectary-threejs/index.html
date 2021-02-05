@@ -527,7 +527,7 @@
 
     //add tree
 
-    var treeMat = new THREE.MeshBasicMaterial({color: 0x000000, map: snexture});
+    var treeMat = new THREE.MeshBasicMaterial({color: 0x000000});
     var treeOBJLoader = new THREE.OBJLoader(loadingManager);
     treeOBJLoader.setPath( './assets/3D/');
     treeOBJLoader.load( 'Tree.obj', function ( object ) {
