@@ -16,6 +16,7 @@
   <script src='./node_modules/three/examples/jsm/utils/threex.domevents.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.70/Tone.js"></script>
   <script src="./js/movement-pad.js"></script>
+  <script src="./js/VRKeyboard.js"></script>
   <script src="./js/rotation-pad.js"></script>
   <script src="./js/touch-controls.js"></script>
   <script src="./js/obj.js"></script>
@@ -311,7 +312,25 @@
     }
     scene.add(createTerrain())
 
-    
+  // load VR keyboard for mobile kids
+  var vrKeyboard = new VRKeyboard(scene, camera, renderer)
+  vrKeyboard.position.set(0,250,3665)
+  vrKeyboard.scale.set(0.6,0.6,0.6)
+  vrKeyboard.keyColor="#000000";
+  vrKeyboard.labelColor="#7cfc00";
+  vrKeyboard.borderColor="#32cd32";
+  vrKeyboard.keyDownColor="#008000";
+  vrKeyboard.labelDownColor="#ffffff";
+  vrKeyboard.borderDownColor="#32cd32";
+  vrKeyboard.borderRadius=0
+  var usernameTxt = new VRTextInput();
+  usernameTxt.width = 300;
+  usernameTxt.backgroundColor="#000000";
+  usernameTxt.textColor="#7cfc00";
+  usernameTxt.scale.set(0.7,0.7,0.7)
+  usernameTxt.position.set(0,375,3665);
+  vrKeyboard.addField(usernameTxt);
+  vrKeyboard.target = usernameTxt;
   // load statue pillars
 
     const loader = new GLTFLoader(loadingManager);
@@ -387,7 +406,6 @@
               object.scale.set(1700,1700,1700)
               object.rotation.z = THREE.Math.radToDeg(1.1);
                 var texture = new THREE.TextureLoader().load(JPGFile);
-
                 object.traverse(function (child) {  
                     if (child instanceof THREE.Mesh) {
                         child.material.map = texture;
@@ -412,13 +430,6 @@
               object.position.x = 270;
               object.scale.set(1700,1700,1700)
               object.rotation.z = THREE.Math.radToDeg(0.98911);
-                var texture = new THREE.TextureLoader().load(JPGFile);
-
-                object.traverse(function (child) {  
-                    if (child instanceof THREE.Mesh) {
-                        child.material.map = texture;
-                    }
-                });
                 life = object
                 scene.add(object);
               });
@@ -428,9 +439,7 @@
 
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.load('./assets/3D/ysl.mtl', function (materials) {
-
       materials.preload();
-
       var objLoader = new THREE.OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load('./assets/3D/ysl.obj', function (object) {
@@ -539,6 +548,56 @@
     particleGroup2.rotation.y = time * 0.75;
     particleGroup2.rotation.z = time * 1.0;
     }
+
+    var particleTexture3 = new THREE.TextureLoader(loadingManager).load( './assets/3D/vvs.png' );
+    particleGroup3 = new THREE.Object3D();
+    particleAttributes3 = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 227;
+    var radiusRange = 4100;
+    for( var i = 0; i < totalParticles; i++ ) 
+    {
+        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture3, color: 0xffffff } );
+      
+      var sprite = new THREE.Sprite( spriteMaterial );
+      sprite.scale.set( 120, 120, 1.0 ); 
+      sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
+      sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+      sprite.material.color.setHex( "#ff0000" ); 
+      sprite.material.blending = THREE.AdditiveBlending
+      particleGroup3.add( sprite );
+      particleAttributes3.startPosition.push( sprite.position.clone() );
+      particleAttributes3.randomness.push( Math.random() );
+    }
+    particleGroup3.position.y = 2050;
+    particleGroup3.position.z = -3600;
+    particleGroup3.position.x = -15;
+    scene.add( particleGroup3 );
+
+    var particleGroup3, particleAttributes3;
+
+    function particleUpdate3(){
+    var time = 4 * clock.getElapsedTime();
+    for ( var c = 0; c < particleGroup3.children.length; c ++ ) 
+    {
+      var sprite = particleGroup3.children[ c ];
+
+      var wiggleScale = 2;
+      sprite.position.x += wiggleScale * (Math.random() - 0.5);
+      sprite.position.y += wiggleScale * (Math.random() - 0.5);
+      sprite.position.z += wiggleScale * (Math.random() - 0.5);
+
+      var a = particleAttributes3.randomness[c] + 1;
+      var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
+      sprite.position.x = particleAttributes3.startPosition[c].x * pulseFactor;
+      sprite.position.y = particleAttributes3.startPosition[c].y * pulseFactor;
+      sprite.position.z = particleAttributes3.startPosition[c].z * pulseFactor;	
+    }
+
+    particleGroup3.rotation.y = time * 0.75;
+    particleGroup3.rotation.z = time * 1.0;
+    }
+    
 
     //add tree
 
@@ -760,6 +819,12 @@
     sun.position.set(3000,500,0)
     scene.add(sun)
 
+    const geometry23 = new THREE.SphereGeometry(300,300,300)
+    const material23 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const xanthar = new THREE.Mesh(geometry23, material23)
+    xanthar.position.set(0,2000,-3600)
+    scene.add(xanthar)
+
     const geometry6 = new THREE.SphereGeometry(65, 65, 65)
     const material6 = new THREE.MeshBasicMaterial({color: "#8b0000"})
     const uranus = new THREE.Mesh(geometry6, material6)
@@ -789,8 +854,6 @@
     const venus2 = new THREE.Mesh(geometry20, material10)
     venus2.position.set(-410,3000,300)
     scene.add(venus2)
-
-    // create back tree ornaments
 
     const geometry14 = new THREE.SphereGeometry(100,100,100)
     const material14 = new THREE.MeshBasicMaterial({color: "#000000"})
@@ -867,6 +930,7 @@
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
+    
 
     const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
     const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
@@ -947,10 +1011,22 @@
             backsound4.start();
     }}
 
-    // add in mouse events for sound objects
-    
-    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+    // add in mouse events for YSL objects  
 
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+    var yDown, sDown, lDown
+
+    // domEvents.addEventListener(life, 'click', event => {
+    // console.log("hi")
+    // })
+    // add in mouse events for sound objects
+
+    vrKeyboard.addEventListener("keydown", function(e){
+      if(e.code == "y"){console.log(yDown = true)}
+      if(e.code == "s"){console.log(sDown = true)}
+      if(e.code == "l"){console.log(lDown = true)}
+    })
+    
     domEvents.addEventListener(sun, 'click', event => {
       loopSwitch();
     })
@@ -989,6 +1065,26 @@
 
     domEvents.addEventListener(sun2, 'mouseout', event => {
       sun2.material.color.setHex( 0x000000 );
+    })
+
+    domEvents.addEventListener(xanthar, 'click', event => {
+      window.prompt()
+    })
+
+    domEvents.addEventListener(xanthar, 'touchstart', event => {
+      loopSwitch2();
+      xanthar.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          xanthar.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
+    domEvents.addEventListener(xanthar, 'mouseover', event => {
+      xanthar.material.color.setHex( 0xffffff );
+    })
+
+    domEvents.addEventListener(xanthar, 'mouseout', event => {
+      xanthar.material.color.setHex( 0x000000 );
     })
 
     domEvents.addEventListener(mercury, 'click', event => {
@@ -1494,6 +1590,24 @@
     var animateS = false
     var animateL = false
 
+    document.addEventListener("click", event => {
+      if(yDown){
+      young.scale.set(5000,5000,5000),
+      young.position.set(-2500,3000,0),
+      animateY = true
+      }
+      if(sDown){
+      stoner.scale.set(5000,5000,5000),
+      stoner.position.set(0,4600,0),
+      animateS = true
+      }
+      if(lDown){
+      life.scale.set(5000,5000,5000),
+      life.position.set(2500,3000,0),
+      animateL = true
+      }
+    });
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 89) {
         return young.scale.set(5000,5000,5000),
@@ -1501,6 +1615,7 @@
         animateY = true
       }
     });
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 83) {
         return stoner.scale.set(5000,5000,5000),
@@ -1508,6 +1623,7 @@
         animateS = true
       }
     });
+
     document.addEventListener("keydown", event => {
       if (event.keyCode === 76) {
         return life.scale.set(5000,5000,5000),
@@ -1554,6 +1670,8 @@
       scene.simulate();
       particleUpdate();
       particleUpdate2();
+      particleUpdate3();
+      vrKeyboard.update();
       // console.log(camera.rotation)
         camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
         camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
