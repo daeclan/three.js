@@ -312,7 +312,8 @@
     }
     scene.add(createTerrain())
 
-  // load VR keyboard for mobile kids
+  // load VR keyboard
+
   var vrKeyboard = new VRKeyboard(scene, camera, renderer)
   vrKeyboard.position.set(0,250,3665)
   vrKeyboard.scale.set(0.6,0.6,0.6)
@@ -323,6 +324,7 @@
   vrKeyboard.labelDownColor="#ffffff";
   vrKeyboard.borderDownColor="#32cd32";
   vrKeyboard.borderRadius=0
+
   // load statue pillars
 
     const loader = new GLTFLoader(loadingManager);
@@ -922,6 +924,11 @@
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
+
+    const backsound5 = new Tone.Player("./assets/MP3/GFU.mp3").toDestination();
+    Tone.loaded().then(() => {
+      Tone.context.resume();
+    });
     
 
     const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
@@ -954,6 +961,7 @@
             backsound2.stop();
             backsound3.stop();
             backsound4.stop();
+            backsound5.stop();
             backsound.loop = true
             backsound.start();
     }}
@@ -969,6 +977,7 @@
             backsound.stop();
             backsound3.stop();
             backsound4.stop();
+            backsound5.stop();
             backsound2.loop = true
             backsound2.start();
     }}
@@ -984,6 +993,7 @@
             backsound.stop();
             backsound2.stop();
             backsound4.stop();
+            backsound5.stop();
             backsound3.loop = true
             backsound3.start();
     }}
@@ -999,14 +1009,31 @@
             backsound.stop();
             backsound2.stop();
             backsound3.stop();
+            backsound5.stop();
             backsound4.loop = true
             backsound4.start();
+    }}
+
+    function loopSwitch5() {
+      backsound4.volume.value = -5;
+        if (backsound5.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound5.loop = false
+            backsound5.stop();
+        } else if (backsound5.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.stop();
+            backsound2.stop();
+            backsound3.stop();
+            backsound4.stop();
+            backsound5.loop = true
+            backsound5.start();
     }}
 
     // add in mouse events for YSL objects  
 
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-    var yDown, sDown, lDown
+    var yDown, sDown, lDown, eDown, zDown
 
     // domEvents.addEventListener(life, 'click', event => {
     // console.log("hi")
@@ -1017,6 +1044,8 @@
       if(e.code == "y"){console.log(yDown = true)}
       if(e.code == "s"){console.log(sDown = true)}
       if(e.code == "l"){console.log(lDown = true)}
+      if(e.code == "e"){console.log(eDown = true)}
+      if(e.code == "z"){console.log(zDown = true)}
     })
     
     domEvents.addEventListener(sun, 'click', event => {
@@ -1060,11 +1089,11 @@
     })
 
     domEvents.addEventListener(xanthar, 'click', event => {
-      window.prompt()
+      loopSwitch5();
     })
 
     domEvents.addEventListener(xanthar, 'touchstart', event => {
-      loopSwitch2();
+      loopSwitch5();
       xanthar.material.color.setHex( 0xffffff );
       setTimeout(function () {
           xanthar.material.color.setHex( 0x000000 );
@@ -1582,6 +1611,27 @@
     var animateS = false
     var animateL = false
 
+    function ezSound(){
+      mercury.position.set(0,300,1100)
+      moon.position.set(180,300,1100)
+      mars.position.set(-200,300,1100)
+      neptune.position.set(0,750,1100)
+      uranus.position.set(180,750,1100)
+      saturn.position.set(-200,750,1100)
+      pluto.position.set(0,1000,1100)
+      jupiter.position.set(400,300,1100)
+      venus.position.set(-400,300,1100)
+      mercury2.position.set(0,200,-1200)
+      moon2.position.set(200,200,-1200)
+      mars2.position.set(-215,200,-1200)
+      neptune2.position.set(0,1000,-1200)
+      uranus2.position.set(260,500,-1200)
+      saturn2.position.set(-280,500,-1200)
+      pluto2.position.set(0,520,-1200)
+      jupiter2.position.set(410,200,-1200)
+      venus2.position.set(-410,200,-1200)
+    }
+
     document.addEventListener("click", event => {
       if(yDown){
       young.scale.set(5000,5000,5000),
@@ -1597,6 +1647,9 @@
       life.scale.set(5000,5000,5000),
       life.position.set(2500,3000,0),
       animateL = true
+      }
+      if(eDown && zDown){
+        ezSound();
       }
     });
 
@@ -1621,6 +1674,21 @@
         return life.scale.set(5000,5000,5000),
         life.position.set(2500,3000,0),
         animateL = true
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.keyCode === 69) {
+        eDown = true
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.keyCode === 90) {
+        zDown = true
+        if(zDown && eDown){
+          ezSound();
+        }
       }
     });
 
