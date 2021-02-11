@@ -1182,8 +1182,3 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
   this.quadraticCurveTo(x, y, x + r, y);
   this.fill();
 }
-
-
-/*
- https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath
- */

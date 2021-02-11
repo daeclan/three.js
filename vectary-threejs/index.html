@@ -183,7 +183,8 @@
       controls.lookSpeed = 0.0001
     })
     
-    if(isMobileDevice()){controls.maxPolarAngle = Math.PI / 2}
+    if(isMobileDevice()){
+      controls.maxPolarAngle = Math.PI / 2}
 
     // insert blocker screen / instructions
 
@@ -324,6 +325,10 @@
   vrKeyboard.labelDownColor="#ffffff";
   vrKeyboard.borderDownColor="#32cd32";
   vrKeyboard.borderRadius=0
+
+  vrKeyboard.addEventListener('keydown' , function(e){
+    console.log(e.code)
+  })
 
   // load statue pillars
 
@@ -591,7 +596,6 @@
     particleGroup3.rotation.y = time * 0.75;
     particleGroup3.rotation.z = time * 1.0;
     }
-    
 
     //add tree
 
@@ -930,7 +934,6 @@
       Tone.context.resume();
     });
     
-
     const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
     const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
     const adlib3 = new Tone.Player("./assets/MP3/wavy.mp3").toDestination();
@@ -1030,22 +1033,17 @@
             backsound5.start();
     }}
 
-    // add in mouse events for YSL objects  
-
-    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-    var yDown, sDown, lDown, eDown, zDown
-
-    // domEvents.addEventListener(life, 'click', event => {
-    // console.log("hi")
-    // })
     // add in mouse events for sound objects
 
-    vrKeyboard.addEventListener("keydown", function(e){
-      if(e.code == "y"){console.log(yDown = true)}
-      if(e.code == "s"){console.log(sDown = true)}
-      if(e.code == "l"){console.log(lDown = true)}
-      if(e.code == "e"){console.log(eDown = true)}
-      if(e.code == "z"){console.log(zDown = true)}
+    var yDown, sDown, lDown, eDown, zDown
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+
+    vrKeyboard.addEventListener("keydown", event => {
+      if(event.code == "y"){console.log(yDown = true)}
+      if(event.code == "s"){console.log(sDown = true)}
+      if(event.code == "l"){console.log(lDown = true)}
+      if(event.code == "e"){console.log(eDown = true)}
+      if(event.code == "z"){console.log(zDown = true)}
     })
     
     domEvents.addEventListener(sun, 'click', event => {
@@ -1725,26 +1723,19 @@
         loopSwitch3();
         isExecuted = true;
       }
-      controls.update( clock.getDelta() );
-      // console.log(controls.object.rotation)
+      if(mobileConfirm){
+        var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
+        vector.unproject(camera);
+      }
+      controls.update(clock.getDelta());
+      vrKeyboard.update();
       scene.simulate();
       particleUpdate();
       particleUpdate2();
       particleUpdate3();
-      vrKeyboard.update();
-      // console.log(camera.rotation)
-        camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
-        camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
-        camera.position.y = Math.min(200, Math.max(200, camera.position.y))
-      
-        // console.log(controls.object.getFocalLength())
-    
-      if(mobileConfirm){
-        var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);
-        vector.unproject(camera);
-
-        // var raycaster = new THREE.Raycaster(controls.fpsBody.position, vector.sub(controls.fpsBody.position).normalize());
-      }
+      camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
+      camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
+      camera.position.y = Math.min(200, Math.max(200, camera.position.y))
       renderer.render(scene, camera)
       requestAnimationFrame(animate)
       }
