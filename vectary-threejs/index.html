@@ -73,7 +73,9 @@
             Play/Pause Loop: CLICK BLACK ORBS<br/>
             Soundboard: CLICK RED ORBS or KEYS 0-9<br/>
             Pause/Work Cited: SPACE<br/><br />
-            <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]</span>
+            <span style="font-size:10px">[Unlock A Secret Loop With The Correct Key Presses]
+              <br />
+            Type EZ To Make Soundboard More Accessible</span>
             <div id="pause" style="display: none;">
               <span style="font-size:25px">
                 FOLLOW DAECLAN
@@ -326,10 +328,6 @@
   vrKeyboard.borderDownColor="#32cd32";
   vrKeyboard.borderRadius=0
 
-  vrKeyboard.addEventListener('keydown' , function(e){
-    console.log(e.code)
-  })
-
   // load statue pillars
 
     const loader = new GLTFLoader(loadingManager);
@@ -546,55 +544,6 @@
 
     particleGroup2.rotation.y = time * 0.75;
     particleGroup2.rotation.z = time * 1.0;
-    }
-
-    var particleTexture3 = new THREE.TextureLoader(loadingManager).load( './assets/3D/vvs.png' );
-    particleGroup3 = new THREE.Object3D();
-    particleAttributes3 = { startSize: [], startPosition: [], randomness: [] };
-
-    var totalParticles = 100;
-    var radiusRange = 4100;
-    for( var i = 0; i < totalParticles; i++ ) 
-    {
-        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture3, color: 0xffffff } );
-      
-      var sprite = new THREE.Sprite( spriteMaterial );
-      sprite.scale.set( 120, 120, 1.0 ); 
-      sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 )*2;
-      sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-      sprite.material.color.setHex( "#ff0000" ); 
-      sprite.material.blending = THREE.AdditiveBlending
-      particleGroup3.add( sprite );
-      particleAttributes3.startPosition.push( sprite.position.clone() );
-      particleAttributes3.randomness.push( Math.random() );
-    }
-    particleGroup3.position.y = 2050;
-    particleGroup3.position.z = -3600;
-    particleGroup3.position.x = -15;
-    scene.add( particleGroup3 );
-
-    var particleGroup3, particleAttributes3;
-
-    function particleUpdate3(){
-    var time = 4 * clock.getElapsedTime();
-    for ( var c = 0; c < particleGroup3.children.length; c ++ ) 
-    {
-      var sprite = particleGroup3.children[ c ];
-
-      var wiggleScale = 2;
-      sprite.position.x += wiggleScale * (Math.random() - 0.5);
-      sprite.position.y += wiggleScale * (Math.random() - 0.5);
-      sprite.position.z += wiggleScale * (Math.random() - 0.5);
-
-      var a = particleAttributes3.randomness[c] + 1;
-      var pulseFactor = Math.sin(a * time) * 0.1 + 0.05;
-      sprite.position.x = particleAttributes3.startPosition[c].x * pulseFactor;
-      sprite.position.y = particleAttributes3.startPosition[c].y * pulseFactor;
-      sprite.position.z = particleAttributes3.startPosition[c].z * pulseFactor;	
-    }
-
-    particleGroup3.rotation.y = time * 0.75;
-    particleGroup3.rotation.z = time * 1.0;
     }
 
     //add tree
@@ -1167,6 +1116,7 @@
 
     domEvents.addEventListener(mercury, 'touchstart', event => {
       adlib.start();
+      mercury.scale.set(3,3,3)
       mercury.material.color.setHex( 0xffffff );
       setTimeout(function () {
           mercury.scale.set(1,1,1)
@@ -1196,6 +1146,7 @@
 
     domEvents.addEventListener(mercury2, 'touchstart', event => {
       adlib11.start();
+      mercury2.scale.set(3,3,3)
       mercury2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           mercury2.scale.set(1,1,1)
@@ -1225,6 +1176,7 @@
 
     domEvents.addEventListener(moon, 'touchstart', event => {
       adlib2.start();
+      moon.scale.set(3,3,3)
       moon.material.color.setHex( 0xffffff );
       setTimeout(function () {
           moon.scale.set(1,1,1)
@@ -1254,6 +1206,7 @@
 
     domEvents.addEventListener(moon2, 'touchstart', event => {
       adlib12.start();
+      moon2.scale.set(3,3,3)
       moon2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           moon2.scale.set(1,1,1)
@@ -1283,6 +1236,7 @@
     
     domEvents.addEventListener(mars, 'touchstart', event => {
       adlib3.start();
+      mars.scale.set(3,3,3)
       mars.material.color.setHex( 0xffffff );
       setTimeout(function () {
           mars.scale.set(1,1,1)
@@ -1312,6 +1266,7 @@
 
     domEvents.addEventListener(mars2, 'touchstart', event => {
       adlib13.start();
+      mars2.scale.set(3,3,3)
       mars2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           mars2.scale.set(1,1,1)
@@ -1341,6 +1296,7 @@
 
     domEvents.addEventListener(neptune, 'touchstart', event => {
       adlib4.start();
+      neptune.scale.set(3,3,3)
       neptune.material.color.setHex( 0xffffff );
       setTimeout(function () {
           neptune.scale.set(1,1,1)
@@ -1370,6 +1326,7 @@
 
     domEvents.addEventListener(neptune2, 'touchstart', event => {
       adlib14.start();
+      neptune2.scale.set(3,3,3)
       neptune2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           neptune2.scale.set(1,1,1)
@@ -1399,6 +1356,7 @@
 
     domEvents.addEventListener(uranus, 'touchstart', event => {
       adlib5.start();
+      uranus.scale.set(3,3,3)
       uranus.material.color.setHex( 0xffffff );
       setTimeout(function () {
           uranus.scale.set(1,1,1)
@@ -1428,6 +1386,7 @@
 
     domEvents.addEventListener(uranus2, 'touchstart', event => {
       adlib15.start();
+      uranus2.scale.set(3,3,3)
       uranus2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           uranus2.scale.set(1,1,1)
@@ -1457,6 +1416,7 @@
 
     domEvents.addEventListener(saturn, 'touchstart', event => {
       adlib6.start();
+      saturn.scale.set(3,3,3)
       saturn.material.color.setHex( 0xffffff );
       setTimeout(function () {
           saturn.scale.set(1,1,1)
@@ -1486,6 +1446,7 @@
 
     domEvents.addEventListener(saturn2, 'touchstart', event => {
       adlib16.start();
+      saturn2.scale.set(3,3,3)
       saturn2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           saturn2.scale.set(1,1,1)
@@ -1509,6 +1470,7 @@
 
     domEvents.addEventListener(pluto, 'touchstart', event => {
       adlib17.start();
+      pluto.scale.set(3,3,3)
       pluto.material.color.setHex( 0xffffff );
       setTimeout(function () {
           pluto.scale.set(1,1,1)
@@ -1532,6 +1494,7 @@
 
     domEvents.addEventListener(pluto2, 'touchstart', event => {
       adlib7.start();
+      pluto2.scale.set(3,3,3)
       pluto2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           pluto2.scale.set(1,1,1)
@@ -1555,6 +1518,7 @@
 
     domEvents.addEventListener(venus, 'touchstart', event => {
       adlib8.start();
+      venus.scale.set(3,3,3)
       venus.material.color.setHex( 0xffffff );
       setTimeout(function () {
           venus.scale.set(1,1,1)
@@ -1578,6 +1542,7 @@
 
     domEvents.addEventListener(venus2, 'touchstart', event => {
       adlib18.start();
+      venus2.scale.set(3,3,3)
       venus2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           venus2.scale.set(1,1,1)
@@ -1597,6 +1562,7 @@
 
     domEvents.addEventListener(jupiter, 'touchstart', event => {
       adlib9.start();
+      jupiter.scale.set(3,3,3)
       jupiter.material.color.setHex( 0xffffff );
       setTimeout(function () {
           jupiter.scale.set(1,1,1)
@@ -1624,6 +1590,7 @@
 
     domEvents.addEventListener(jupiter2, 'touchstart', event => {
       adlib10.start();
+      jupiter2.scale.set(3,3,3)
       jupiter2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           jupiter2.scale.set(1,1,1)
@@ -1828,7 +1795,6 @@
       scene.simulate();
       particleUpdate();
       particleUpdate2();
-      particleUpdate3();
       camera.position.x = Math.min(4998, Math.max(-4998, camera.position.x))
       camera.position.z = Math.min(4998, Math.max(-4998, camera.position.z))
       camera.position.y = Math.min(200, Math.max(200, camera.position.y))
