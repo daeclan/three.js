@@ -552,7 +552,7 @@
     particleGroup3 = new THREE.Object3D();
     particleAttributes3 = { startSize: [], startPosition: [], randomness: [] };
 
-    var totalParticles = 227;
+    var totalParticles = 100;
     var radiusRange = 4100;
     for( var i = 0; i < totalParticles; i++ ) 
     {
@@ -1073,42 +1073,22 @@
 
     domEvents.addEventListener(yButton, 'touchstart', event => {
       yDown = true
-      yButton.material.color.setHex( 0xffffff );
-      setTimeout(function () {
-          yButton.material.color.setHex( 0x000000 );
-      }, 200);
     });
 
     domEvents.addEventListener(sButton, 'touchstart', event => {
       sDown = true
-      sButton.material.color.setHex( 0xffffff );
-      setTimeout(function () {
-          sButton.material.color.setHex( 0x000000 );
-      }, 200);
     });
 
     domEvents.addEventListener(lButton, 'touchstart', event => {
       lDown = true
-      lButton.material.color.setHex( 0xffffff );
-      setTimeout(function () {
-          lButton.material.color.setHex( 0x000000 );
-      }, 200);
     });
 
     domEvents.addEventListener(eButton, 'touchstart', event => {
       eDown = true
-      eButton.material.color.setHex( 0xffffff );
-      setTimeout(function () {
-          eButton.material.color.setHex( 0x000000 );
-      }, 200);
     });
 
     domEvents.addEventListener(zButton, 'touchstart', event => {
       zDown = true
-      zButton.material.color.setHex( 0xffffff );
-      setTimeout(function () {
-          zButton.material.color.setHex( 0x000000 );
-      }, 200);
     });
 
     vrKeyboard.addEventListener("keydown", event => {
@@ -1189,6 +1169,7 @@
       adlib.start();
       mercury.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          mercury.scale.set(1,1,1)
           mercury.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1217,6 +1198,7 @@
       adlib11.start();
       mercury2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          mercury2.scale.set(1,1,1)
           mercury2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1245,6 +1227,7 @@
       adlib2.start();
       moon.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          moon.scale.set(1,1,1)
           moon.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1273,6 +1256,7 @@
       adlib12.start();
       moon2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          moon2.scale.set(1,1,1)
           moon2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1301,6 +1285,7 @@
       adlib3.start();
       mars.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          mars.scale.set(1,1,1)
           mars.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1329,6 +1314,7 @@
       adlib13.start();
       mars2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          mars2.scale.set(1,1,1)
           mars2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1357,6 +1343,7 @@
       adlib4.start();
       neptune.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          neptune.scale.set(1,1,1)
           neptune.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1385,6 +1372,7 @@
       adlib14.start();
       neptune2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          neptune2.scale.set(1,1,1)
           neptune2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1413,6 +1401,7 @@
       adlib5.start();
       uranus.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          uranus.scale.set(1,1,1)
           uranus.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1441,6 +1430,7 @@
       adlib15.start();
       uranus2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          uranus2.scale.set(1,1,1)
           uranus2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1469,6 +1459,7 @@
       adlib6.start();
       saturn.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          saturn.scale.set(1,1,1)
           saturn.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1497,6 +1488,7 @@
       adlib16.start();
       saturn2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          saturn2.scale.set(1,1,1)
           saturn2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1519,6 +1511,7 @@
       adlib17.start();
       pluto.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          pluto.scale.set(1,1,1)
           pluto.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1541,6 +1534,7 @@
       adlib7.start();
       pluto2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          pluto2.scale.set(1,1,1)
           pluto2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1563,6 +1557,7 @@
       adlib8.start();
       venus.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          venus.scale.set(1,1,1)
           venus.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1585,6 +1580,7 @@
       adlib18.start();
       venus2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          venus2.scale.set(1,1,1)
           venus2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1603,6 +1599,7 @@
       adlib9.start();
       jupiter.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          jupiter.scale.set(1,1,1)
           jupiter.material.color.setHex( 0x8b0000 );
       }, 200);
     })
@@ -1629,6 +1626,7 @@
       adlib10.start();
       jupiter2.material.color.setHex( 0xffffff );
       setTimeout(function () {
+          jupiter2.scale.set(1,1,1)
           jupiter2.material.color.setHex( 0x8b0000 );
       }, 200);
     })
