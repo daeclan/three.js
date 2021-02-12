@@ -907,6 +907,38 @@
     saturn2.position.set(1000,10,250)
     scene.add(saturn2)
 
+    // create mobile key presses
+
+    const geometry33 = new THREE.BoxGeometry(40, 30, 5)
+    const material33 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const yButton = new THREE.Mesh(geometry33, material33)
+    yButton.position.set(24,314,3662)
+    scene.add(yButton)
+
+    const geometry34 = new THREE.BoxGeometry(40, 30, 5)
+    const material34 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const sButton = new THREE.Mesh(geometry34, material34)
+    sButton.position.set(-144,271,3662)
+    scene.add(sButton)
+
+    const geometry35 = new THREE.BoxGeometry(40, 30, 5)
+    const material35 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const lButton = new THREE.Mesh(geometry35, material35)
+    lButton.position.set(192,271,3662)
+    scene.add(lButton)
+
+    const geometry36 = new THREE.BoxGeometry(40, 30, 5)
+    const material36 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const eButton = new THREE.Mesh(geometry36, material36)
+    eButton.position.set(-120,314,3662)
+    scene.add(eButton)
+
+    const geometry37 = new THREE.BoxGeometry(40, 30, 5)
+    const material37 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const zButton = new THREE.Mesh(geometry37, material37)
+    zButton.position.set(-144,230,3662)
+    scene.add(zButton)
+
     // create/load tone.js sounds
 
     const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
@@ -1033,18 +1065,61 @@
             backsound5.start();
     }}
 
-    // add in mouse events for sound objects
-
-    var yDown, sDown, lDown, eDown, zDown
+    // add in touch events for keyboard
+    
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
+    var yDown, sDown, lDown, eDown, zDown
+
+    domEvents.addEventListener(yButton, 'touchstart', event => {
+      yDown = true
+      yButton.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          yButton.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
+    domEvents.addEventListener(sButton, 'touchstart', event => {
+      sDown = true
+      sButton.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          sButton.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
+    domEvents.addEventListener(lButton, 'touchstart', event => {
+      lDown = true
+      lButton.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          lButton.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
+    domEvents.addEventListener(eButton, 'touchstart', event => {
+      eDown = true
+      eButton.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          eButton.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
+    domEvents.addEventListener(zButton, 'touchstart', event => {
+      zDown = true
+      zButton.material.color.setHex( 0xffffff );
+      setTimeout(function () {
+          zButton.material.color.setHex( 0x000000 );
+      }, 200);
+    });
+
     vrKeyboard.addEventListener("keydown", event => {
-      if(event.code == "y"){console.log(yDown = true)}
-      if(event.code == "s"){console.log(sDown = true)}
-      if(event.code == "l"){console.log(lDown = true)}
-      if(event.code == "e"){console.log(eDown = true)}
-      if(event.code == "z"){console.log(zDown = true)}
+      if(event.code == "y"){yDown = true}
+      if(event.code == "s"){sDown = true}
+      if(event.code == "l"){lDown = true}
+      if(event.code == "e"){eDown = true}
+      if(event.code == "z"){zDown = true}
     })
+
+     // add in mouse events for sound objects
     
     domEvents.addEventListener(sun, 'click', event => {
       loopSwitch();
@@ -1650,6 +1725,29 @@
         ezSound();
       }
     });
+
+    if(isMobileDevice){
+      document.addEventListener("touchstart", event => {
+        if(yDown){
+        young.scale.set(5000,5000,5000),
+        young.position.set(-2500,3000,0),
+        animateY = true
+        }
+        if(sDown){
+        stoner.scale.set(5000,5000,5000),
+        stoner.position.set(0,4600,0),
+        animateS = true
+        }
+        if(lDown){
+        life.scale.set(5000,5000,5000),
+        life.position.set(2500,3000,0),
+        animateL = true
+        }
+        if(eDown && zDown){
+          ezSound();
+        }
+      });
+    }
 
     document.addEventListener("keydown", event => {
       if (event.keyCode === 89) {
