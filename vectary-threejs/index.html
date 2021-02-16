@@ -269,6 +269,7 @@
     const texture2 = new THREE.TextureLoader(loadingManager).load( './assets/3D/TITL.jpg' );
     const texture3 = new THREE.TextureLoader(loadingManager).load( './assets/3D/THATGO.jpg' );
     const texture4 = new THREE.TextureLoader(loadingManager).load( './assets/3D/GFU.jpg' );
+    const texture5 = new THREE.TextureLoader(loadingManager).load( './assets/3D/LSY.jpg' );
     
     var roomBox = new THREE.BoxBufferGeometry(10000,10000,10000, 8);
     const roomMaterial = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide });
@@ -1794,6 +1795,7 @@
       if(animateY&&animateS&&animateL&&!isExecuted){
         loopSwitch3();
         isExecuted = true;
+        roomMesh.material.map = texture5
       }
       if(mobileConfirm){
         var vector = new THREE.Vector3(controls.mouse.x, controls.mouse.y, 1);

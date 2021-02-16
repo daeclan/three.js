@@ -38,6 +38,12 @@ h1 {
   display: -moz-box;
   display: box;
 
+  color: #85ec59;
+  text-align: center;
+  font-family: VCR;
+  font-size: 14px;
+  line-height: 24px;
+
   -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;
   box-orient: horizontal;
@@ -49,12 +55,6 @@ h1 {
   -webkit-box-align: center;
   -moz-box-align: center;
   box-align: center;
-
-  color: #85ec59;
-  text-align: center;
-  font-family: VCR;
-  font-size: 14px;
-  line-height: 24px;
 
   cursor: pointer;
 }
@@ -67,6 +67,12 @@ h1 {
   display: -moz-box;
   display: box;
 
+  color: #ffffff;
+  text-align: center;
+  font-family: VCR;
+  font-size: 14px;
+  line-height: 24px;
+
   -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;
   box-orient: horizontal;
@@ -79,14 +85,9 @@ h1 {
   -moz-box-align: center;
   box-align: center;
 
-  color: #ffffff;
-  text-align: center;
-  font-family: VCR;
-  font-size: 14px;
-  line-height: 24px;
-
   cursor: pointer;
 }
+
 html, body {
 overflow: hidden;
 margin: 0;
