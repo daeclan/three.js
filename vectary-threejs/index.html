@@ -38,7 +38,7 @@
     <div id="blocker">
       <div id="loader">
         <div id="loadText">
-          <span style="font-size:40px">
+          <span style="font-size:25px">
           S<br /> 
           L<br /> 
           A<br /> 
@@ -66,10 +66,8 @@
             let instructionsScreen = document.getElementById( 'instructions' );
             instructionsScreen.style.visibility = 'visible';
             ;
+            loader.style.display = 'none';
           };
-          window.addEventListener ("load", function() {
-          loader.style.display = 'none';
-          });
         </script>
         </div>
           <div id="instructions">
@@ -902,6 +900,12 @@
     zButton.position.set(-144,230,3662)
     scene.add(zButton)
 
+    const geometry38 = new THREE.BoxGeometry(40, 30, 5)
+    const material38 = new THREE.MeshBasicMaterial({color: "#000000"})
+    const sixButton = new THREE.Mesh(geometry37, material37)
+    sixButton.position.set(22,312,3675)
+    scene.add(sixButton)
+
     // create/load tone.js sounds
 
     const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
@@ -925,6 +929,11 @@
     });
 
     const backsound5 = new Tone.Player("./assets/MP3/GFU.mp3").toDestination();
+    Tone.loaded().then(() => {
+      Tone.context.resume();
+    });
+
+    const backsound6 = new Tone.Player("./assets/MP3/ovoslime.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -960,6 +969,7 @@
             backsound3.stop();
             backsound4.stop();
             backsound5.stop();
+            backsound6.stop();
             backsound.loop = true
             backsound.start();
     }}
@@ -976,6 +986,7 @@
             backsound3.stop();
             backsound4.stop();
             backsound5.stop();
+            backsound6.stop();
             backsound2.loop = true
             backsound2.start();
     }}
@@ -992,6 +1003,7 @@
             backsound2.stop();
             backsound4.stop();
             backsound5.stop();
+            backsound6.stop();
             backsound3.loop = true
             backsound3.start();
     }}
@@ -1008,6 +1020,7 @@
             backsound2.stop();
             backsound3.stop();
             backsound5.stop();
+            backsound6.stop();
             backsound4.loop = true
             backsound4.start();
     }}
@@ -1024,15 +1037,33 @@
             backsound2.stop();
             backsound3.stop();
             backsound4.stop();
+            backsound6.stop();
             backsound5.loop = true
             backsound5.start();
+    }}
+
+    function loopSwitch6() {
+      backsound4.volume.value = -5;
+        if (backsound6.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound6.loop = false
+            backsound6.stop();
+        } else if (backsound6.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.stop();
+            backsound2.stop();
+            backsound3.stop();
+            backsound4.stop();
+            backsound5.stop();
+            backsound6.loop = true
+            backsound6.start();
     }}
 
     // add in touch events for keyboard
     
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
-    var yDown, sDown, lDown, eDown, zDown
+    var yDown, sDown, lDown, eDown, zDown, sixDown
 
     domEvents.addEventListener(yButton, 'touchstart', event => {
       yDown = true
@@ -1054,12 +1085,19 @@
       zDown = true
     });
 
+    domEvents.addEventListener(sixButton, 'touchstart', event => {
+      sixDown = true
+    });
+
     vrKeyboard.addEventListener("keydown", event => {
       if(event.code == "y"){yDown = true}
       if(event.code == "s"){sDown = true}
       if(event.code == "l"){lDown = true}
       if(event.code == "e"){eDown = true}
       if(event.code == "z"){zDown = true}
+      if(event.code == "6"){sixDown = true}
+      console.log(event.code)
+      console.log(sixDown)
     })
 
      // add in mouse events for sound objects
