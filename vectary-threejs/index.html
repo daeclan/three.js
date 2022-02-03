@@ -279,6 +279,20 @@
 
     scene.add( spotLight );
 
+    const schpotLight = new THREE.SpotLight( 0x0afb02, 0.23 );
+    schpotLight.position.set( 0, 1600, -2500 );
+
+    schpotLight.castShadow = true;
+
+    schpotLight.shadow.mapSize.width = 1024;
+    schpotLight.shadow.mapSize.height = 1024;
+
+    schpotLight.shadow.camera.near = 500;
+    schpotLight.shadow.camera.far = 4000;
+    schpotLight.shadow.camera.fov = 30;
+
+    scene.add( schpotLight );
+
     // create room environment
 
     const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/SL2.jpg' );
@@ -568,22 +582,25 @@
 
     //add tree
 
-    // var treeMat = new THREE.MeshBasicMaterial({color: 0x000000});
-    // var treeOBJLoader = new THREE.OBJLoader(loadingManager);
-    // treeOBJLoader.setPath( './assets/3D/');
-    // treeOBJLoader.load( 'Tree.obj', function ( object ) {
-    //     object.traverse(function(child) {
-    //         if (child instanceof THREE.Mesh){
-    //             child.material = basic;
-    //         }
-    //     });
-    //     scene.add( object );
-    //     object.position.z = -0;
-    //     object.position.y = 0;
-    //     object.position.x = -400;
-    //     object.rotation.x = 0
-    //     object.scale.set(700,700,700)
-    // });
+    var tree = new THREE.Object3D(loadingManager)
+
+    var treeMat = new THREE.MeshBasicMaterial({color: 0x000000});
+    var treeOBJLoader = new THREE.OBJLoader(loadingManager);
+    treeOBJLoader.setPath( './assets/3D/');
+    treeOBJLoader.load( 'Tree.obj', function ( object ) {
+        object.traverse(function(child) {
+            if (child instanceof THREE.Mesh){
+                child.material = basic;
+            }
+        });
+        scene.add( object );
+        object.position.z = -0;
+        object.position.y = 0;
+        object.position.x = -400;
+        object.rotation.x = 0
+        object.scale.set(700,700,700)
+        tree = object
+    });
 
         //add P
 
@@ -924,6 +941,12 @@
     zButton.position.set(-144,230,3662)
     scene.add(zButton)
 
+    const geometry66 = new THREE.BoxGeometry(40, 30, 5)
+    const material66 = new THREE.MeshBasicMaterial({color: "#ffffff"})
+    const pButton = new THREE.Mesh(geometry66, material66)
+    pButton.position.set(216,314,3662)
+    scene.add(pButton)
+
     // create/load tone.js sounds
 
     const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
@@ -1081,7 +1104,7 @@
     
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
-    var yDown, sDown, lDown, eDown, zDown
+    var yDown, sDown, lDown, eDown, zDown, pDown
 
     domEvents.addEventListener(yButton, 'touchstart', event => {
       yDown = true
@@ -1103,6 +1126,10 @@
       zDown = true
     });
 
+    domEvents.addEventListener(pButton, 'touchstart', event => {
+      zDown = true
+    });
+
 
     vrKeyboard.addEventListener("keydown", event => {
       if(event.code == "y"){yDown = true}
@@ -1110,6 +1137,7 @@
       if(event.code == "l"){lDown = true}
       if(event.code == "e"){eDown = true}
       if(event.code == "z"){zDown = true}
+      if(event.code == "p"){pDown = true}
     })
 
      // add in mouse events for sound objects
@@ -1740,6 +1768,10 @@
       venus2.position.set(-410,200,-1200)
     }
 
+    function pzSound(){
+      mercury.position.set(0,300,1100)
+    }
+
     document.addEventListener("click", event => {
       if(yDown){
       young.scale.set(5000,5000,5000),
@@ -1815,6 +1847,12 @@
     });
 
     document.addEventListener("keydown", event => {
+      if (event.keyCode === 80) {
+        pDown = true
+      }
+    });
+
+    document.addEventListener("keydown", event => {
       if (event.keyCode === 90) {
         zDown = true
         if(zDown && eDown){
@@ -1832,6 +1870,7 @@
         young.rotation.y += 0.01;
         stoner.rotation.y += 0.01;
         life.rotation.y += 0.01;
+        tree.rotation.y += 0.01;
         young.scale.y = 15000;
         young.scale.x = 15000;
         young.scale.z = 15000;
