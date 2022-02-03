@@ -241,6 +241,14 @@
     light.position.set(0,2050,-3700);
     scene.add(light);
 
+    var light = new THREE.PointLight(0xffffff, 2, 420)
+    light.position.set(0,550,-3700);
+    scene.add(light);
+
+    var light = new THREE.PointLight(0xffffff, 300, 420)
+    light.position.set(0,2050,3700);
+    scene.add(light);
+
     var light = new THREE.PointLight(0x5cd5fd, 0.8, 300)
     light.position.set(0,400,-3500);
     scene.add(light);
@@ -575,6 +583,22 @@
         object.position.x = -400;
         object.rotation.x = 0
         object.scale.set(700,700,700)
+    });
+
+        //add P
+
+        var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.load('./assets/3D/panko.mtl', function (materials) {
+      materials.preload();
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./assets/3D/panko.obj', function (object) {
+        scene.add(object);
+        object.scale.set(400,400,400);
+        object.position.z = 0;
+        object.position.y = -2500;
+        object.rotation.y = Math.PI;
+      });
     });
     
     //add mushrooms
