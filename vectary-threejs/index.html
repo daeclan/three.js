@@ -265,8 +265,8 @@
     light.position.set(0,10000,35);
     scene.add(light);
 
-    const spotLight = new THREE.SpotLight( 0x0afb02 );
-    spotLight.position.set( 0, 1000, -5000 );
+    const spotLight = new THREE.SpotLight( 0x0afb02, 0.23 );
+    spotLight.position.set( 0, 1600, 2500 );
 
     spotLight.castShadow = true;
 
@@ -568,22 +568,22 @@
 
     //add tree
 
-    var treeMat = new THREE.MeshBasicMaterial({color: 0x000000});
-    var treeOBJLoader = new THREE.OBJLoader(loadingManager);
-    treeOBJLoader.setPath( './assets/3D/');
-    treeOBJLoader.load( 'Tree.obj', function ( object ) {
-        object.traverse(function(child) {
-            if (child instanceof THREE.Mesh){
-                child.material = basic;
-            }
-        });
-        scene.add( object );
-        object.position.z = -0;
-        object.position.y = 0;
-        object.position.x = -400;
-        object.rotation.x = 0
-        object.scale.set(700,700,700)
-    });
+    // var treeMat = new THREE.MeshBasicMaterial({color: 0x000000});
+    // var treeOBJLoader = new THREE.OBJLoader(loadingManager);
+    // treeOBJLoader.setPath( './assets/3D/');
+    // treeOBJLoader.load( 'Tree.obj', function ( object ) {
+    //     object.traverse(function(child) {
+    //         if (child instanceof THREE.Mesh){
+    //             child.material = basic;
+    //         }
+    //     });
+    //     scene.add( object );
+    //     object.position.z = -0;
+    //     object.position.y = 0;
+    //     object.position.x = -400;
+    //     object.rotation.x = 0
+    //     object.scale.set(700,700,700)
+    // });
 
         //add P
 
