@@ -229,10 +229,6 @@
     light.position.set(0,15,0);
     scene.add(light);
 
-    var light = new THREE.PointLight(0xffff00, 2, 500)
-    light.position.set(0,2000,500);
-    scene.add(light);
-
     var light = new THREE.PointLight(0x0afb02, 2, 420)
     light.position.set(0,550,3700);
     scene.add(light);
@@ -266,7 +262,7 @@
     scene.add(light);
 
     const spotLight = new THREE.SpotLight( 0x0afb02, 0.23 );
-    spotLight.position.set( 0, 1600, 2500 );
+    spotLight.position.set( 0, 3100, 2500 );
 
     spotLight.castShadow = true;
 
@@ -280,7 +276,7 @@
     scene.add( spotLight );
 
     const schpotLight = new THREE.SpotLight( 0x0afb02, 0.23 );
-    schpotLight.position.set( 0, 1600, -2500 );
+    schpotLight.position.set( 0, 3100, -2500 );
 
     schpotLight.castShadow = true;
 
@@ -602,10 +598,12 @@
         tree = object
     });
 
-        //add P
+    //add P
 
-        var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.load('./assets/3D/panko.mtl', function (materials) {
+      var patek = new THREE.Object3D(loadingManager)
+
+      var mtlLoader = new THREE.MTLLoader();
+      mtlLoader.load('./assets/3D/panko.mtl', function (materials) {
       materials.preload();
       var objLoader = new THREE.OBJLoader();
       objLoader.setMaterials(materials);
@@ -613,8 +611,9 @@
         scene.add(object);
         object.scale.set(400,400,400);
         object.position.z = 0;
-        object.position.y = -2500;
+        object.position.y = -7000;
         object.rotation.y = Math.PI;
+        patek = object
       });
     });
     
@@ -974,10 +973,10 @@
       Tone.context.resume();
     });
 
-    // const backsound6 = new Tone.Player("./assets/MP3/ovoslime.mp3").toDestination();
-    // Tone.loaded().then(() => {
-    //   Tone.context.resume();
-    // });
+    const backsound6 = new Tone.Player("./assets/MP3/pushinP.mp3").toDestination();
+    Tone.loaded().then(() => {
+      Tone.context.resume();
+    });
     
     const adlib = new Tone.Player("./assets/MP3/fed.mp3").toDestination();
     const adlib2 = new Tone.Player("./assets/MP3/grat.mp3").toDestination();
@@ -1010,7 +1009,7 @@
             backsound3.stop();
             backsound4.stop();
             backsound5.stop();
-            // backsound6.stop();
+            backsound6.stop();
             backsound.loop = true
             backsound.start();
     }}
@@ -1027,7 +1026,7 @@
             backsound3.stop();
             backsound4.stop();
             backsound5.stop();
-            // backsound6.stop();
+            backsound6.stop();
             backsound2.loop = true
             backsound2.start();
     }}
@@ -1044,7 +1043,7 @@
             backsound2.stop();
             backsound4.stop();
             backsound5.stop();
-            // backsound6.stop();
+            backsound6.stop();
             backsound3.loop = true
             backsound3.start();
     }}
@@ -1061,7 +1060,7 @@
             backsound2.stop();
             backsound3.stop();
             backsound5.stop();
-            // backsound6.stop();
+            backsound6.stop();
             backsound4.loop = true
             backsound4.start();
     }}
@@ -1078,27 +1077,27 @@
             backsound2.stop();
             backsound3.stop();
             backsound4.stop();
-            // backsound6.stop();
+            backsound6.stop();
             backsound5.loop = true
             backsound5.start();
     }}
 
-    // function loopSwitch6() {
-    //   backsound4.volume.value = -5;
-    //     if (backsound6.state == "started") {
-    //         // Use the Tone.Transport to pause audio
-    //         backsound6.loop = false
-    //         backsound6.stop();
-    //     } else if (backsound6.state == "stopped") {
-    //         // Use the Tone.Transport to start again
-    //         backsound.stop();
-    //         backsound2.stop();
-    //         backsound3.stop();
-    //         backsound4.stop();
-    //         backsound5.stop();
-    //         backsound6.loop = true
-    //         backsound6.start();
-    // }}
+    function loopSwitch6() {
+      backsound4.volume.value = -5;
+        if (backsound6.state == "started") {
+            // Use the Tone.Transport to pause audio
+            backsound6.loop = false
+            backsound6.stop();
+        } else if (backsound6.state == "stopped") {
+            // Use the Tone.Transport to start again
+            backsound.stop();
+            backsound2.stop();
+            backsound3.stop();
+            backsound4.stop();
+            backsound5.stop();
+            backsound6.loop = true
+            backsound6.start();
+    }}
 
     // add in touch events for keyboard
     
@@ -1127,7 +1126,7 @@
     });
 
     domEvents.addEventListener(pButton, 'touchstart', event => {
-      zDown = true
+      pDown = true
     });
 
 
@@ -1769,7 +1768,10 @@
     }
 
     function pzSound(){
-      mercury.position.set(0,300,1100)
+      tree.position.y = -5000;
+      spider2.position.y = -5000;
+      patek.position.y = -2000
+      loopSwitch6();
     }
 
     document.addEventListener("click", event => {
@@ -1790,6 +1792,9 @@
       }
       if(eDown && zDown){
         ezSound();
+      }
+      if(pDown){
+        pzSound();
       }
     });
 
@@ -1812,6 +1817,9 @@
         }
         if(eDown && zDown){
           ezSound();
+        }
+        if(pDown){
+        pzSound();
         }
       });
     }
@@ -1849,6 +1857,7 @@
     document.addEventListener("keydown", event => {
       if (event.keyCode === 80) {
         pDown = true
+        pzSound();
       }
     });
 
@@ -1870,7 +1879,6 @@
         young.rotation.y += 0.01;
         stoner.rotation.y += 0.01;
         life.rotation.y += 0.01;
-        tree.rotation.y += 0.01;
         young.scale.y = 15000;
         young.scale.x = 15000;
         young.scale.z = 15000;
