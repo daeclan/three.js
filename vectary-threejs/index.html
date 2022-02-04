@@ -292,9 +292,9 @@
     // create room environment
 
     const texture = new THREE.TextureLoader(loadingManager).load( './assets/3D/SL2.jpg' );
-    const texture2 = new THREE.TextureLoader(loadingManager).load( './assets/3D/TITL.jpg' );
-    const texture3 = new THREE.TextureLoader(loadingManager).load( './assets/3D/THATGO.jpg' );
-    const texture4 = new THREE.TextureLoader(loadingManager).load( './assets/3D/GFU.jpg' );
+    const texture2 = new THREE.TextureLoader(loadingManager).load( './assets/3D/punk.jpg' );
+    const texture3 = new THREE.TextureLoader(loadingManager).load( './assets/3D/thuggergirls.jpg' );
+    const texture4 = new THREE.TextureLoader(loadingManager).load( './assets/3D/smf.jpg' );
     const texture5 = new THREE.TextureLoader(loadingManager).load( './assets/3D/LSY.jpg' );
     const texture7 = new THREE.TextureLoader(loadingManager).load( './assets/3D/parking.jpg' );
     
@@ -949,12 +949,12 @@
 
     // create/load tone.js sounds
 
-    const backsound = new Tone.Player("./assets/MP3/trial46.aac").toDestination();
+    const backsound = new Tone.Player("./assets/MP3/loveYOU.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
 
-    const backsound2 = new Tone.Player("./assets/MP3/THATGO.mp3").toDestination();
+    const backsound2 = new Tone.Player("./assets/MP3/daddysBIRTH.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -969,7 +969,7 @@
       Tone.context.resume();
     });
 
-    const backsound5 = new Tone.Player("./assets/MP3/GFU.mp3").toDestination();
+    const backsound5 = new Tone.Player("./assets/MP3/manneQUIN.mp3").toDestination();
     Tone.loaded().then(() => {
       Tone.context.resume();
     });
@@ -1156,16 +1156,22 @@
     domEvents.addEventListener(sun, 'click', event => {
       loopSwitch();
       roomMesh.material.map = texture2
+      texture2.wrapS = THREE.RepeatWrapping;
+      texture2.repeat.x = - 1;
     })
 
     domEvents.addEventListener(sun2, 'click', event => {
       loopSwitch2();
       roomMesh.material.map = texture3
+      texture3.wrapS = THREE.RepeatWrapping;
+      texture3.repeat.x = - 1;
     })
 
     domEvents.addEventListener(sun, 'touchstart', event => {
       loopSwitch();
       roomMesh.material.map = texture2
+      texture2.wrapS = THREE.RepeatWrapping;
+      texture2.repeat.x = - 1;
       sun.material.color.setHex( 0xffffff );
       setTimeout(function () {
           sun.material.color.setHex( 0x000000 );
@@ -1175,6 +1181,8 @@
     domEvents.addEventListener(sun2, 'touchstart', event => {
       loopSwitch2();
       roomMesh.material.map = texture3
+      texture3.wrapS = THREE.RepeatWrapping;
+      texture3.repeat.x = - 1;
       sun2.material.color.setHex( 0xffffff );
       setTimeout(function () {
           sun2.material.color.setHex( 0x000000 );
@@ -1199,12 +1207,16 @@
 
     domEvents.addEventListener(xanthar, 'click', event => {
       roomMesh.material.map = texture4
+      texture4.wrapS = THREE.RepeatWrapping;
+      texture4.repeat.x = - 1;
       loopSwitch5();
     })
 
     domEvents.addEventListener(xanthar, 'touchstart', event => {
       loopSwitch5();
       roomMesh.material.map = texture4
+      texture4.wrapS = THREE.RepeatWrapping;
+      texture4.repeat.x = - 1;
       xanthar.material.color.setHex( 0xffffff );
       setTimeout(function () {
           xanthar.material.color.setHex( 0x000000 );
