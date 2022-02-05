@@ -128,15 +128,15 @@
     // set up three.js scene, clock, camera, and webGL renderer
 
     var scene = new Physijs.Scene;
-    var sceneObject = scene
-    scene.setGravity(new THREE.Vector3(0,-0.001,0))
+    var sceneObject = scene;
+    scene.setGravity(new THREE.Vector3(0,-0.001,0));
 
     var clock = new THREE.Clock();
-    var look = new THREE.Vector3(0, -100, -63)
+    var look = new THREE.Vector3(0, -100, -63);
 
     var camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
-    camera.lookAt(look)
-    camera.position.set(0,200,4998)
+    camera.lookAt(look);
+    camera.position.set(0,200,4998);
  
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setClearColor("#007a33");
@@ -145,9 +145,9 @@
 
     // set up controls by checking if user is mobile or desktop
 
-    var mobileConfirm = null
+    var mobileConfirm = null;
     var container = $('body');
-    var intersected 
+    var intersected;
     
     function isMobileDevice() {
       return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
